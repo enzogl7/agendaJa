@@ -1,3 +1,13 @@
+document.getElementById('cpfPagante').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+
+    value = value.replace(/^(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
+
+    e.target.value = value;
+});
+
 function modalLogin() {
     $('#modalLogin').modal('show');
 }
