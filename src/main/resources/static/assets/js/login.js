@@ -8,6 +8,16 @@ document.getElementById('cpfPagante').addEventListener('input', function (e) {
     e.target.value = value;
 });
 
+document.getElementById('cpf').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, '');
+
+    value = value.replace(/^(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
+
+    e.target.value = value;
+});
+
 function modalLogin() {
     $('#modalLogin').modal('show');
 }
@@ -37,8 +47,8 @@ function mostrarEtapa(n) {
 }
 
 function avancarEtapa() {
-    const etapaAtual = document.querySelector(`#etapa-${etapa}`);
-    const inputs = etapaAtual.querySelectorAll("input");
+    const etapaAtualDiv = document.querySelector(`#etapa-${etapa}`);
+    const inputs = etapaAtualDiv.querySelectorAll("input");
     let camposVazios = false;
     let dataNascimento = null;
 
@@ -80,6 +90,18 @@ function avancarEtapa() {
             });
             return;
         }
+    }
+
+    const tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked').value;
+    if (etapa === 1 && tipoUsuario === "cliente") {
+        etapa = 4;
+        mostrarEtapa(etapa);
+
+        setTimeout(() => {
+            window.location.href = "/home";
+        }, 3000);
+
+        return;
     }
 
     if (etapa < 4) {

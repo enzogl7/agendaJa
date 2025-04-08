@@ -13,6 +13,10 @@
               <input type="text" class="form-control" id="nome" required>
             </div>
             <div class="mb-3">
+              <label for="cpf" class="form-label">CPF</label>
+              <input type="text" class="form-control" placeholder="123.456.789-10" id="cpf" maxlength="14" required>
+            </div>
+            <div class="mb-3">
               <label for="email" class="form-label">E-mail</label>
               <input type="email" class="form-control" id="email" required>
             </div>
@@ -24,6 +28,20 @@
               <label for="senha" class="form-label">Senha</label>
               <input type="password" class="form-control" id="senha" required>
             </div>
+            <div class="mb-3">
+              <label class="form-label">Tipo de usuário</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="tipoUsuario" id="cliente" value="cliente" checked>
+                  <label class="form-check-label" for="cliente">Cliente</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="tipoUsuario" id="prestador" value="prestador">
+                  <label class="form-check-label" for="prestador">Prestador de Serviço</label>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div class="etapa d-none" id="etapa-2">
