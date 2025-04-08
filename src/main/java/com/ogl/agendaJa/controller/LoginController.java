@@ -57,7 +57,7 @@ public class LoginController {
             cookie.setHttpOnly(true);
             cookie.setSecure(true);
             cookie.setPath("/");
-            cookie.setMaxAge(3600);  // Tempo de expiração: 1 hora
+            cookie.setMaxAge(3600);
 
             response.addCookie(cookie);
 

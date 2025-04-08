@@ -18,6 +18,8 @@ document.getElementById('cpf').addEventListener('input', function (e) {
     e.target.value = value;
 });
 
+AOS.init();
+
 function modalLogin() {
     $('#modalLogin').modal('show');
 }
