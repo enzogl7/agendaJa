@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/links :: headContent('/assets/css/landing_page.css')}"></head>
+<meta charset="UTF-8">
+<title>AgendaJá - Seu horário, seu tempo</title>
+
+<body>
+<header class="menu-superior">
+    <div><strong>AgendaJá</strong></div>
+    <nav>
+        <a href="#">Planos</a>
+        <a href="#" onclick="modalLogin()">Acessar sua conta</a>
+        <a href="#" onclick="modalCadastro()">Criar sua conta</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>
+        <strong style="text-decoration: underline">Menos</strong> ligações. <strong style="text-decoration: underline">Mais</strong> agendamentos.<br>
+        Automatize sua rotina com um sistema inteligente e intuitivo.
+    </h1>
+</section>
+
+<section class="conteudo">
+    <h2>Como funciona o AgendaJá?</h2>
+    <p>
+        O AgendaJá é um sistema simples e eficiente para que seus clientes escolham os melhores horários, você mantenha controle dos agendamentos e otimize sua rotina. Ideal para profissionais autônomos, clínicas, consultores e muito mais.
+    </p>
+</section>
+
+<section class="beneficios">
+    <h2>Benefícios do AgendaJá</h2>
+    <div class="cards-beneficios">
+        <div class="card">
+            <img src="/assets/gifs/calendar.gif" class="beneficio-icon">
+            <h3>Agendamento Online</h3>
+            <p>Permita que seus clientes escolham horários com autonomia, sem depender de ligações ou mensagens.</p>
+        </div>
+        <div class="card">
+            <img src="/assets/gifs/notifications.gif" class="beneficio-icon">
+            <h3>Lembretes Automáticos</h3>
+            <p>Envio de lembretes por e-mail ou WhatsApp para reduzir faltas e atrasos.</p>
+        </div>
+        <div class="card">
+            <img src="/assets/gifs/checklist.gif" class="beneficio-icon">
+            <h3>Controle Total</h3>
+            <p>Acompanhe seus horários, edite compromissos e visualize estatísticas em tempo real.</p>
+        </div>
+        <div class="card">
+            <img src="/assets/gifs/settings.gif" class="beneficio-icon">
+            <h3>Fácil de Usar</h3>
+            <p>Interface intuitiva que dispensa treinamentos. Comece a usar em minutos.</p>
+        </div>
+        <div class="card">
+            <img src="/assets/gifs/custom.gif" class="beneficio-icon">
+            <h3>Customizável</h3>
+            <p>Customize de acordo com suas necessidades e deixe o AgendeJá com a sua cara.</p>
+        </div>
+    </div>
+</section>
+
+<section class="planos">
+    <h2>Escolha o plano ideal para você</h2>
+    <div class="cards-planos">
+        <div class="card-plano">
+            <h3>Plano Básico</h3>
+            <p class="preco">Gratuito</p>
+            <ul>
+                <li>Agenda online com até 10 agendamentos</li>
+            </ul>
+            <button class="btn-plano" onclick="modalCadastro()">Começar</button>
+        </div>
+        <div class="card-plano destaque">
+            <h3>Plano Profissional</h3>
+            <p class="preco">R$ 29,90/mês</p>
+            <ul>
+                <li>Agendamentos ilimitados</li>
+                <li>Lembretes automáticos</li>
+                <li>Pagamentos de clientes feitos diretamente na plataforma via PIX</li>
+            </ul>
+            <button class="btn-plano" onclick="modalCadastro()">Quero esse!</button>
+        </div>
+    </div>
+</section>
+
+
+<div th:replace="~{modais/modal_login}"></div>
+<div th:replace="~{modais/modal_cadastro}"></div>
+<footer th:replace="~{fragments/scripts :: scriptsContent('assets/js/login.js')}"></footer>
+</body>
+</html>
