@@ -40,7 +40,6 @@ function mostrarEtapa(n) {
         btnAvancar.classList.add("d-none");
         setTimeout(() => {
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroEtapas'));
-            window.location.href = "/home";
         }, 3000);
     } else {
         btnAvancar.classList.remove("d-none");
@@ -95,13 +94,10 @@ function avancarEtapa() {
     }
 
     const tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked').value;
-    if (etapa === 1 && tipoUsuario === "cliente") {
+    if (etapa === 1 && tipoUsuario === "CLIENTE") {
         etapa = 4;
-        mostrarEtapa(etapa);
+        cadastrar();
 
-        setTimeout(() => {
-            window.location.href = "/home";
-        }, 3000);
 
         return;
     }
@@ -124,4 +120,96 @@ function modalCadastro() {
     mostrarEtapa(etapa);
     const modal = new bootstrap.Modal(document.getElementById('modalCadastroEtapas'));
     modal.show();
+}
+
+function cadastrar() {
+    console.log("rodou");
+    var nome = document.getElementById('nome').value;
+    var cpf = document.getElementById('cpf').value;
+    var email = document.getElementById('email').value;
+    var senha = document.getElementById('senha').value;
+    var dataNascimento = document.getElementById('dataNascimento').value;
+    var tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked').value;
+    var planoSelecionadoInput = document.querySelector('input[name="plano"]:checked');
+    // var nomePagante = document.getElementById('nomePagante').value;
+    // var cpfPagante = document.getElementById('cpfPagante').value;
+    var planoSelecionado = planoSelecionadoInput ? planoSelecionadoInput.value : null;
+
+    $.ajax({
+        url: '/register',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            nome: nome,
+            email: email,
+            senha: senha,
+            cpf: cpf,
+            tipoUsuario: tipoUsuario,
+            dataNascimento: dataNascimento,
+            planoSelecionado: planoSelecionado,
+            userRole: "USER",
+        }),
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    mostrarEtapa(4);
+                    setTimeout(() => {
+                        $('#modalCadastroEtapas').modal('hide');
+                        modalLogin();
+                    }, 2000);
+                    break;
+                case 400:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Email já cadastrado.",
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    })
+                    break;
+                case 405:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "CPF já cadastrado.",
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    })
+                    break;
+                default:
+                    alert("Erro desconhecido: " + status);
+            }
+        }
+    });
+}
+
+function logar() {
+    var email = document.getElementById('emailLogin').value;
+    var senha = document.getElementById('senhaLogin').value;
+
+    if (!email || !senha) {
+        Swal.fire({
+            title: "Ops!",
+            text: "Preencha todos os campos!",
+            icon: "warning",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    $.ajax({
+        url: '/logar',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ email: email, senha: senha }),
+        success: function() {
+            window.location.href = "/home/dashboard";
+        },
+        error: function(xhr, status, error) {
+            Swal.fire({
+                title: "Ops!",
+                text: "Email ou senha inválidos.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+        }
+    });
 }

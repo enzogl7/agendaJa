@@ -36,11 +36,12 @@ public class LoginController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO dataRegister) {
         if (this.usuarioRepository.findByEmail(dataRegister.email()) != null) return ResponseEntity.badRequest().build();
+        if (this.usuarioRepository.findByCpf(dataRegister.cpf()) != null) return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dataRegister.senha());
         Usuario newUsuario = new Usuario(dataRegister.nome(), dataRegister.email(), encryptedPassword,
                 dataRegister.cpf(), dataRegister.tipoUsuario(), dataRegister.dataNascimento(),
-                dataRegister. planoSelecionado(), true, dataRegister.userRole());
+                dataRegister.planoSelecionado(), true, dataRegister.userRole());
 
         usuarioRepository.save(newUsuario);
         return ResponseEntity.ok().build();
@@ -49,7 +50,7 @@ public class LoginController {
     @PostMapping("/logar")
     public ResponseEntity logar(@RequestBody AuthenticationDTO dataLogin, HttpServletResponse response) {
         try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(dataLogin.email(), dataLogin.password());
+            var usernamePassword = new UsernamePasswordAuthenticationToken(dataLogin.email(), dataLogin.senha());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
