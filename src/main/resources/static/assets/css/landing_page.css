@@ -1,7 +1,12 @@
+body::-webkit-scrollbar {
+    display: none;
+}
+
 body, html {
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    scrollbar-width: none;
 }
 
 .hero {
@@ -268,4 +273,23 @@ body, html {
 @keyframes underlineSlide {
     0% { width: 0; }
     100% { width: 100%; }
+}
+
+.footer-contato {
+    background-color: #2C3E50;
+    color: #F8F9FA;
+    text-align: center;
+    padding: 1rem 1rem;
+    font-size: 0.95rem;
+}
+
+.footer-contato a {
+    color: #27AE60;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-contato .footer-conteudo {
+    max-width: 600px;
+    margin: 0 auto;
 }
