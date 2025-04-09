@@ -8,7 +8,7 @@
 <body class="bg-[#F8F9FA] text-[#2C3E50] font-sans">
 
 <!-- navbar !-->
-<header class="bg-[#2C3E50] p-4 shadow-md">
+<header class="bg-[#2C3E50] p-3 shadow-md">
   <div class="container mx-auto d-flex flex-wrap justify-between align-items-center">
     <h3 class="text-2xl font-bold text-white">AgendaJá</h3>
 
@@ -93,6 +93,8 @@
         <div class="card-body">
           <h5 class="card-title mb-3">
             Próximos agendamentos <i class="bi bi-box-arrow-up-right"></i>
+            <br>
+            <span class="text-muted" style="font-size: 0.7rem">Agendamentos dos próximos 5 dias</span>
           </h5>
           <div class="table-responsive">
             <table class="table table-striped no-footer table-hover align-middle" id="tabelaProximosAgendamentos">
@@ -114,6 +116,8 @@
         <div class="card-body">
           <h5 class="card-title mb-3">
             Pagamentos <i class="bi bi-box-arrow-up-right"></i>
+            <br>
+            <span class="text-muted" style="font-size: 0.7rem">Pagamentos dos últimos 5 dias</span>
           </h5>
           <div class="table-responsive">
             <table class="table table-striped no-footer table-hover align-middle" id="tabelaUltimosPagamentos">
@@ -132,11 +136,10 @@
     </div>
   </div>
 
-
 </main>
 
 <footer class="text-center text-sm text-[#7F8C8D] p-4 mt-10">
-  <p>Suporte, sugestões, dúvidas, etc: <a href="mailto:contatoagendaja@gmail.com.br">contatoagendaja@gmail.com.br</a></p>
+  <p>Suporte, sugestões, dúvidas, etc: <a href="mailto:contatoagendaja@gmail.com">contatoagendaja@gmail.com</a></p>
   &copy; 2025 AgendaJá. Todos os direitos reservados.
 </footer>
 <footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>

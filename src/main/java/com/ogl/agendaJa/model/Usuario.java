@@ -34,15 +34,16 @@ public class Usuario implements UserDetails {
     private LocalDate dataNascimento;
     private String planoSelecionado;
     private boolean pagamentoConfirmado;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public Usuario(String nome, String email, String senha, String cpf, TipoUsuario tipoUsuario, LocalDate dataNascimento, String planoSelecionado,
+    public Usuario(String nome, String email, String senha, String cpf, LocalDate dataNascimento, String planoSelecionado,
                    boolean pagamentoConfirmado, UserRole role) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
-        this.tipoUsuario = tipoUsuario;
         this.dataNascimento = dataNascimento;
         this.planoSelecionado = planoSelecionado;
         this.pagamentoConfirmado = pagamentoConfirmado;
@@ -51,8 +52,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
 
     @Override

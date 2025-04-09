@@ -2,7 +2,8 @@ package com.ogl.agendaJa.model;
 
 public enum UserRole {
     ADMIN("admin"),
-    USER("user");
+    CLIENTE("cliente"),
+    PRESTADOR("prestador");
 
     private String role;
 

@@ -84,7 +84,7 @@ function avancarEtapa() {
 
         if (menorDeIdade) {
             Swal.fire({
-                title: "Menor de idade",
+                title: "Ops!",
                 text: "Para criar uma conta no AgendaJá, você deve ter pelo menos 18 anos.",
                 icon: "error",
                 confirmButtonText: "Entendi"
@@ -97,8 +97,15 @@ function avancarEtapa() {
     if (etapa === 1 && tipoUsuario === "CLIENTE") {
         etapa = 4;
         cadastrar();
+        return;
+    }
 
+    console.log("etapa: " + etapa);
+    console.log("tipo usuario: " + tipoUsuario)
 
+    if (etapa === 3 && tipoUsuario === "PRESTADOR") {
+        etapa = 4;
+        cadastrar();
         return;
     }
 
@@ -123,7 +130,6 @@ function modalCadastro() {
 }
 
 function cadastrar() {
-    console.log("rodou");
     var nome = document.getElementById('nome').value;
     var cpf = document.getElementById('cpf').value;
     var email = document.getElementById('email').value;
@@ -134,6 +140,7 @@ function cadastrar() {
     // var nomePagante = document.getElementById('nomePagante').value;
     // var cpfPagante = document.getElementById('cpfPagante').value;
     var planoSelecionado = planoSelecionadoInput ? planoSelecionadoInput.value : null;
+    console.log("TIPO USUARIO: " +  tipoUsuario)
 
     $.ajax({
         url: '/register',
@@ -144,10 +151,9 @@ function cadastrar() {
             email: email,
             senha: senha,
             cpf: cpf,
-            tipoUsuario: tipoUsuario,
             dataNascimento: dataNascimento,
             planoSelecionado: planoSelecionado,
-            userRole: "USER",
+            userRole: tipoUsuario,
         }),
         complete: function(xhr, status) {
             switch (xhr.status) {
@@ -199,17 +205,21 @@ function logar() {
         url: '/logar',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ email: email, senha: senha }),
-        success: function() {
-            window.location.href = "/home";
-        },
-        error: function(xhr, status, error) {
-            Swal.fire({
-                title: "Ops!",
-                text: "Email ou senha inválidos.",
-                icon: "error",
-                confirmButtonText: "OK"
-            });
+        data: JSON.stringify({
+            email: email, senha: senha
+        }),
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    window.location.href = "/prestador/home";
+                    break;
+                case 202:
+                    window.location.href = "/cliente/home";
+                    break;
+                default:
+                    alert("Erro desconhecido: " + status);
+                    break;
+            }
         }
     });
 }

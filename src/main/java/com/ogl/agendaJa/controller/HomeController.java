@@ -11,9 +11,15 @@ public class HomeController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/home")
-    public String home(Model model) {
+    @GetMapping("/prestador/home")
+    public String prestadorHome(Model model) {
         model.addAttribute("usuario", usuarioService.getUsuarioLogado());
-        return "/home/home";
+        return "/prestador/home";
+    }
+
+    @GetMapping("/cliente/home")
+    public String clienteHome(Model model) {
+        model.addAttribute("usuario", usuarioService.getUsuarioLogado());
+        return "/cliente/home_cliente";
     }
 }

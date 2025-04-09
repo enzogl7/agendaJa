@@ -40,7 +40,7 @@ public class LoginController {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dataRegister.senha());
         Usuario newUsuario = new Usuario(dataRegister.nome(), dataRegister.email(), encryptedPassword,
-                dataRegister.cpf(), dataRegister.tipoUsuario(), dataRegister.dataNascimento(),
+                dataRegister.cpf(), dataRegister.dataNascimento(),
                 dataRegister.planoSelecionado(), true, dataRegister.userRole());
 
         usuarioRepository.save(newUsuario);
@@ -61,8 +61,13 @@ public class LoginController {
             cookie.setMaxAge(3600);
 
             response.addCookie(cookie);
+            Usuario usuario = (Usuario) usuarioRepository.findByEmail(dataLogin.email());
+            if (usuario.getAuthorities().stream().anyMatch(auth1 -> auth1.getAuthority().equals("ROLE_CLIENTE"))) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+            } else {
+                return ResponseEntity.ok().build();
+            }
 
-            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
