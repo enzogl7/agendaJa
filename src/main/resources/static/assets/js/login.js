@@ -201,7 +201,7 @@ function logar() {
         contentType: 'application/json',
         data: JSON.stringify({ email: email, senha: senha }),
         success: function() {
-            window.location.href = "/home/dashboard";
+            window.location.href = "/home";
         },
         error: function(xhr, status, error) {
             Swal.fire({
