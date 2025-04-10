@@ -5,143 +5,153 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgendaJá - Dashboard</title>
 
-<body class="bg-[#F8F9FA] text-[#2C3E50] font-sans">
+<body class="bg-[#f8fafe]">
 
-<!-- navbar !-->
-<header class="bg-[#2C3E50] p-3 shadow-md">
-  <div class="container mx-auto d-flex flex-wrap justify-between align-items-center">
-    <h3 class="text-2xl font-bold text-white">AgendaJá</h3>
+<div class="flex min-h-screen">
+  <button id="toggleSidebar" class="md:hidden fixed top-2 left-2 z-50 bg-[#27AE60] text-white p-1 rounded">
+    <i class="bi bi-arrow-bar-right text-base"></i>
+  </button>
 
-    <div class="d-flex align-items-center gap-3">
-      <button class="btn btn-success btn-sm">Novo Agendamento</button>
-
-      <div class="dropdown">
-        <a href="#" style="text-decoration: none" class="text-white dropdown-toggle fs-3" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person-circle"></i>
+  <div id="sidebar" class="fixed md:static top-0 left-0 h-screen md:h-screen w-64 bg-white shadow-xl flex flex-col justify-between py-6 px-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <div>
+      <div class="flex items-center gap-2 mb-10">
+        <span class="text-xl font-bold">📅 AgendaJá</span>
+      </div>
+      <nav class="space-y-2">
+        <a href="/prestador/home" style="text-decoration: none; color: #7F8C8D" class="flex items-center gap-2 px-3 py-2 bg-[#27AE60] text-white hover:bg-[#1b7a46] rounded-md transition">
+          <i class="bi bi-house"></i>
+          <span>Home</span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
-          <li><a class="dropdown-item" href="#">Perfil</a></li>
-          <li><a class="dropdown-item" href="/logout">Sair</a></li>
-        </ul>
+        <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-calendar3"></i>
+            <span>Agendamentos</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+        <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-gear"></i>
+            <span>Serviços</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+        <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-sliders2-vertical"></i>
+            <span>Configurações</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+      </nav>
+    </div>
+
+    <div class="flex items-center justify-between px-2 mt-4">
+      <div class="flex items-center gap-3">
+        <i class="bi bi-person-circle text-xl"></i>
+        <div>
+          <p class="text-sm font-semibold mb-1 pb-1" th:text="${usuario.nome.split(' ')[0]}"></p>
+          <p class="text-xs text-gray-400 mt-1 pt-1" th:text="'Plano ' + ${usuario.planoSelecionado}"></p>
+        </div>
       </div>
+      <i class="bi bi-chevron-down text-sm text-gray-500"></i>
     </div>
   </div>
-</header>
 
-<main class="container mx-auto p-6">
-  <section class="mb-6">
-    <h2 class="text-xl font-semibold">Olá, <span th:text="${usuario.nome}"></span>!</h2>
-    <p class="text-[#7F8C8D]">Aqui está uma visão geral do seu dia.</p>
-  </section>
-
+  <main class="container mx-auto p-6 flex-1">
   <!-- cards !-->
-  <section class="container mb-5">
-    <div class="row g-4">
-      <div class="col-12 col-md-3">
-        <div class="card shadow rounded-4 border-0 hover-shadow">
-          <div class="card-body text-center">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-pin-angle-fill fs-1"></i>
-            </div>
-            <p class="card-text fs-2 fw-bold text-success text-center">3</p>
-            <h5 class="card-title mb-2 text-center">Agendamentos Hoje</h5>
+  <section class="container mt-4 mb-8">
+    <section class="mb-4">
+      <h2 class="text-xl font-semibold text-shadow">
+        Olá, <span th:text="${usuario.nome.split(' ')[0]}"></span> 👋
+      </h2>
+    </section>
+
+    <div class="card shadow-md border-0 rounded-4 p-4 transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+      <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-4">
+
+        <div class="d-flex align-items-center gap-3 flex-grow-1">
+          <div class="icon-circle bg-light-green">
+            <i class="bi bi-pin-angle fs-2 text-success"></i>
+          </div>
+          <div>
+            <div class>Agendamentos próximos</div>
+            <div class="fs-4 fw-bold">3</div>
+            <div class="text-success small"><i class="bi bi-arrow-up"></i> 16% esse mês</div>
           </div>
         </div>
-      </div>
 
-      <div class="col-12 col-md-3">
-        <div class="card shadow rounded-4 border-0 hover-shadow transition">
-          <div class="card-body text-center">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-hourglass-split fs-1"></i>
-            </div>
-            <p class="card-text fs-2 fw-bold text-danger">1</p>
-            <h5 class="card-title mb-2">Aguardando confirmação</h5>
+        <div class="vr d-none d-md-block mx-2"></div>
+
+        <!-- Card 2 -->
+        <div class="d-flex align-items-center gap-3 flex-grow-1">
+          <div class="icon-circle bg-light-green">
+            <i class="bi bi-hourglass fs-2 text-success"></i>
+          </div>
+          <div>
+            <div class="text-muted">Agendamentos pendentes</div>
+            <div class="fs-4 fw-bold">5</div>
+            <small class="text-muted" style="font-size: 0.8rem">Agendamentos aguardando confirmação de cliente</small>
           </div>
         </div>
-      </div>
 
-      <div class="col-12 col-md-3">
-        <div class="card shadow rounded-4 border-0 hover-shadow transition">
-          <div class="card-body text-center">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-calendar3 fs-1"></i>
-            </div>
-            <p class="card-text fs-2 fw-bold text-dark">12</p>
-            <h5 class="card-title mb-0">Total no mês</h5>
+        <div class="vr d-none d-md-block mx-2"></div>
+
+        <!-- Card 3 -->
+        <div class="d-flex align-items-center gap-3 flex-grow-1">
+          <div class="icon-circle bg-light-green">
+            <i class="bi bi-wallet fs-2 text-success"></i>
           </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-3">
-        <div class="card shadow rounded-4 border-0 hover-shadow transition">
-          <div class="card-body text-center">
-            <div class="d-flex justify-content-center mb-3">
-              <i class="bi bi-cash-coin fs-1"></i>
-            </div>
-            <p class="card-text fs-2 fw-bold text-dark">R$450,24</p>
-            <h5 class="card-title mb-0">Receita no mês</h5>
+          <div>
+            <div class="text-muted">Receita do mês</div>
+            <div class="fs-4 fw-bold">R$550,87</div>
+            <div class="text-success small"><i class="bi bi-arrow-up"></i> 23% esse mês</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="row mt-3">
-    <div class="col-md-6">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title mb-3">
-            Próximos agendamentos <i class="bi bi-box-arrow-up-right"></i>
-            <br>
-            <span class="text-muted" style="font-size: 0.7rem">Agendamentos dos próximos 5 dias</span>
-          </h5>
-          <div class="table-responsive">
-            <table class="table table-striped no-footer table-hover align-middle" id="tabelaProximosAgendamentos">
-              <thead>
-              <tr>
-                <th class="text-center" style="width: 10%">Data</th>
-                <th class="text-center" style="width: 10%">Cliente</th>
-                <th class="text-center" style="width: 10%">Serviço</th>
-              </tr>
-              </thead>
-            </table>
-          </div>
+  <div class="container mt-4">
+    <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-xl font-bold">Próximos agendamentos <i class="bi bi-box-arrow-up-right text-sm align-middle"></i>
+          </h2>
+          <p class="text-sm text-emerald-500 font-semibold">Agendamentos previstos para os próximos 3 dias</p>
         </div>
       </div>
-    </div>
 
-    <div class="col-md-6">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title mb-3">
-            Pagamentos <i class="bi bi-box-arrow-up-right"></i>
-            <br>
-            <span class="text-muted" style="font-size: 0.7rem">Pagamentos dos últimos 5 dias</span>
-          </h5>
-          <div class="table-responsive">
-            <table class="table table-striped no-footer table-hover align-middle" id="tabelaUltimosPagamentos">
-              <thead>
-              <tr>
-                <th class="text-center" style="width: 10%">Data</th>
-                <th class="text-center" style="width: 10%">Cliente</th>
-                <th class="text-center" style="width: 10%">Valor</th>
-                <th class="text-center" style="width: 10%">Serviço</th>
-              </tr>
-              </thead>
-            </table>
-          </div>
-        </div>
-      </div>
+      <table class="w-full text-left text-sm" id="tableAgendamentos">
+        <thead>
+        <tr class="text-gray-500 font-semibold border-b">
+          <th class="pb-3">Data</th>
+          <th class="pb-3">Cliente</th>
+          <th class="pb-3">Serviço</th>
+        </tr>
+        </thead>
+        <tbody class="text-gray-700">
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="py-4">10/04/2025</td>
+          <td class="py-4">João Silva</td>
+          <td class="py-4">Unha</td>
+        </tr>
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="py-4">11/04/2025</td>
+          <td class="py-4">Maria Oliveira</td>
+          <td class="py-4">Cabelo</td>
+        </tr>
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="py-4">12/04/2025</td>
+          <td class="py-4">Carlos Lima</td>
+          <td class="py-4">Sobrancelha</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
 </main>
-
-<footer class="text-center text-sm text-[#7F8C8D] p-4 mt-10">
-  <p>Suporte, sugestões, dúvidas, etc: <a href="mailto:contatoagendaja@gmail.com">contatoagendaja@gmail.com</a></p>
-  &copy; 2025 AgendaJá. Todos os direitos reservados.
-</footer>
-<footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>
+</div>
+<footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/prestador/home.js')}"></footer>
 </body>
 </html>

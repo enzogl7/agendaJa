@@ -293,3 +293,14 @@ body, html {
     max-width: 600px;
     margin: 0 auto;
 }
+
+.selo-destaque {
+    background-color: #27AE60;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 10px;
+}

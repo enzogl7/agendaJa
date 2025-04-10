@@ -110,8 +110,7 @@ function avancarEtapa() {
         return;
     }
 
-    console.log("etapa: " + etapa);
-    console.log("tipo usuario: " + tipoUsuario)
+
 
     if (etapa === 3 && tipoUsuario === "PRESTADOR") {
         etapa = 4;
@@ -150,7 +149,6 @@ function cadastrar() {
     // var nomePagante = document.getElementById('nomePagante').value;
     // var cpfPagante = document.getElementById('cpfPagante').value;
     var planoSelecionado = planoSelecionadoInput ? planoSelecionadoInput.value : null;
-    console.log("TIPO USUARIO: " +  tipoUsuario)
 
     $.ajax({
         url: '/register',
