@@ -54,12 +54,22 @@ function avancarEtapa() {
     let dataNascimento = null;
 
     inputs.forEach(input => {
-        if (!input.value.trim()) {
-            camposVazios = true;
-            input.classList.add("is-invalid");
+        if (input.type === "checkbox") {
+            if (!input.checked) {
+                camposVazios = true;
+                input.classList.add("is-invalid");
+            } else {
+                input.classList.remove("is-invalid");
+            }
         } else {
-            input.classList.remove("is-invalid");
+            if (!input.value.trim()) {
+                camposVazios = true;
+                input.classList.add("is-invalid");
+            } else {
+                input.classList.remove("is-invalid");
+            }
         }
+
         if (input.name === "dataNascimento" || input.id === "dataNascimento") {
             dataNascimento = new Date(input.value);
         }
@@ -222,4 +232,12 @@ function logar() {
             }
         }
     });
+}
+
+function modalTermos() {
+    $('#modalTermos').modal('show');
+}
+
+function modalPrivacidade() {
+    $('#modalPrivacidade').modal('show');
 }

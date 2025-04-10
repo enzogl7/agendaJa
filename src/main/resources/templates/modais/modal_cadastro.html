@@ -6,7 +6,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
       <div class="modal-body">
-        <form id="formCadastro">
           <div class="etapa" id="etapa-1">
             <div class="mb-3">
               <label for="nome" class="form-label">Nome completo</label>
@@ -40,8 +39,16 @@
                   <label class="form-check-label" for="prestador">Prestador de Serviço</label>
                 </div>
               </div>
-            </div>
-
+              <div class="mb-3 mt-3">
+                <label class="form-label">Termos e condições gerais e políticas de privacidade</label>
+                <div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="sim" id="termosEPrivacidadeCheck">
+                    <label class="form-check-label" for="termosEPrivacidadeCheck">Aceito os <a class="cursor-pointer" onclick="modalTermos()">termos e condições gerais de venda e uso</a> e as <a class="cursor-pointer" onclick="modalPrivacidade()">políticas de privacidade</a></label>
+                  </div>
+                </div>
+              </div>
+             </div>
           </div>
 
           <div class="etapa d-none" id="etapa-2">
@@ -73,8 +80,7 @@
             <h5>Cadastro concluído com sucesso! 🎉</h5>
             <p>Bem-vindo(a) ao AgendaJá. Você será redirecionado em instantes...</p>
           </div>
-        </form>
-      </div>
+
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="btn-voltar" onclick="voltarEtapa()" disabled>Voltar</button>
