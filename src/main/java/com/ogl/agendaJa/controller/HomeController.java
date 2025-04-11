@@ -12,14 +12,12 @@ public class HomeController {
     private UsuarioService usuarioService;
 
     @GetMapping("/prestador/home")
-    public String prestadorHome(Model model) {
-        model.addAttribute("usuario", usuarioService.getUsuarioLogado());
+    public String prestadorHome() {
         return "/prestador/home";
     }
 
     @GetMapping("/cliente/home")
-    public String clienteHome(Model model) {
-        model.addAttribute("usuario", usuarioService.getUsuarioLogado());
+    public String clienteHome() {
         return "/cliente/home_cliente";
     }
 }

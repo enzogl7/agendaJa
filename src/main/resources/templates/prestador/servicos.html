@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="~{fragments/links :: headContent('')}"></head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgendaJá - Serviços</title>
+
+<body class="bg-[#f8fafe]">
+
+<div class="flex min-h-screen">
+  <button id="toggleSidebar" class="md:hidden fixed top-2 left-2 z-50 bg-[#27AE60] text-white p-1 rounded">
+    <i class="bi bi-arrow-bar-right text-base"></i>
+  </button>
+  <div id="sidebar" class="fixed md:static top-0 left-0 h-screen md:h-screen w-64 bg-white shadow-xl flex flex-col justify-between py-6 px-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <div>
+      <div class="flex items-center gap-2 mb-10">
+        <span class="text-xl font-bold">📅 AgendaJá</span>
+      </div>
+      <nav class="space-y-2">
+        <a href="/prestador/home" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-house"></i>
+            <span>Home</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+        <a href="/prestador/agendamentos" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-calendar3"></i>
+            <span>Agendamentos</span>
+            <i class="bi bi-chevron-right text-sm"></i>
+          </div>
+        </a>
+        <a href="/prestador/servicos" style="text-decoration: none; color: #7F8C8D" class="flex items-center gap-2 px-3 py-2 bg-[#27AE60] text-white hover:bg-[#1b7a46] rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-gear"></i>
+            <span>Serviços</span>
+          </div>
+        </a>
+        <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-sliders2-vertical"></i>
+            <span>Configurações</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+      </nav>
+    </div>
+
+    <div class="relative px-2 mt-4">
+      <div class="flex items-center justify-between cursor-pointer" id="userToggle">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-person-circle text-xl"></i>
+          <div>
+            <p class="text-sm font-semibold mb-1 pb-1" th:text="${usuario.nome.split(' ')[0]}"></p>
+            <p class="text-xs text-gray-400 mt-1 pt-1" th:text="'Plano ' + ${usuario.planoSelecionado}"></p>
+          </div>
+        </div>
+        <i id="chevronIcon" class="bi bi-chevron-down text-sm text-gray-500 transition-all duration-300"></i>
+      </div>
+
+      <div id="userMenu" class="absolute bottom-full right-0 mb-2 bg-white shadow-md rounded p-2 w-32 hidden z-40">
+        <a href="/logout" class="block text-sm text-gray-700 hover:bg-gray-100 px-3 py-1 rounded" style="text-decoration: none; color: #7F8C8D">Sair</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container mx-auto p-6 flex-1">
+    <div class="container mt-4">
+      <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-xl font-bold">Serviços</h2>
+          </div>
+          <div class="flex justify-end mb-4">
+            <a href="/prestador/novoservico" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
+              <i class="bi bi-plus-circle mr-1"></i> Novo serviço
+            </a>
+          </div>
+        </div>
+
+        <table class="w-full text-left text-sm" id="tableServicosPrestador">
+          <thead>
+          <tr class="text-gray-500 font-semibold border-b">
+            <th class="pb-3">Serviço</th>
+            <th class="pb-3">Ações</th>
+          </tr>
+          </thead>
+          <tbody class="text-gray-700">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+<footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>
+</body>
+</html>

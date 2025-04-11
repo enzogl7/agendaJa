@@ -46,15 +46,21 @@
             </nav>
         </div>
 
-        <div class="flex items-center justify-between px-2 mt-4">
-            <div class="flex items-center gap-3">
-                <i class="bi bi-person-circle text-xl"></i>
-                <div>
-                    <p class="text-sm font-semibold mb-1 pb-1" th:text="${usuario.nome.split(' ')[0]}"></p>
-                    <p class="text-xs text-gray-400 mt-1 pt-1" th:text="'Plano ' + ${usuario.planoSelecionado}"></p>
+        <div class="relative px-2 mt-4">
+            <div class="flex items-center justify-between cursor-pointer" id="userToggle">
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-person-circle text-xl"></i>
+                    <div>
+                        <p class="text-sm font-semibold mb-1 pb-1" th:text="${usuario.nome.split(' ')[0]}"></p>
+                        <p class="text-xs text-gray-400 mt-1 pt-1" th:text="'Plano ' + ${usuario.planoSelecionado}"></p>
+                    </div>
                 </div>
+                <i id="chevronIcon" class="bi bi-chevron-down text-sm text-gray-500 transition-all duration-300"></i>
             </div>
-            <i class="bi bi-chevron-down text-sm text-gray-500"></i>
+
+            <div id="userMenu" class="absolute bottom-full right-0 mb-2 bg-white shadow-md rounded p-2 w-32 hidden z-40">
+                <a href="/logout" class="block text-sm text-gray-700 hover:bg-gray-100 px-3 py-1 rounded" style="text-decoration: none; color: #7F8C8D">Sair</a>
+            </div>
         </div>
     </div>
 
