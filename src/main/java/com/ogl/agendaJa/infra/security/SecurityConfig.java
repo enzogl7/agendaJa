@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/logar", "/cadastro", "/register", "/webjars/**", "/resources/**", "/assets/**", "/templates/**").permitAll()
+                        .requestMatchers("/", "/login", "/logar", "/cadastro", "/register", "/webjars/**", "/resources/**", "/assets/**", "/templates/**").permitAll()
                         .requestMatchers("/cliente/**").hasAuthority("ROLE_CLIENTE")
                         .requestMatchers("/provedor/**").hasAuthority("ROLE_PROVEDOR")
                         .anyRequest().authenticated()
@@ -33,7 +33,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin(form -> form
+                        .loginPage("/")
+                        .permitAll()
+                );
 
         return http.build();
     }

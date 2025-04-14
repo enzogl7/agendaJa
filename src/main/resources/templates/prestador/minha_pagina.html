@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="~{fragments/links :: headContent('')}"></head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgendaJá - Minha página</title>
+
+<body class="bg-[#f8fafe]">
+
+<div class="flex min-h-screen">
+  <button id="toggleSidebar" class="md:hidden fixed top-2 left-2 z-50 bg-[#27AE60] text-white p-1 rounded">
+    <i class="bi bi-arrow-bar-right text-base"></i>
+  </button>
+  <div id="sidebar" class="fixed md:static top-0 left-0 h-screen md:h-screen w-64 bg-white shadow-xl flex flex-col justify-between py-6 px-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+    <div>
+      <div class="flex items-center gap-2 mb-10">
+        <span class="text-xl font-bold">📅 AgendaJá</span>
+      </div>
+      <nav class="space-y-2">
+        <a href="/prestador/home" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-house"></i>
+            <span>Home</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+        <a href="/prestador/agendamentos" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-calendar3"></i>
+            <span>Agendamentos</span>
+            <i class="bi bi-chevron-right text-sm"></i>
+          </div>
+        </a>
+        <a href="/prestador/servicos" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-gear"></i>
+            <span>Serviços</span>
+            <i class="bi bi-chevron-right text-sm"></i>
+          </div>
+        </a>
+        <a href="/prestador/minhapagina" style="text-decoration: none; color: #7F8C8D" class="flex items-center gap-2 px-3 py-2 bg-[#27AE60] text-white hover:bg-[#1b7a46] rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-shop"></i>
+            <span>Minha página</span>
+          </div>
+        </a>
+        <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-sliders2-vertical"></i>
+            <span>Configurações</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
+      </nav>
+    </div>
+
+    <div class="relative px-2 mt-4">
+      <div class="flex items-center justify-between cursor-pointer" id="userToggle">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-person-circle text-xl"></i>
+          <div>
+            <p class="text-sm font-semibold mb-1 pb-1" th:text="${usuario.nome.split(' ')[0]}"></p>
+            <p class="text-xs text-gray-400 mt-1 pt-1" th:text="'Plano ' + ${usuario.planoSelecionado}"></p>
+          </div>
+        </div>
+        <i id="chevronIcon" class="bi bi-chevron-down text-sm text-gray-500 transition-all duration-300"></i>
+      </div>
+
+      <div id="userMenu" class="absolute bottom-full right-0 mb-2 bg-white shadow-md rounded p-2 w-32 hidden z-40">
+        <a href="/logout" class="block text-sm text-gray-700 hover:bg-gray-100 px-3 py-1 rounded" style="text-decoration: none; color: #7F8C8D">Sair</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+      <div class="flex flex-col items-center">
+        <img class="w-28 h-28 rounded-full border-4 border-teal-400 object-cover" src="<!-- substitua pelo src da imagem da loja com Thymeleaf -->" alt="Foto da loja"/>
+        <input type="text" name="nome" class="mt-4 text-xl font-semibold text-center text-gray-800 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-teal-500 transition duration-300" placeholder="Nome da Loja" value="<!-- ${loja.nome} -->"/>
+      </div>
+
+      <div class="mt-6">
+        <label class="block text-sm text-gray-700 mb-1">Descrição</label>
+        <textarea name="descricao" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none" rows="3" placeholder="Fale sobre sua loja"><!-- ${loja.descricao} --></textarea>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm text-gray-700 mb-1">Localização</label>
+        <input type="text" name="localizacao" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Cidade, Estado" value="<!-- ${loja.localizacao} -->"/>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm text-gray-700 mb-1">Serviços</label>
+        <textarea name="servicos" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none" rows="3" placeholder="Separe por vírgulas ou quebras de linha"><!-- ${loja.servicos} --></textarea>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm text-gray-700 mb-1">Contato</label>
+        <input type="email" name="email" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="contato@exemplo.com" value="<!-- ${loja.email} -->"/>
+        <input type="tel" name="telefone" class="w-full mt-2 border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="(XX) XXXXX-XXXX" value="<!-- ${loja.telefone} -->"/>
+      </div>
+
+      <div class="mt-6 text-center">
+        <button type="submit" class="btn btn-success">
+          Salvar Alterações
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>
+</body>
+</html>

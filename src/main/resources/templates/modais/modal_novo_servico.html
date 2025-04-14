@@ -1,0 +1,42 @@
+<div class="modal fade" id="modalNovoServico" tabindex="-1" role="dialog" aria-labelledby="modalNovoServicoTitulo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align: center; width: 100%;">
+        <h5 class="modal-title" id="modalNovoServicoTitulo">Novo serviço</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="nomeServico">Nome*</label>
+          <input class="form-control mb-3" type="text" id="nomeServico">
+
+          <label for="descricaoServico">Descrição</label>
+          <input class="form-control mb-3" type="text" id="descricaoServico">
+
+          <label for="precoServico">Preço*</label>
+          <input class="form-control mb-3" type="text" id="precoServico">
+
+          <label for="categoriaServico">Categoria*</label>
+          <select class="form-control mb-3 form-select" id="categoriaServico" data-live-search="true" title="Selecione uma categoria">
+            <option value="BELEZA">Beleza</option>
+            <option value="SAUDE">Saúde</option>
+            <option value="EDUCACAO">Educação</option>
+            <option value="DOMESTICO">Serviços Domésticos</option>
+            <option value="CONSULTORIA">Consultoria</option>
+            <option value="TECNICO">Suporte Técnico</option>
+            <option value="CONSTRUCAO">Construção e Reparos</option>
+            <option value="EVENTOS">Eventos</option>
+            <option value="TRANSPORTE">Transporte</option>
+            <option value="PET">Serviços para Pets</option>
+            <option value="ARTES">Artes e Design</option>
+            <option value="OUTROS">Outros</option>
+          </select>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn" style="background-color: #27AE60; color: white" onclick="salvarServico()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -37,6 +37,13 @@
             <span>Serviços</span>
           </div>
         </a>
+        <a href="/prestador/minhapagina" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+          <div class="flex items-center gap-3">
+            <i class="bi bi-shop"></i>
+            <span>Minha página</span>
+          </div>
+          <i class="bi bi-chevron-right text-sm"></i>
+        </a>
         <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
           <div class="flex items-center gap-3">
             <i class="bi bi-sliders2-vertical"></i>
@@ -67,13 +74,14 @@
 
   <main class="container mx-auto p-6 flex-1">
     <div class="container mt-4">
-      <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+      <div class="p-6 bg-white rounded-2xl shadow">
         <div class="flex justify-between items-center mb-4">
           <div>
             <h2 class="text-xl font-bold">Serviços</h2>
+            <p class="text-muted">Foram encontrados <strong><span th:text="${qtdeServicos}"></span> serviço(s).</strong></p>
           </div>
           <div class="flex justify-end mb-4">
-            <a href="/prestador/novoservico" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
+            <a onclick="novoServicoModal()" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
               <i class="bi bi-plus-circle mr-1"></i> Novo serviço
             </a>
           </div>
@@ -81,19 +89,51 @@
 
         <table class="w-full text-left text-sm" id="tableServicosPrestador">
           <thead>
-          <tr class="text-gray-500 font-semibold border-b">
+          <tr class="text-gray-500 font-semibold border-b text-center">
             <th class="pb-3">Serviço</th>
+            <th class="pb-3">Descrição</th>
+            <th class="pb-3">Categoria</th>
+            <th class="pb-3">Preço</th>
+            <th class="pb-3">Ativo</th>
             <th class="pb-3">Ações</th>
           </tr>
           </thead>
           <tbody class="text-gray-700">
+          <tr class="border-b hover:bg-gray-50 transition h-16" th:each="servico : ${servicos}"  th:if="${not #lists.isEmpty(servicos)}">
+            <td class="text-center" th:text="${servico.nome}"></td>
+            <td class="text-center" th:text="${servico.descricao} != '' ? ${servico.descricao} : '---'"></td>
+            <td class="text-center" th:text="${servico.categoria}"></td>
+            <td class="text-center" th:text="${servico.preco}"></td>
+            <td class="text-center">
+              <i class="bi bi-check2" style="color: #27AE60;" th:if="${servico.ativo}"></i>
+              <i class="bi bi-x" style="color: #7f8c8d;" th:unless="${servico.ativo}"></i>
+            </td>
+            <td class="text-center">
+              <a onclick="modalEditarServico(this)" th:data-id="${servico.id}" th:data-nome="${servico.nome}" th:data-descricao="${servico.descricao}" th:data-categoria="${servico.categoria}"
+                 th:data-preco="${servico.preco}" th:data-ativo="${servico.ativo}"
+                 style="text-decoration: none" class="me-2 cursor-pointer" title="Editar">
+                <i class="bi bi-pencil" style="color: #7f8c8d;"></i>
+              </a>
+              <a onclick="excluirServico(this)" th:data-id="${servico.id}" class="cursor-pointer" title="Excluir">
+                <i class="bi bi-trash" style="color: #7f8c8d;"></i>
+              </a>
+            </td>
+          </tr>
 
+          <tr th:if="${#lists.isEmpty(servicos)}">
+            <td colspan="6" class="text-center text-muted py-4">
+              Nenhum registro encontrado.
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
     </div>
   </main>
+
 </div>
-<footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>
+<div th:replace="~{modais/modal_novo_servico}"></div>
+<div th:replace="~{modais/modal_editar_servico}"></div>
+<footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/prestador/servicos.js')}"></footer>
 </body>
 </html>

@@ -6,7 +6,7 @@
 
 <body>
 <header class="menu-superior">
-    <div><strong>AgendaJá</strong></div>
+    <div><strong><a href="/" style="text-decoration: none; color: black">AgendaJá</a></strong></div>
     <nav>
         <a href="#planos">Planos</a>
         <a href="#beneficios">Benefícios</a>
@@ -15,12 +15,16 @@
     </nav>
 </header>
 
-<section class="hero">
-    <h1>Menos ligações, mais agendamentos.</h1>
-    <p>Automatize sua rotina com um sistema inteligente e intuitivo. Facilitando pagamentos, agendamentos e a gestão de seus horários comerciais,</p>
+<section class="hero text-center py-12">
+    <h1 class="text-3xl font-bold mb-4">Menos ligações, mais agendamentos.</h1>
+    <p class="mb-6">Automatize sua rotina com um sistema <strong>inteligente e intuitivo</strong>. Facilitando pagamentos, agendamentos e a gestão de seus horários comerciais.</p>
+    <div class="flex justify-center gap-4 mt-6">
+        <button class="btn-plano px-6 py-3 bg-teal-400 text-white rounded-lg" onclick="modalCadastro()">Começar com o plano gratuito</button>
+        <button class="btn-conhecer"><a href="#conheca" style="text-decoration: none; color: black">Conhecer mais</a></button>
+    </div>
 </section>
 
-<section class="conteudo">
+<section class="conteudo" id="conheca">
     <h2>Como funciona o AgendaJá?</h2>
     <p>
         O AgendaJá é um sistema simples e eficiente para que seus clientes escolham os melhores horários, você mantenha controle dos agendamentos e otimize sua rotina. Ideal para profissionais autônomos, clínicas, consultores e muito mais.
@@ -58,7 +62,7 @@
         <div class="card" data-aos="fade-up">
             <img src="/assets/gifs/custom.gif" class="beneficio-icon">
             <h3>Customizável</h3>
-            <p>Customize de acordo com suas necessidades e deixe o AgendeJá com a sua cara.</p>
+            <p>Crie a própria página exclusiva do seu negócio para agendamentos e deixe o AgendaJá com a sua cara.</p>
         </div>
     </div>
 </section>
@@ -82,7 +86,7 @@
             <ul>
                 <li>Agendamentos ilimitados</li>
                 <li>Suporte prioritário</li>
-                <li>Integração com aplicativos como Google Calendar, Apple Calendar, etc</li>
+                <li>Página exclusiva do seu negócio</li>
             </ul>
             <button class="btn-plano" onclick="modalCadastro()">Quero esse!</button>
         </div>
@@ -97,11 +101,14 @@
 </section>
 
 <footer class="footer-contato">
+    <hr>
+    <h3>AgendaJá</h3>
     <div class="footer-conteudo">
         <p>Suporte, sugestões, dúvidas, etc: <a href="mailto:contatoagendaja@gmail.com">contatoagendaja@gmail.com</a></p>
         <p>&copy; 2025 AgendaJá. Todos os direitos reservados.</p>
     </div>
 </footer>
+
 <div th:replace="~{modais/modal_login}"></div>
 <div th:replace="~{modais/modal_cadastro}"></div>
 <div th:replace="~{modais/modal_termos}"></div>
