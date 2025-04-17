@@ -84,6 +84,75 @@
         <i class="bi bi-info-circle-fill mr-2"></i>
         Aproveite para revisar seus <a href="/prestador/servicos" style="color: #2E7D32;">serviços cadastrados</a>
       </div>
+      <div th:if="${agendamentosPendentes > 0}" id="alertPendentes" class="bg-yellow-100 border border-yellow-300 text-yellow-800 rounded-xl px-4 py-3 mb-6 relative">
+        <button onclick="document.getElementById('alertPendentes').style.display='none'" class="absolute top-2 right-3 text-yellow-800 hover:text-yellow-900 text-lg">
+          &times;
+        </button>
+        <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+        Você possui <strong th:text="${agendamentosPendentes}">0</strong> agendamentos pendentes. Não se esqueça de confirmá-los na sua tabela de agendamentos.
+      </div>
+
+      <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-xl font-bold">Agendamentos</h2>
+            <div class="mb-4 text-gray-600">
+              <p>
+                <i class="bi bi-calendar-check"></i>
+                Você tem <strong th:text="${agendamentosHoje}">0</strong> agendamentos hoje
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-end mb-4">
+            <a onclick="modalNovoAgendamento()" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
+              <i class="bi bi-plus-circle mr-1"></i> Novo agendamento
+            </a>
+          </div>
+        </div>
+
+        <table class="w-full text-left text-sm" id="tableAgendamentosPrestador">
+          <thead>
+          <tr class="text-gray-500 font-semibold border-b text-center">
+            <th class="pb-3">Data</th>
+            <th class="pb-3">Cliente</th>
+            <th class="pb-3">Serviço</th>
+            <th class="pb-3">Valor</th>
+            <th class="pb-3">Status</th>
+            <th class="pb-3">Ações</th>
+          </tr>
+          </thead>
+          <tbody class="text-gray-700">
+          <tr class="border-b hover:bg-gray-50 transition h-16" th:each="agendamento : ${agendamentos}" th:if="${not #lists.isEmpty(agendamentos)}">
+            <td class="text-center">
+              <span th:if="${agendamento.data == hoje}" class="badge bg-success text-white" data-toggle="tooltip" data-placement="bottom" title="Agendamento hoje">
+                <span class="text-base" th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
+              </span>
+              <span th:if="${agendamento.data != hoje}">
+                <span th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
+              </span>
+            </td>
+            <td class="text-center">CLIENTE</td>
+            <td class="text-center" th:text="${agendamento.servico.nome}"></td>
+            <td class="text-center" th:text="${agendamento.servico.preco}"></td>
+            <td class="text-center" th:text="${agendamento.status}"></td>
+            <td class="text-center">
+              <a th:if="${agendamento.status == 'PENDENTE'}" onclick="confirmarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer" title="Confirmar">
+                <i class="bi bi-check text-xl" style="color: #7f8c8d;"></i>
+              </a>
+              <a onclick="modalEditarAgendamento(this)" th:data-id="${agendamento.id}" th:data-data="${agendamento.data}" th:data-servico="${agendamento.servico.id}" th:data-status="${agendamento.status}"
+                 th:data-horario="${agendamento.horario}" style="text-decoration: none" class="me-2 cursor-pointer" title="Editar">
+                <i class="bi bi-pencil" style="color: #7f8c8d;"></i>
+              </a>
+              <a onclick="excluirAgendamento(this)" th:data-id="${agendamento.id}" class="cursor-pointer" title="Excluir">
+                <i class="bi bi-trash" style="color: #7f8c8d;"></i>
+              </a>
+            </td>
+          </tr>
+          </tbody>
+
+        </table>
+      </div>
+
       <div class="p-6 mb-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02] mt-6 max-w-[420px] w-full">
         <h4 class="text-xl font-bold mb-4 text-center" id="textoMesAgenda"></h4>
 
@@ -111,39 +180,14 @@
           <span class="align-middle">Agendado</span>
         </div>
       </div>
-
-      <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h2 class="text-xl font-bold">Agendamentos</h2>
-            <div class="mb-4 text-gray-600">
-              <p><i class="bi bi-calendar-check"></i> Você tem <strong>5 agendamentos</strong> hoje</p>
-            </div>
-          </div>
-          <div class="flex justify-end mb-4">
-            <a href="/prestador/novoagendamento" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
-              <i class="bi bi-plus-circle mr-1"></i> Novo agendamento
-            </a>
-          </div>
-        </div>
-
-        <table class="w-full text-left text-sm" id="tableAgendamentosPrestador">
-          <thead>
-          <tr class="text-gray-500 font-semibold border-b">
-            <th class="pb-3">Data</th>
-            <th class="pb-3">Cliente</th>
-            <th class="pb-3">Serviço</th>
-            <th class="pb-3">Ações</th>
-          </tr>
-          </thead>
-          <tbody class="text-gray-700">
-
-          </tbody>
-        </table>
-      </div>
     </div>
   </main>
 </div>
+<div th:replace="~{modais/modal_novo_agendamento}"></div>
+<div th:replace="~{modais/modal_editar_agendamento}"></div>
 <footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/prestador/agendamentos.js')}"></footer>
+<script th:inline="javascript">
+  const datasAgendadas = /*[[${datasAgendadas}]]*/ [];
+</script>
 </body>
 </html>

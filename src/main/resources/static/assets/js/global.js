@@ -21,3 +21,34 @@ userToggle.addEventListener("click", () => {
     chevronIcon.classList.toggle("bi-chevron-down");
     chevronIcon.classList.toggle("bi-chevron-up");
 });
+
+function paginacaoTabela(tabela) {
+    $('#' + tabela).DataTable({
+        "paging": true,
+        "lengthMenu": [10, 15, 25],
+        "searching": false,
+        "ordering": false,
+        "info": false,
+        "language": {
+            "lengthMenu": "_MENU_ registros por página",
+            "zeroRecords": "Nenhum registro encontrado",
+            "info": "Página _PAGE_ de _PAGES_",
+            "infoEmpty": "Nenhum registro disponível",
+            "infoFiltered": "(Filtrado de _MAX_ registros no total)",
+            "paginate": {
+                "previous": "<",
+                "next": ">"
+            }
+        },
+        "initComplete": function() {
+            $('#' + tabela + '_paginate [aria-current="page"]').css({
+                'background-color': '#27AE60',
+                'color': '#fff',
+                'border': 'none',
+                'outline': 'none',
+                'text-decoration': 'none'
+            });
+            $('#' + tabela + ' th').css('text-align', 'center');
+        }
+    });
+}

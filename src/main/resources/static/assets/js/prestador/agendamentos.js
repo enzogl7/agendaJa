@@ -14,6 +14,10 @@ const feriadosFixos = [
 "12-25"
 ];
 
+$(document).ready(function () {
+    paginacaoTabela('tableAgendamentosPrestador');
+});
+
 function gerarCalendario(data) {
     const ano = data.getFullYear();
     const mes = data.getMonth();
@@ -39,11 +43,14 @@ function gerarCalendario(data) {
 
         const mm = String(mes + 1).padStart(2, '0');
         const dd = String(dia).padStart(2, '0');
-        const dataFormatada = `${mm}-${dd}`;
+        const dataCompleta = `${ano}-${mm}-${dd}`;
 
-        if (feriadosFixos.includes(dataFormatada)) {
+        if (feriadosFixos.includes(`${mm}-${dd}`)) {
             div.classList.add("bg-[#E74C3C]", "text-white", "rounded-lg", "py-2");
             div.title = "Feriado";
+        } else if (datasAgendadas.includes(dataCompleta)) {
+            div.classList.add("bg-[#27AE60]", "text-white", "font-semibold", "rounded-lg", "py-2");
+            div.title = "Agendamento";
         } else {
             div.classList.add("bg-[#f1f1f1]", "rounded-lg", "py-2", "hover:bg-[#7F8C8D]", "hover:text-white", "transition");
         }
@@ -60,3 +67,216 @@ function mudarMes(offset) {
 document.addEventListener("DOMContentLoaded", () => {
     gerarCalendario(dataAtual);
 });
+
+function modalNovoAgendamento() {
+    $('#modalNovoAgendamento').modal('show');
+}
+
+function salvarAgendamento() {
+    var servico = document.getElementById('servicoAgendamento').value;
+    var data = document.getElementById('dataAgendamento').value;
+    var horario = document.getElementById('horarioAgendamento').value;
+    var status = document.getElementById('statusAgendamento').value;
+
+    if (!servico || !data || !horario) {
+        Swal.fire({
+            title: "Ops!",
+            text: "Preencha todos os campos obrigatórios!",
+            icon: "warning",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    var hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    var partesData = data.split("-");
+    var dataSelecionada = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+    dataSelecionada.setHours(0, 0, 0, 0);
+    if (dataSelecionada < hoje) {
+        Swal.fire({
+            title: "Data inválida",
+            text: "A data do agendamento não pode ser anterior a hoje!",
+            icon: "error",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    $.ajax({
+        url: '/prestador/salvaragendamento',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            servico: servico, data: data, horario: horario, status: status
+        }),
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    Swal.fire({
+                        title: "Pronto!",
+                        text: "Agendamento criado com sucesso!",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                    break;
+                default:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Ocorreu um erro ao salvar o agendamento.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    return;
+            }
+        }
+    });
+}
+
+function excluirAgendamento(button) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Deseja excluir este agendamento?',
+        showDenyButton: true,
+        confirmButtonText: 'Sim',
+        denyButtonText: 'Não',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/prestador/excluiragendamento',
+                type: 'POST',
+                data: {
+                    idAgendamento: button.getAttribute('data-id')
+                },
+                complete: function(xhr, status) {
+                    switch (xhr.status) {
+                        case 200:
+                            Swal.fire({
+                                title: "Pronto!",
+                                text: "Excluído com sucesso!",
+                                icon: "success",
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao excluir o agendamento.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            return;
+                    }
+                }
+            });
+        }
+    })
+}
+
+function modalEditarAgendamento(button) {
+    $('#modalEditarAgendamento').modal('show');
+    $('#idAgendamentoEdicao').val(button.getAttribute('data-id'));
+    $('#servicoAgendamentoEdicao').val(button.getAttribute('data-servico'));
+    $('#dataAgendamentoEdicao').val(button.getAttribute('data-data'));
+    $('#horarioAgendamentoEdicao').val(button.getAttribute('data-horario'));
+    $('#statusAgendamentoEdicao').val(button.getAttribute('data-status'));
+}
+
+function salvarEdicaoAgendamento() {
+    var id = document.getElementById('idAgendamentoEdicao').value;
+    var servico = document.getElementById('servicoAgendamentoEdicao').value;
+    var data = document.getElementById('dataAgendamentoEdicao').value;
+    var horario = document.getElementById('horarioAgendamentoEdicao').value;
+    var status = document.getElementById('statusAgendamentoEdicao').value;
+
+    if (!servico || !data || !horario) {
+        Swal.fire({
+            title: "Ops!",
+            text: "Preencha todos os campos obrigatórios!",
+            icon: "warning",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    $.ajax({
+        url: '/prestador/editaragendamento',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            id:id, servico: servico, data: data, horario: horario, status: status
+        }),
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    Swal.fire({
+                        title: "Pronto!",
+                        text: "Agendamento editado com sucesso!",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                    break;
+                default:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Ocorreu um erro ao editar o agendamneto.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    return;
+            }
+        }
+    });
+}
+
+function confirmarAgendamento(button) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Deseja ativar este agendamento?',
+        showDenyButton: true,
+        confirmButtonText: 'Sim',
+        denyButtonText: 'Não',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/prestador/confirmaragendamento',
+                type: 'POST',
+                data: {
+                    idAgendamento: button.getAttribute('data-id')
+                },
+                complete: function(xhr, status) {
+                    switch (xhr.status) {
+                        case 200:
+                            Swal.fire({
+                                title: "Pronto!",
+                                text: "Confirmado com sucesso!",
+                                icon: "success",
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao confirmar o agendamento.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            return;
+                    }
+                }
+            });
+        }
+    })
+}

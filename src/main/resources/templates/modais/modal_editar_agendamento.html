@@ -1,0 +1,40 @@
+<div class="modal fade" id="modalEditarAgendamento" tabindex="-1" role="dialog" aria-labelledby="modalEditarAgendamentoTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: center; width: 100%;">
+                <h5 class="modal-title" id="modalEdtarAgendamentoTitulo">Editar serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" id="idAgendamentoEdicao">
+
+                    <label for="servicoAgendamentoEdicao">Serviço*</label>
+                    <select class="form-control mb-3 form-select" id="servicoAgendamentoEdicao" data-live-search="true" title="Selecione um serviço">
+                        <option th:each="servico : ${servicos}" th:value="${servico.id}" th:text="${servico.nome}"></option>
+                    </select>
+
+                    <label for="dataAgendamentoEdicao">Data*</label>
+                    <input class="form-control mb-3" type="date" id="dataAgendamentoEdicao">
+
+                    <label for="horarioAgendamentoEdicao">Horário*</label>
+                    <select class="form-control mb-3 form-select" id="horarioAgendamentoEdicao" title="Selecione um horário">
+                        <option value="08:00">08:00</option>
+                        <option value="08:00">Popular de acordo com os horários configurados pelo prestador</option>
+                    </select>
+
+                    <label for="statusAgendamentoEdicao">Status*</label>
+                    <select class="form-control mb-3 form-select" id="statusAgendamentoEdicao" title="Selecione um status">
+                        <option value="CONFIRMADO">Confirmado</option>
+                        <option value="PENDENTE">Pendente</option>
+                        <option value="CONCLUIDO">Concluído</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn" style="background-color: #27AE60; color: white" onclick="salvarEdicaoAgendamento()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
