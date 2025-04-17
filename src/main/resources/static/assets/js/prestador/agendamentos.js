@@ -18,6 +18,10 @@ $(document).ready(function () {
     paginacaoTabela('tableAgendamentosPrestador');
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    gerarCalendario(dataAtual);
+});
+
 function gerarCalendario(data) {
     const ano = data.getFullYear();
     const mes = data.getMonth();
@@ -52,7 +56,23 @@ function gerarCalendario(data) {
             div.classList.add("bg-[#27AE60]", "text-white", "font-semibold", "rounded-lg", "py-2");
             div.title = "Agendamento";
         } else {
-            div.classList.add("bg-[#f1f1f1]", "rounded-lg", "py-2", "hover:bg-[#7F8C8D]", "hover:text-white", "transition");
+            div.classList.add(
+                "bg-[#f1f1f1]",
+                "rounded-lg",
+                "py-2",
+                "hover:bg-[#7F8C8D]",
+                "hover:text-white",
+                "transition",
+                "cursor-pointer"
+            );
+            div.title = "Clique para adicionar um serviço";
+            div.addEventListener("click", () => {
+                const inputData = document.getElementById("dataAgendamento");
+                if (inputData) {
+                    inputData.value = dataCompleta;
+                }
+                modalNovoAgendamento(dataCompleta);
+            });
         }
 
         calendarDays.appendChild(div);
@@ -64,12 +84,11 @@ function mudarMes(offset) {
     gerarCalendario(dataAtual);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    gerarCalendario(dataAtual);
-});
-
-function modalNovoAgendamento() {
+function modalNovoAgendamento(data) {
     $('#modalNovoAgendamento').modal('show');
+    if (data != null) {
+        $('#dataAgendamento').val(data);
+    }
 }
 
 function salvarAgendamento() {

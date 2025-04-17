@@ -83,13 +83,13 @@
     <div class="card shadow-md border-0 rounded-4 p-4 transition duration-300 hover:shadow-lg hover:scale-[1.02]">
       <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center gap-4">
 
-        <div class="d-flex align-items-center gap-3 flex-grow-1">
+        <div class="d-flex align-items-center gap-3 flex-grow-1" th:classappend="${qtdeAgendamentosProximos == 0} ? ' opacity-50'">
           <div class="icon-circle bg-light-green">
             <i class="bi bi-pin-angle fs-2 text-success"></i>
           </div>
           <div>
             <div class>Agendamentos próximos</div>
-            <div class="fs-4 fw-bold">3</div>
+            <div class="fs-4 fw-bold" th:text="${qtdeAgendamentosProximos}">x</div>
             <div class="text-success small"><i class="bi bi-arrow-up"></i> 16% esse mês</div>
           </div>
         </div>
@@ -97,14 +97,14 @@
         <div class="vr d-none d-md-block mx-2"></div>
 
         <!-- Card 2 -->
-        <div class="d-flex align-items-center gap-3 flex-grow-1">
+        <div class="d-flex align-items-center gap-3 flex-grow-1" th:classappend="${agendamentosPendentes == 0} ? ' opacity-50'">
           <div class="icon-circle bg-light-green">
             <i class="bi bi-hourglass fs-2 text-success"></i>
           </div>
           <div>
             <div class="text-muted">Agendamentos pendentes</div>
-            <div class="fs-4 fw-bold">5</div>
-            <small class="text-muted" style="font-size: 0.8rem">Agendamentos aguardando confirmação de cliente</small>
+            <div class="fs-4 fw-bold" th:text="${agendamentosPendentes}">x</div>
+            <small class="text-muted" style="font-size: 0.8rem">Agendamentos aguardando confirmação</small>
           </div>
         </div>
 
@@ -129,36 +129,41 @@
     <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
       <div class="flex justify-between items-center mb-4">
         <div>
-          <h2 class="text-xl font-bold">Próximos agendamentos <a href="/prestador/agendamentos" style="text-decoration: none; color: #7F8C8D"><i class="bi bi-box-arrow-up-right text-sm align-middle"></i></a>
+          <h2 class="text-xl font-bold">Próximos agendamentos <a href="/prestador/agendamentos" style="text-decoration: none; color: #7F8C8D"><i class="bi bi-box-arrow-up-right text-sm align-middle" data-bs-toggle="tooltip" data-bs-placement="right" title="Ir para agendamentos"></i></a>
           </h2>
-          <p class="text-sm text-emerald-500 font-semibold">Agendamentos previstos para os próximos 3 dias</p>
+          <p class="text-sm text-emerald-500 font-semibold">Agendamentos confirmados previstos para os próximos 5 dias</p>
         </div>
       </div>
 
-      <table class="w-full text-left text-sm" id="tableAgendamentos">
+      <table class="w-full text-left text-sm" id="tableAgendamentosHome">
         <thead>
-        <tr class="text-gray-500 font-semibold border-b">
+        <tr class="text-gray-500 font-semibold border-b text-center">
           <th class="pb-3">Data</th>
           <th class="pb-3">Cliente</th>
           <th class="pb-3">Serviço</th>
         </tr>
         </thead>
         <tbody class="text-gray-700">
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="py-4">10/04/2025</td>
-          <td class="py-4">João Silva</td>
-          <td class="py-4">Unha</td>
+        <tr class="group border-b transition h-16" th:each="agendamento : ${agendamentos}">
+          <td class="text-center group-hover:bg-gray-50">
+              <span th:if="${agendamento.data == hoje}" class="badge bg-success text-white" data-bs-toggle="tooltip" data-bs-placement="left" title="Agendamento hoje">
+                <span class="text-base" th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
+              </span>
+            <span th:if="${agendamento.data != hoje}">
+                <span th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
+              </span>
+          </td>
+          <td class="text-center group-hover:bg-gray-50">CLIENTE</td>
+          <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.nome}"></td>
         </tr>
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="py-4">11/04/2025</td>
-          <td class="py-4">Maria Oliveira</td>
-          <td class="py-4">Cabelo</td>
-        </tr>
-        <tr class="border-b hover:bg-gray-50 transition">
-          <td class="py-4">12/04/2025</td>
-          <td class="py-4">Carlos Lima</td>
-          <td class="py-4">Sobrancelha</td>
-        </tr>
+        </tbody>
+
+        <tbody>
+          <tr th:if="${#lists.isEmpty(agendamentos)}">
+            <td colspan="3" class="text-center text-muted py-4">
+              Nenhum agendamento próximo confirmado.
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

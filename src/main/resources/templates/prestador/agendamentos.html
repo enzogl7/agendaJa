@@ -92,7 +92,7 @@
         Você possui <strong th:text="${agendamentosPendentes}">0</strong> agendamentos pendentes. Não se esqueça de confirmá-los na sua tabela de agendamentos.
       </div>
 
-      <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
+      <div class="p-6 bg-white rounded-2xl shadow">
         <div class="flex justify-between items-center mb-4">
           <div>
             <h2 class="text-xl font-bold">Agendamentos</h2>
@@ -104,7 +104,7 @@
             </div>
           </div>
           <div class="flex justify-end mb-4">
-            <a onclick="modalNovoAgendamento()" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
+            <a onclick="modalNovoAgendamento(null)" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg shadow transition">
               <i class="bi bi-plus-circle mr-1"></i> Novo agendamento
             </a>
           </div>
@@ -122,20 +122,30 @@
           </tr>
           </thead>
           <tbody class="text-gray-700">
-          <tr class="border-b hover:bg-gray-50 transition h-16" th:each="agendamento : ${agendamentos}" th:if="${not #lists.isEmpty(agendamentos)}">
-            <td class="text-center">
-              <span th:if="${agendamento.data == hoje}" class="badge bg-success text-white" data-toggle="tooltip" data-placement="bottom" title="Agendamento hoje">
+          <tr class="group border-b transition h-16" th:each="agendamento : ${agendamentos}">
+            <td class="text-center group-hover:bg-gray-50">
+              <span th:if="${agendamento.data == hoje}" class="badge bg-success text-white" data-bs-toggle="tooltip" data-bs-placement="left" title="Agendamento hoje">
                 <span class="text-base" th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
               </span>
-              <span th:if="${agendamento.data != hoje}">
+                    <span th:if="${agendamento.data != hoje}">
                 <span th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
               </span>
             </td>
-            <td class="text-center">CLIENTE</td>
-            <td class="text-center" th:text="${agendamento.servico.nome}"></td>
-            <td class="text-center" th:text="${agendamento.servico.preco}"></td>
-            <td class="text-center" th:text="${agendamento.status}"></td>
-            <td class="text-center">
+            <td class="text-center group-hover:bg-gray-50">CLIENTE</td>
+            <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.nome}"></td>
+            <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.preco}"></td>
+            <td class="text-center group-hover:bg-gray-50">
+        <span th:if="${agendamento.status == 'PENDENTE'}">
+          <span th:text="${agendamento.status}" class="badge bg-warning text-black text-base"></span>
+        </span>
+              <span th:if="${agendamento.status == 'CONCLUIDO'}">
+          <span th:text="${agendamento.status}" class="badge bg-info text-white text-base"></span>
+        </span>
+              <span th:if="${agendamento.status == 'CONFIRMADO'}">
+          <span th:text="${agendamento.status}" class="badge bg-success text-white text-base"></span>
+        </span>
+            </td>
+            <td class="text-center group-hover:bg-gray-50">
               <a th:if="${agendamento.status == 'PENDENTE'}" onclick="confirmarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer" title="Confirmar">
                 <i class="bi bi-check text-xl" style="color: #7f8c8d;"></i>
               </a>
