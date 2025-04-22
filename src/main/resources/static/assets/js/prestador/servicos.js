@@ -8,6 +8,16 @@ document.getElementById("precoServico").addEventListener("input", function (e) {
     e.target.value = value;
 });
 
+document.getElementById("precoServicoEdicao").addEventListener("input", function (e) {
+    let value = e.target.value;
+    value = value.replace(/\D/g, "");
+    value = (Number(value) / 100).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    });
+    e.target.value = value;
+});
+
 function novoServicoModal() {
     $('#modalNovoServico').modal('show');
 }

@@ -33,4 +33,8 @@ public class ServicoService {
         return servicoRepository.findById(id).orElse(null);
     }
 
+    public List<Servico> findAllById(List<Long> ids) {
+        return servicoRepository.findAllById(ids);
+    }
+
 }

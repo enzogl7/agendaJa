@@ -29,4 +29,8 @@ public class Servico {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "pagina_negocio_id")
+    private PaginaNegocio paginaNegocio;
 }

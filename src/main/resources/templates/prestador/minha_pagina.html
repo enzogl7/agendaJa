@@ -75,35 +75,64 @@
   <div class="flex-1 flex items-center justify-center min-h-screen bg-gray-100">
     <div th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
       <div class="flex flex-col items-center">
-        <img class="w-28 h-28 rounded-full border-4 border-teal-400 object-cover" src="<!-- substitua pelo src da imagem da loja com Thymeleaf -->" alt="Foto da loja"/>
-        <input type="text" name="nome" class="mt-4 text-xl font-semibold text-center text-gray-800 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-teal-500 transition duration-300" placeholder="Nome da Loja" value="<!-- ${loja.nome} -->"/>
+        <input type="text" id="nomeNegocio" class="mt-4 text-xl font-semibold text-center text-gray-800 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-[#27AE60] focus:ring-2 focus:ring-[#27AE60] transition duration-300"
+               placeholder="Nome do seu negócio" th:value="${minhaPagina != null ? minhaPagina.nome : ''}"/>
       </div>
 
       <div class="mt-6">
         <label class="block text-sm text-gray-700 mb-1">Descrição</label>
-        <textarea name="descricao" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none" rows="3" placeholder="Fale sobre sua loja"><!-- ${loja.descricao} --></textarea>
+        <textarea id="descricaoNegocio" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60] resize-none" rows="3"
+                  placeholder="Fale sobre seu negócio" th:text="${minhaPagina.descricao != null ? minhaPagina.descricao : ''}"></textarea>
       </div>
 
       <div class="mt-4">
-        <label class="block text-sm text-gray-700 mb-1">Localização</label>
-        <input type="text" name="localizacao" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Cidade, Estado" value="<!-- ${loja.localizacao} -->"/>
+        <label class="block text-sm text-gray-700 mb-1">Endereço</label>
+        <input type="text" id="enderecoNegocio" name="enderecoNegocio"
+               class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60]"
+               placeholder="Rua, número, bairro"
+               th:value="${minhaPagina.endereco != null ? minhaPagina.endereco : ''}" />
       </div>
 
       <div class="mt-4">
-        <label class="block text-sm text-gray-700 mb-1">Serviços</label>
-        <textarea name="servicos" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none" rows="3" placeholder="Separe por vírgulas ou quebras de linha"><!-- ${loja.servicos} --></textarea>
+        <label class="block text-sm text-gray-700 mb-1">Cidade e Estado</label>
+        <input type="text" id="cidadeNegocio" name="cidadeNegocio"
+               class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60]"
+               placeholder="Cidade, Estado"
+               th:value="${minhaPagina.cidade != null ? minhaPagina.cidade : ''}" />
+      </div>
+
+      <div class="mt-4">
+        <label for="servicoNegocio">Serviço</label>
+        <select class="form-control mb-3 form-select" id="servicoNegocio" data-live-search="true" title="Selecione um serviço" multiple>
+          <option th:each="servico : ${servicos}" th:text="${servico.nome}" th:value="${servico.id}" th:selected="${minhaPagina != null && minhaPagina.servicos != null && minhaPagina.servicos.contains(servico)}"></option>
+          <span class="text-sm text-muted" style="font-size: 0.7rem">Os serviços selecionados aqui serão exibidos na sua página e disponibilizados para novos agendamentos.</span>
+        </select>
       </div>
 
       <div class="mt-4">
         <label class="block text-sm text-gray-700 mb-1">Contato</label>
-        <input type="email" name="email" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="contato@exemplo.com" value="<!-- ${loja.email} -->"/>
-        <input type="tel" name="telefone" class="w-full mt-2 border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="(XX) XXXXX-XXXX" value="<!-- ${loja.telefone} -->"/>
+        <input type="email" id="emailNegocio" class="w-full border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60]"
+               placeholder="contato@exemplo.com"  th:value="${minhaPagina.email != null ? minhaPagina.email : ''}"/>
+        <input type="tel" id="telefoneNegocio" class="w-full mt-2 border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60]"
+               placeholder="(XX) XXXXX-XXXX" th:value="${minhaPagina.telefone != null ? minhaPagina.telefone : ''}"
+               maxlength="15" />
+        <span class="text-sm text-muted" style="font-size: 0.7rem">*OBS.: O mesmo será utilizado para WhatsApp.</span>
+        <input type="email" id="instagramNegocio" class="w-full mt-2 border border-gray-300 rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#27AE60]"
+               placeholder="instagram.com/usuario/"  th:value="${minhaPagina.instagram != null ? minhaPagina.instagram : ''}"/>
+        <span class="text-sm text-muted" style="font-size: 0.7rem">Certifique-se de que o link está correto, pois será exibido em sua página de agendamentos.</span>
       </div>
 
       <div class="mt-6 text-center">
-        <button type="submit" class="btn btn-success">
+        <button id="btnSalvar" onclick="salvarMinhaPagina()" class="btn btn-success bg-[#27AE60] mb-3" disabled>
           Salvar Alterações
         </button>
+        <br>
+        <input type="hidden" id="paginaSlug" th:value="${minhaPagina.slug}" />
+        <button id="btnCompartilhar" class="text-sm mt-3 cursor-pointer text-muted">
+          <i class="bi bi-box-arrow-up"></i> Compartilhar minha página
+        </button>
+        <br>
+        <span id="copiadoMsg" class="text-xs text-green-500 ml-2 hidden">Link copiado!</span>
       </div>
 
     </div>
@@ -116,6 +145,6 @@
   </div>
 
 </div>
-<footer th:replace="~{fragments/scripts :: scriptsContent('')}"></footer>
+<footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/prestador/minha_pagina.js')}"></footer>
 </body>
 </html>
