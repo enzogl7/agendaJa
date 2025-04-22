@@ -3,10 +3,12 @@ package com.ogl.agendaJa.controller;
 import com.ogl.agendaJa.model.Agendamento;
 import com.ogl.agendaJa.model.AgendamentoDTO;
 import com.ogl.agendaJa.model.EdicaoAgendamentoDTO;
+import com.ogl.agendaJa.model.Usuario;
 import com.ogl.agendaJa.services.AgendamentoService;
 import com.ogl.agendaJa.services.ServicoService;
 import com.ogl.agendaJa.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +36,7 @@ public class AgendamentoController {
         List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuarioService.getUsuarioLogado());
         agendamentos.sort(Comparator.comparing(Agendamento::getData));
         List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ISO_LOCAL_DATE)).toList();
-        long agendamentosHoje = agendamentos.stream()
-                .filter(a -> a.getData().equals(LocalDate.now()))
-                .count();
+        long agendamentosHoje = agendamentos.stream().filter(a -> a.getData().equals(LocalDate.now())).count();
 
         model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioService.getUsuarioLogado()));
         model.addAttribute("agendamentos", agendamentos);
@@ -50,6 +50,13 @@ public class AgendamentoController {
     @PostMapping("/prestador/salvaragendamento")
     public ResponseEntity salvarAgendamento(@RequestBody AgendamentoDTO agendamentoDTO) {
         try {
+            Usuario usuario = usuarioService.getUsuarioLogado();
+            if (usuario.getPlanoSelecionado().equals("BASICO")) {
+                List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuario);
+                if (agendamentos.size() == 10) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+            }
             Agendamento agendamento = new Agendamento();
             agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
             agendamento.setData(LocalDate.parse(agendamentoDTO.data()));
@@ -98,6 +105,18 @@ public class AgendamentoController {
         try {
             Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
             agendamento.setStatus("CONFIRMADO");
+            agendamentoService.salvar(agendamento);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/prestador/cancelaragendamento")
+    public ResponseEntity cancelarAgendamento(@RequestParam("idAgendamento")String idAgendamento) {
+        try {
+            Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
+            agendamento.setStatus("CANCELADO"); // todo: criar um schedule para deletar esses agendamentos depois de algum tempo "CANCELADO"
             agendamentoService.salvar(agendamento);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

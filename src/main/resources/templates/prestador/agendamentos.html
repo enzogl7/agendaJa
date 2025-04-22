@@ -89,7 +89,7 @@
           &times;
         </button>
         <i class="bi bi-exclamation-triangle-fill mr-2"></i>
-        Você possui <strong th:text="${agendamentosPendentes}">0</strong> agendamentos pendentes. Não se esqueça de confirmá-los na sua tabela de agendamentos.
+        Você possui <strong th:text="${agendamentosPendentes}">0</strong> agendamento(s) pendentes. Não se esqueça de confirmá-los na sua tabela de agendamentos.
       </div>
 
       <div class="p-6 bg-white rounded-2xl shadow">
@@ -135,25 +135,31 @@
             <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.nome}"></td>
             <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.preco}"></td>
             <td class="text-center group-hover:bg-gray-50">
-        <span th:if="${agendamento.status == 'PENDENTE'}">
-          <span th:text="${agendamento.status}" class="badge bg-warning text-black text-base"></span>
-        </span>
-              <span th:if="${agendamento.status == 'CONCLUIDO'}">
-          <span th:text="${agendamento.status}" class="badge bg-info text-white text-base"></span>
-        </span>
-              <span th:if="${agendamento.status == 'CONFIRMADO'}">
-          <span th:text="${agendamento.status}" class="badge bg-success text-white text-base"></span>
-        </span>
+              <span th:if="${agendamento.status == 'PENDENTE'}">
+                <span th:text="${agendamento.status}" class="badge bg-warning text-black text-base"></span>
+              </span>
+                <span th:if="${agendamento.status == 'CONCLUIDO'}">
+                  <span th:text="${agendamento.status}" class="badge bg-info text-white text-base"></span>
+                </span>
+                <span th:if="${agendamento.status == 'CONFIRMADO'}">
+                  <span th:text="${agendamento.status}" class="badge bg-success text-white text-base"></span>
+                </span>
+              <span th:if="${agendamento.status == 'CANCELADO'}">
+                  <span th:text="${agendamento.status}" class="badge bg-danger text-white text-base"></span>
+              </span>
             </td>
             <td class="text-center group-hover:bg-gray-50">
-              <a th:if="${agendamento.status == 'PENDENTE'}" onclick="confirmarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer" title="Confirmar">
+              <a th:if="${agendamento.status == 'PENDENTE'}" onclick="confirmarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer"  data-bs-toggle="tooltip" data-bs-placement="top" title="Confirmar">
                 <i class="bi bi-check text-xl" style="color: #7f8c8d;"></i>
               </a>
+              <a th:if="${agendamento.status == 'PENDENTE'}" onclick="cancelarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar">
+                <i class="bi bi-x text-xl" style="color: #7f8c8d;"></i>
+              </a>
               <a onclick="modalEditarAgendamento(this)" th:data-id="${agendamento.id}" th:data-data="${agendamento.data}" th:data-servico="${agendamento.servico.id}" th:data-status="${agendamento.status}"
-                 th:data-horario="${agendamento.horario}" style="text-decoration: none" class="me-2 cursor-pointer" title="Editar">
+                 th:data-horario="${agendamento.horario}" style="text-decoration: none" class="me-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                 <i class="bi bi-pencil" style="color: #7f8c8d;"></i>
               </a>
-              <a onclick="excluirAgendamento(this)" th:data-id="${agendamento.id}" class="cursor-pointer" title="Excluir">
+              <a onclick="excluirAgendamento(this)" th:data-id="${agendamento.id}" class="cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top"  title="Excluir">
                 <i class="bi bi-trash" style="color: #7f8c8d;"></i>
               </a>
             </td>

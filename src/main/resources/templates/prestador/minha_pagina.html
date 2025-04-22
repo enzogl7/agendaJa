@@ -73,7 +73,7 @@
   </div>
 
   <div class="flex-1 flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+    <div th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
       <div class="flex flex-col items-center">
         <img class="w-28 h-28 rounded-full border-4 border-teal-400 object-cover" src="<!-- substitua pelo src da imagem da loja com Thymeleaf -->" alt="Foto da loja"/>
         <input type="text" name="nome" class="mt-4 text-xl font-semibold text-center text-gray-800 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-teal-500 transition duration-300" placeholder="Nome da Loja" value="<!-- ${loja.nome} -->"/>
@@ -106,6 +106,12 @@
         </button>
       </div>
 
+    </div>
+
+    <div th:unless="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="max-w-md w-full text-center bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+      <h2 class="text-xl font-semibold mb-2">Indisponível</h2>
+      <p>Este recurso está disponível apenas para o plano <strong>profissional</strong>.</p>
+      <a href="/prestador/planos" class="mt-2 inline-block bg-[#27AE60] text-white px-4 py-2 rounded hover:bg-[#1b7a46] transition" style="text-decoration: none">Ver Planos</a>
     </div>
   </div>
 

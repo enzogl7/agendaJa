@@ -143,6 +143,14 @@ function salvarAgendamento() {
                         }
                     });
                     break;
+                case 409:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Você atingiu seu limite de 10 agendamentos do plano básico de assinatura!",
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    });
+                    return;
                 default:
                     Swal.fire({
                         title: "Ops!",
@@ -261,7 +269,7 @@ function salvarEdicaoAgendamento() {
 function confirmarAgendamento(button) {
     Swal.fire({
         icon: 'info',
-        title: 'Deseja ativar este agendamento?',
+        title: 'Deseja confirmar este agendamento?',
         showDenyButton: true,
         confirmButtonText: 'Sim',
         denyButtonText: 'Não',
@@ -289,6 +297,48 @@ function confirmarAgendamento(button) {
                             Swal.fire({
                                 title: "Ops!",
                                 text: "Ocorreu um erro ao confirmar o agendamento.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            return;
+                    }
+                }
+            });
+        }
+    })
+}
+
+function cancelarAgendamento(button) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Deseja cancelar este agendamento?',
+        showDenyButton: true,
+        confirmButtonText: 'Sim',
+        denyButtonText: 'Não',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/prestador/cancelaragendamento',
+                type: 'POST',
+                data: {
+                    idAgendamento: button.getAttribute('data-id')
+                },
+                complete: function(xhr, status) {
+                    switch (xhr.status) {
+                        case 200:
+                            Swal.fire({
+                                title: "Pronto!",
+                                text: "Cancelado com sucesso!",
+                                icon: "success",
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao cancelar o agendamento.",
                                 icon: "error",
                                 confirmButtonText: "Ok"
                             });
