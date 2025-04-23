@@ -52,7 +52,33 @@
 
     <div id="agenda" class="tabcontent bg-white mt-4 p-6 rounded-xl shadow" style="display:none;">
         <h2 class="text-xl font-semibold mb-4">Agenda</h2>
-        <p>Colocar calendário com as datas igual da home de agendamento</p>
+        <div class="p-6 mb-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02] mt-6 max-w-[420px] w-full mx-auto">
+            <h4 class="text-xl font-bold mb-4 text-center" id="textoMesAgenda"></h4>
+
+            <div id="calendar" class="grid grid-cols-7 gap-2 text-center text-sm text-gray-700">
+                <div class="font-semibold text-[#2C3E50]">Dom</div>
+                <div class="font-semibold text-[#2C3E50]">Seg</div>
+                <div class="font-semibold text-[#2C3E50]">Ter</div>
+                <div class="font-semibold text-[#2C3E50]">Qua</div>
+                <div class="font-semibold text-[#2C3E50]">Qui</div>
+                <div class="font-semibold text-[#2C3E50]">Sex</div>
+                <div class="font-semibold text-[#2C3E50]">Sáb</div>
+            </div>
+
+            <div id="calendar-days" class="grid grid-cols-7 gap-2 text-center mt-2 text-sm">
+            </div>
+
+            <div class="flex justify-between mt-4">
+                <button onclick="mudarMes(-1)" class="px-4 py-2 text-black rounded-xl transition">←</button>
+                <button onclick="mudarMes(1)" class="px-4 py-2 text-black rounded-xl transition">→</button>
+            </div>
+            <div class="mt-4 text-center text-sm text-gray-500">
+                <span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-2 align-middle"></span>
+                <span class="align-middle">Feriado</span>
+                <span class="ml-3 inline-block w-3 h-3 bg-[#27AE60] rounded-full mr-2 align-middle"></span>
+                <span class="align-middle">Agendado</span>
+            </div>
+        </div>
     </div>
 
     <div id="horarios" class="tabcontent bg-white mt-4 p-6 rounded-xl shadow" style="display:none;">
@@ -69,7 +95,7 @@
             </li>
 
             <li th:if="${horarioNegocio == null or horarioNegocio.datasFolgas == null or #lists.isEmpty(horarioNegocio.datasFolgas)}">
-                Nenhum dia ausente configurado.
+                Nenhum dia ausente previsto.
             </li>
         </ul>
     </div>
@@ -82,11 +108,15 @@
 </div>
 
 <footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/pagina_negocio.js')}"></footer>
+<div th:replace="~{modais/modal_novo_agendamento}"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
     var telefoneLimpo = '/*[[${pagina.telefone}]]*/'.replace(/\D/g, "");
     var whatsappLink = "https://wa.me/55" + telefoneLimpo;
     document.getElementById("whatsappLink").setAttribute("href", whatsappLink);
+</script>
+<script th:inline="javascript">
+    const datasAgendadas = /*[[${datasAgendadas}]]*/ [];
 </script>
 </body>
 </html>

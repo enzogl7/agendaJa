@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header" style="text-align: center; width: 100%;">
-                <h5 class="modal-title" id="modalNovoAgendamentoTitulo">Novo serviço</h5>
+                <h5 class="modal-title" id="modalNovoAgendamentoTitulo">Novo agendamento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -17,8 +17,7 @@
 
                     <label for="horarioAgendamento">Horário*</label>
                     <select class="form-control mb-3 form-select" id="horarioAgendamento" title="Selecione um horário">
-                        <option value="08:00">08:00</option>
-                        <option value="08:00">Popular de acordo com os horários configurados pelo prestador</option>
+                        <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
                     </select>
 
                     <label for="statusAgendamento">Status*</label>
@@ -27,7 +26,6 @@
                         <option value="PENDENTE">Pendente</option>
                         <option value="CONCLUIDO">Concluído</option>
                     </select>
-
                 </div>
             </div>
             <div class="modal-footer">

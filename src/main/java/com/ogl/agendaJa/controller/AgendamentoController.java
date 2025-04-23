@@ -1,10 +1,8 @@
 package com.ogl.agendaJa.controller;
 
-import com.ogl.agendaJa.model.Agendamento;
-import com.ogl.agendaJa.model.AgendamentoDTO;
-import com.ogl.agendaJa.model.EdicaoAgendamentoDTO;
-import com.ogl.agendaJa.model.Usuario;
+import com.ogl.agendaJa.model.*;
 import com.ogl.agendaJa.services.AgendamentoService;
+import com.ogl.agendaJa.services.HorarioService;
 import com.ogl.agendaJa.services.ServicoService;
 import com.ogl.agendaJa.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,6 +30,30 @@ public class AgendamentoController {
     private ServicoService servicoService;
     @Autowired
     private AgendamentoService agendamentoService;
+    @Autowired
+    private HorarioService horarioService;
+
+    private List<String> gerarHorariosDisponiveis(Horario horario) {
+        List<String> horariosDisponiveis = new ArrayList<>();
+
+        LocalTime inicioExpediente = LocalTime.parse(horario.getInicio_expediente());
+        LocalTime fimExpediente = LocalTime.parse(horario.getFim_expediente());
+        LocalTime inicioPausa = LocalTime.parse(horario.getInicio_pausa());
+        LocalTime fimPausa = LocalTime.parse(horario.getFim_pausa());
+        LocalTime atual = inicioExpediente;
+
+        while (atual.isBefore(fimExpediente)) {
+            boolean dentroDaPausa = !atual.isBefore(inicioPausa) && atual.isBefore(fimPausa);
+
+            if (!dentroDaPausa) {
+                horariosDisponiveis.add(atual.toString());
+            }
+
+            atual = atual.plusMinutes(30);
+        }
+
+        return horariosDisponiveis;
+    }
 
     @RequestMapping("/prestador/agendamentos")
     public String agendamentosPrestador(Model model) {
@@ -37,6 +61,7 @@ public class AgendamentoController {
         agendamentos.sort(Comparator.comparing(Agendamento::getData));
         List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ISO_LOCAL_DATE)).toList();
         long agendamentosHoje = agendamentos.stream().filter(a -> a.getData().equals(LocalDate.now())).count();
+        Horario horarios = horarioService.findAllByUsuario(usuarioService.getUsuarioLogado());
 
         model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioService.getUsuarioLogado()));
         model.addAttribute("agendamentos", agendamentos);
@@ -44,6 +69,7 @@ public class AgendamentoController {
         model.addAttribute("agendamentosHoje", agendamentosHoje);
         model.addAttribute("hoje", LocalDate.now());
         model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioService.getUsuarioLogado()));
+        model.addAttribute("horariosDisponiveis", gerarHorariosDisponiveis(horarios));
         return "prestador/agendamentos";
     }
 

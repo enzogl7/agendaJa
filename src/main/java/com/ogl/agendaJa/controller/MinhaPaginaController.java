@@ -1,13 +1,7 @@
 package com.ogl.agendaJa.controller;
 
-import com.ogl.agendaJa.model.Horario;
-import com.ogl.agendaJa.model.MinhaPaginaDTO;
-import com.ogl.agendaJa.model.PaginaNegocio;
-import com.ogl.agendaJa.model.Servico;
-import com.ogl.agendaJa.services.HorarioService;
-import com.ogl.agendaJa.services.PaginaNegocioService;
-import com.ogl.agendaJa.services.ServicoService;
-import com.ogl.agendaJa.services.UsuarioService;
+import com.ogl.agendaJa.model.*;
+import com.ogl.agendaJa.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.Normalizer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -32,6 +29,8 @@ public class MinhaPaginaController {
     private PaginaNegocioService paginaNegocioService;
     @Autowired
     private HorarioService horarioService;
+    @Autowired
+    private AgendamentoService agendamentoService;
 
     public String gerarSlug(String nomeNegocio, Long id) {
         String nomeSlug = Normalizer.normalize(nomeNegocio, Normalizer.Form.NFD)
@@ -123,6 +122,11 @@ public class MinhaPaginaController {
     public String paginaPublica(@PathVariable String slug, Model model) {
         PaginaNegocio pagina = paginaNegocioService.findBySlug(slug);
         Horario horarioNegocio = horarioService.findAllByUsuario(pagina.getUsuario());
+        List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(pagina.getUsuario());
+        agendamentos.sort(Comparator.comparing(Agendamento::getData));
+        List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ISO_LOCAL_DATE)).toList();
+
+        model.addAttribute("datasAgendadas", datasAgendadas);
         model.addAttribute("pagina", pagina);
         model.addAttribute("horarioNegocio", horarioNegocio);
         model.addAttribute("servicos", pagina.getServicos());
