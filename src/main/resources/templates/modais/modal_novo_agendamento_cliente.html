@@ -15,11 +15,10 @@
           </select>
 
           <label for="dataAgendamentoCliente">Data*</label>
-          <input class="form-control mb-3" type="date" id="dataAgendamentoCliente">
+          <input class="form-control mb-3" type="text" id="dataAgendamentoCliente" onchange="atualizarHorariosDisponiveis()">
 
           <label for="horarioAgendamentoCliente">Horário*</label>
           <select class="form-control mb-3 form-select" id="horarioAgendamentoCliente" title="Selecione um horário">
-            <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
           </select>
 
 

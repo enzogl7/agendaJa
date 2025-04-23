@@ -150,7 +150,7 @@ public class AgendamentoController {
             // caso ok, salva o agendamento
             Agendamento agendamento = new Agendamento();
             agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
-            agendamento.setData(LocalDate.parse(agendamentoDTO.data()));
+            agendamento.setData(LocalDate.parse(agendamentoDTO.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             agendamento.setHorario(agendamentoDTO.horario());
             agendamento.setPrestador(prestador);
             agendamento.setFormaPagamento(agendamentoDTO.pagamento());

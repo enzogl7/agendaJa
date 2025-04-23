@@ -17,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class MinhaPaginaController {
@@ -124,13 +126,17 @@ public class MinhaPaginaController {
         Horario horarioNegocio = horarioService.findAllByUsuario(pagina.getUsuario());
         List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(pagina.getUsuario());
         agendamentos.sort(Comparator.comparing(Agendamento::getData));
-        List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ISO_LOCAL_DATE)).toList();
+        List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).toList();
+        Map<String, List<String>> horariosPorData = agendamentos.stream().collect(Collectors.groupingBy(a -> a.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                Collectors.mapping(Agendamento::getHorario, Collectors.toList())));
+        List<String> horariosDisponiveis = agendamentoService.gerarHorariosDisponiveis(horarioNegocio);
 
         model.addAttribute("datasAgendadas", datasAgendadas);
         model.addAttribute("pagina", pagina);
         model.addAttribute("horarioNegocio", horarioNegocio);
         model.addAttribute("servicos", pagina.getServicos());
-        model.addAttribute("horariosDisponiveis", agendamentoService.gerarHorariosDisponiveis(horarioNegocio));
+        model.addAttribute("horariosDisponiveis", horariosDisponiveis);
+        model.addAttribute("horariosPorData", horariosPorData);
         return "pagina_negocio";
     }
 

@@ -1,23 +1,3 @@
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByTagName("button");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("text-[#27AE60]", "border-[#27AE60]", "py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-transparent", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
-    }
-
-    document.getElementById(tabName).style.display = "block";
-
-    evt.currentTarget.classList.add("py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-[#27AE60]", "text-[#27AE60]", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
-}
-
-document.getElementsByClassName("tabcontent")[0].style.display = "block";
-document.querySelector("button").classList.add("py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-[#27AE60]", "text-[#27AE60]", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
-
 const meses = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -36,7 +16,33 @@ const feriadosFixos = [
 
 document.addEventListener("DOMContentLoaded", () => {
     gerarCalendario(dataAtual);
+    flatpickr("#dataAgendamentoCliente", {
+        dateFormat: "d/m/Y",
+        locale: "pt",
+        minDate: "today",
+    });
 });
+
+document.getElementsByClassName("tabcontent")[0].style.display = "block";
+document.querySelector("button").classList.add("py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-[#27AE60]", "text-[#27AE60]", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
+
+
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByTagName("button");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("text-[#27AE60]", "border-[#27AE60]", "py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-transparent", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
+    }
+
+    document.getElementById(tabName).style.display = "block";
+
+    evt.currentTarget.classList.add("py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-[#27AE60]", "text-[#27AE60]", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
+}
 
 function gerarCalendario(data) {
     const ano = data.getFullYear();
@@ -111,10 +117,10 @@ function modalNovoAgendamentoCliente(data, button) {
 function salvarAgendamentoCliente() {
     var servico = document.getElementById('servicoAgendamentoCliente').value;
     var data = document.getElementById('dataAgendamentoCliente').value;
+    console.log("DAT: " + data)
     var horario = document.getElementById('horarioAgendamentoCliente').value;
     var pagamento = document.getElementById('formaPagamentoCliente').value;
     var prestador = document.getElementById('prestador').value;
-    console.log("PRESTADOR: " + prestador)
 
     if (!servico || !data || !horario) {
         Swal.fire({
@@ -194,4 +200,30 @@ function salvarAgendamentoCliente() {
             }
         }
     });
+}
+
+function atualizarHorariosDisponiveis() {
+    const dataSelecionada = document.getElementById('dataAgendamentoCliente').value;
+    const horarioSelect = document.getElementById('horarioAgendamentoCliente');
+
+    horarioSelect.innerHTML = '';
+
+    if (dataSelecionada && horariosPorData[dataSelecionada]) {
+        const horariosAgendados = horariosPorData[dataSelecionada];
+        const horariosDisponiveisFiltrados = horariosDisponiveis.filter(horario => !horariosAgendados.includes(horario));
+
+        horariosDisponiveisFiltrados.forEach(horario => {
+            const option = document.createElement('option');
+            option.value = horario;
+            option.textContent = horario;
+            horarioSelect.appendChild(option);
+        });
+    } else {
+        horariosDisponiveis.forEach(horario => {
+            const option = document.createElement('option');
+            option.value = horario;
+            option.textContent = horario;
+            horarioSelect.appendChild(option);
+        });
+    }
 }
