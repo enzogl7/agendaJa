@@ -20,6 +20,30 @@ document.getElementById('cpf').addEventListener('input', function (e) {
 
 AOS.init();
 
+document.addEventListener("DOMContentLoaded", function () {
+    const clienteRadio = document.getElementById("cliente");
+    const prestadorRadio = document.getElementById("prestador");
+    const campoCpf = document.getElementById("campoCpf");
+    const campoDataNascimento = document.getElementById("campoDataNascimento");
+    const inputCpf = document.getElementById("cpf");
+    const inputDataNascimento = document.getElementById("dataNascimento");
+
+    function atualizarCamposVisiveis() {
+        const isCliente = clienteRadio.checked;
+        campoCpf.style.display = isCliente ? "none" : "block";
+        campoDataNascimento.style.display = isCliente ? "none" : "block";
+
+        inputCpf.required = !isCliente;
+        inputDataNascimento.required = !isCliente;
+    }
+
+    clienteRadio.addEventListener("change", atualizarCamposVisiveis);
+    prestadorRadio.addEventListener("change", atualizarCamposVisiveis);
+
+    atualizarCamposVisiveis();
+});
+
+
 function modalLogin() {
     $('#modalLogin').modal('show');
 }
@@ -54,6 +78,8 @@ function avancarEtapa() {
     let dataNascimento = null;
 
     inputs.forEach(input => {
+        if (input.closest('div').style.display === 'none') return;
+
         if (input.type === "checkbox") {
             if (!input.checked) {
                 camposVazios = true;
@@ -70,7 +96,7 @@ function avancarEtapa() {
             }
         }
 
-        if (input.name === "dataNascimento" || input.id === "dataNascimento") {
+        if ((input.name === "dataNascimento" || input.id === "dataNascimento") && input.value) {
             dataNascimento = new Date(input.value);
         }
     });
@@ -109,8 +135,6 @@ function avancarEtapa() {
         cadastrar();
         return;
     }
-
-
 
     if (etapa === 3 && tipoUsuario === "PRESTADOR") {
         etapa = 4;

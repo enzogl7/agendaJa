@@ -87,7 +87,7 @@ function gerarCalendario(data) {
                 if (inputData) {
                     inputData.value = dataCompleta;
                 }
-                modalNovoAgendamento(dataCompleta);
+                modalNovoAgendamentoCliente(dataCompleta);
             });
         }
 
@@ -98,4 +98,100 @@ function gerarCalendario(data) {
 function mudarMes(offset) {
     dataAtual.setMonth(dataAtual.getMonth() + offset);
     gerarCalendario(dataAtual);
+}
+
+function modalNovoAgendamentoCliente(data, button) {
+    $('#modalNovoAgendamentoCliente').modal('show');
+    if (data != null) {
+        $('#dataAgendamento').val(data);
+    }
+    $('#prestador').val(button.getAttribute('data-prestador'));
+}
+
+function salvarAgendamentoCliente() {
+    var servico = document.getElementById('servicoAgendamentoCliente').value;
+    var data = document.getElementById('dataAgendamentoCliente').value;
+    var horario = document.getElementById('horarioAgendamentoCliente').value;
+    var pagamento = document.getElementById('formaPagamentoCliente').value;
+    var prestador = document.getElementById('prestador').value;
+    console.log("PRESTADOR: " + prestador)
+
+    if (!servico || !data || !horario) {
+        Swal.fire({
+            title: "Ops!",
+            text: "Preencha todos os campos obrigatórios!",
+            icon: "warning",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    var hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    var partesData = data.split("-");
+    var dataSelecionada = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+    dataSelecionada.setHours(0, 0, 0, 0);
+    if (dataSelecionada < hoje) {
+        Swal.fire({
+            title: "Data inválida",
+            text: "A data do agendamento não pode ser anterior a hoje!",
+            icon: "error",
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    $.ajax({
+        url: '/negocio/salvaragendamentocliente',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            servico: servico, data: data, horario: horario, pagamento: pagamento, prestador: prestador
+        }),
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    Swal.fire({
+                        title: "Pronto!",
+                        text: "Seu agendamento foi solicitado com sucesso e está com status pendente." +
+                            "\nVocê será notificado por e-mail caso seja confirmado pelo estabelecimento.",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            location.reload();
+                        }
+                    });
+                    break;
+                case 401:
+                    Swal.fire({
+                        title: "Faça login para continuar",
+                        text: "Você precisa estar logado para agendar um serviço. Clique em OK para acessar ou criar sua conta.",
+                        icon: "info",
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/login";
+                        }
+                    });
+                    return;
+                case 409:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Este estabelecimento não está aceitando agendamentos no momento.",
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                default:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Ocorreu um erro ao finalizar o agendamento.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    return;
+            }
+        }
+    });
 }

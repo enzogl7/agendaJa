@@ -146,10 +146,10 @@
                             </div>
 
                             <ul id="listaFolgas" class="mt-3 list-group" style="max-width: 300px;">
-                                <th:block th:if="${horarios.datasFolgas != null}">
+                                <th:block th:if="${horarios != null}">
                                     <li th:each="folga : ${horarios.datasFolgas}"
                                         th:if="${folga.isAfter(T(java.time.LocalDate).now())}"
-                                        th:text="${#temporals.format(folga, 'dd/MM/yyyy')}"
+                                        th:text="folga != null ? ${#temporals.format(folga, 'dd/MM/yyyy')} : ''"
                                         class="d-none folga-salva">
                                     </li>
                                 </th:block>

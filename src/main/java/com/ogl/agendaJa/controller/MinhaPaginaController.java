@@ -130,6 +130,7 @@ public class MinhaPaginaController {
         model.addAttribute("pagina", pagina);
         model.addAttribute("horarioNegocio", horarioNegocio);
         model.addAttribute("servicos", pagina.getServicos());
+        model.addAttribute("horariosDisponiveis", agendamentoService.gerarHorariosDisponiveis(horarioNegocio));
         return "pagina_negocio";
     }
 

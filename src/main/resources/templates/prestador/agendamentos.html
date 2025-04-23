@@ -99,7 +99,7 @@
             <div class="mb-4 text-gray-600">
               <p>
                 <i class="bi bi-calendar-check"></i>
-                Você tem <strong th:text="${agendamentosHoje}">0</strong> agendamentos hoje
+                Você tem <strong th:text="${agendamentosHoje} != null ? ${agendamentosHoje} : ''">0</strong> agendamentos hoje
               </p>
             </div>
           </div>
@@ -131,7 +131,7 @@
                 <span th:text="${#temporals.format(agendamento.data, 'dd/MM/yyyy')} + ', ' + ${agendamento.horario}"></span>
               </span>
             </td>
-            <td class="text-center group-hover:bg-gray-50">CLIENTE</td>
+            <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.cliente} != null ? ${agendamento.cliente.nome} : '--'"></td>
             <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.nome}"></td>
             <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.preco}"></td>
             <td class="text-center group-hover:bg-gray-50">

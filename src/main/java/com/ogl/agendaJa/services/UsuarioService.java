@@ -19,5 +19,9 @@ public class UsuarioService {
 
         return (Usuario) usuarioRepository.findByEmail(username);
     }
+
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id).get();
+    }
 }
 

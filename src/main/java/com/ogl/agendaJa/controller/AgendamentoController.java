@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -33,43 +34,23 @@ public class AgendamentoController {
     @Autowired
     private HorarioService horarioService;
 
-    private List<String> gerarHorariosDisponiveis(Horario horario) {
-        List<String> horariosDisponiveis = new ArrayList<>();
-
-        LocalTime inicioExpediente = LocalTime.parse(horario.getInicio_expediente());
-        LocalTime fimExpediente = LocalTime.parse(horario.getFim_expediente());
-        LocalTime inicioPausa = LocalTime.parse(horario.getInicio_pausa());
-        LocalTime fimPausa = LocalTime.parse(horario.getFim_pausa());
-        LocalTime atual = inicioExpediente;
-
-        while (atual.isBefore(fimExpediente)) {
-            boolean dentroDaPausa = !atual.isBefore(inicioPausa) && atual.isBefore(fimPausa);
-
-            if (!dentroDaPausa) {
-                horariosDisponiveis.add(atual.toString());
-            }
-
-            atual = atual.plusMinutes(30);
-        }
-
-        return horariosDisponiveis;
-    }
-
     @RequestMapping("/prestador/agendamentos")
     public String agendamentosPrestador(Model model) {
-        List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuarioService.getUsuarioLogado());
-        agendamentos.sort(Comparator.comparing(Agendamento::getData));
+        Usuario usuarioLogado = usuarioService.getUsuarioLogado();
+        List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuarioLogado);
+        agendamentos.sort(Comparator.comparing((Agendamento a) -> a.getStatus().equals("PENDENTE") ? 0 : (a.getStatus().equals("CANCELADO") || a.getStatus().equals("CONCLUIDO")) ? 2 : 1).thenComparing(Agendamento::getData));
         List<String> datasAgendadas = agendamentos.stream().map(a -> a.getData().format(DateTimeFormatter.ISO_LOCAL_DATE)).toList();
         long agendamentosHoje = agendamentos.stream().filter(a -> a.getData().equals(LocalDate.now())).count();
-        Horario horarios = horarioService.findAllByUsuario(usuarioService.getUsuarioLogado());
+        Horario horarios = horarioService.findAllByUsuario(usuarioLogado);
+        List<String> horariosDisponiveis = horarios != null ? agendamentoService.gerarHorariosDisponiveis(horarios) : Collections.emptyList();
 
-        model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioService.getUsuarioLogado()));
+        model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioLogado));
         model.addAttribute("agendamentos", agendamentos);
         model.addAttribute("datasAgendadas", datasAgendadas);
         model.addAttribute("agendamentosHoje", agendamentosHoje);
         model.addAttribute("hoje", LocalDate.now());
-        model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioService.getUsuarioLogado()));
-        model.addAttribute("horariosDisponiveis", gerarHorariosDisponiveis(horarios));
+        model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioLogado));
+        model.addAttribute("horariosDisponiveis", horariosDisponiveis);
         return "prestador/agendamentos";
     }
 
@@ -144,6 +125,39 @@ public class AgendamentoController {
             Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
             agendamento.setStatus("CANCELADO"); // todo: criar um schedule para deletar esses agendamentos depois de algum tempo "CANCELADO"
             agendamentoService.salvar(agendamento);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/negocio/salvaragendamentocliente")
+    public ResponseEntity salvarAgendamentoCliente(@RequestBody AgendamentoClienteDTO agendamentoDTO) {
+        try {
+            // verifica se o cliente está logado
+            Usuario usuarioLogado = usuarioService.getUsuarioLogado();
+            if (usuarioLogado == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            // verifica se o dono do negocio possui plano
+            Usuario prestador = usuarioService.findById(Long.valueOf(agendamentoDTO.prestador()));
+            List<Agendamento> agendamentosPrestador = agendamentoService.findAllByUsuario(prestador);
+            if (agendamentosPrestador.size() >= 10 && prestador.getPlanoSelecionado().equals("BASICO")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+
+            // caso ok, salva o agendamento
+            Agendamento agendamento = new Agendamento();
+            agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
+            agendamento.setData(LocalDate.parse(agendamentoDTO.data()));
+            agendamento.setHorario(agendamentoDTO.horario());
+            agendamento.setPrestador(prestador);
+            agendamento.setFormaPagamento(agendamentoDTO.pagamento());
+            agendamento.setCliente(usuarioLogado);
+            agendamento.setStatus("PENDENTE");
+            agendamentoService.salvar(agendamento);
+
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

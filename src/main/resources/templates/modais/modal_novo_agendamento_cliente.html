@@ -1,0 +1,38 @@
+<div class="modal fade" id="modalNovoAgendamentoCliente" tabindex="-1" role="dialog" aria-labelledby="modalNovoAgendamentoClienteTitulo" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align: center; width: 100%;">
+        <h5 class="modal-title" id="modalNovoAgendamentoClienteTitulo">Novo agendamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="hidden" id="prestador">
+
+          <label for="servicoAgendamentoCliente">Serviço*</label>
+          <select class="form-control mb-3 form-select" id="servicoAgendamentoCliente" data-live-search="true" title="Selecione um serviço">
+            <option th:each="servico : ${pagina.servicos}" th:text="${servico.nome}" th:value="${servico.id}"></option>
+          </select>
+
+          <label for="dataAgendamentoCliente">Data*</label>
+          <input class="form-control mb-3" type="date" id="dataAgendamentoCliente">
+
+          <label for="horarioAgendamentoCliente">Horário*</label>
+          <select class="form-control mb-3 form-select" id="horarioAgendamentoCliente" title="Selecione um horário">
+            <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
+          </select>
+
+
+          <label for="formaPagamentoCliente">Forma de pagamento*</label>
+          <select class="form-control mb-3 form-select" id="formaPagamentoCliente" title="Selecione uma forma de pagamento">
+            <option value="PIX">PIX via AgendaJá</option>
+          </select>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn" style="background-color: #27AE60; color: white" onclick="salvarAgendamentoCliente()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

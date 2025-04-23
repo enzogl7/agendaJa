@@ -36,7 +36,12 @@ public class LoginController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO dataRegister) {
         if (this.usuarioRepository.findByEmail(dataRegister.email()) != null) return ResponseEntity.badRequest().build();
-        if (this.usuarioRepository.findByCpf(dataRegister.cpf()) != null) return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        if (!dataRegister.cpf().equals("")) {
+            Usuario usuario = usuarioRepository.findByCpf(dataRegister.cpf());
+            if (usuario != null) {
+                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+            }
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(dataRegister.senha());
         Usuario newUsuario = new Usuario(dataRegister.nome(), dataRegister.email(), encryptedPassword,

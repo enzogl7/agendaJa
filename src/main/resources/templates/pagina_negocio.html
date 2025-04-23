@@ -27,7 +27,7 @@
             <a id="whatsappLink" href="#" target="_blank" style="text-decoration: none; color: #2C3E50" class="bg-white border rounded px-3 py-1 flex items-center gap-1 hover:bg-gray-100">
                 <i class="bi bi-whatsapp"></i> WhatsApp
             </a>
-            <a onclick="modalNovoAgendamento(null)" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg transition cursor-pointer">
+            <a onclick="modalNovoAgendamentoCliente(null, this)" th:data-prestador="${pagina.usuario.id}" style="text-decoration: none" class="bg-[#27AE60] decoration-0 hover:bg-[#1b7a46] text-white px-4 py-2 rounded-lg transition cursor-pointer">
                 <i class="bi bi-plus-circle mr-1"></i> Novo agendamento
             </a>
         </div>
@@ -108,7 +108,7 @@
 </div>
 
 <footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/pagina_negocio.js')}"></footer>
-<div th:replace="~{modais/modal_novo_agendamento}"></div>
+<div th:replace="~{modais/modal_novo_agendamento_cliente}"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
     var telefoneLimpo = '/*[[${pagina.telefone}]]*/'.replace(/\D/g, "");
