@@ -1,8 +1,10 @@
 package com.ogl.agendaJa.controller;
 
+import com.ogl.agendaJa.model.Horario;
 import com.ogl.agendaJa.model.MinhaPaginaDTO;
 import com.ogl.agendaJa.model.PaginaNegocio;
 import com.ogl.agendaJa.model.Servico;
+import com.ogl.agendaJa.services.HorarioService;
 import com.ogl.agendaJa.services.PaginaNegocioService;
 import com.ogl.agendaJa.services.ServicoService;
 import com.ogl.agendaJa.services.UsuarioService;
@@ -28,6 +30,8 @@ public class MinhaPaginaController {
     private UsuarioService usuarioService;
     @Autowired
     private PaginaNegocioService paginaNegocioService;
+    @Autowired
+    private HorarioService horarioService;
 
     public String gerarSlug(String nomeNegocio, Long id) {
         String nomeSlug = Normalizer.normalize(nomeNegocio, Normalizer.Form.NFD)
@@ -118,7 +122,9 @@ public class MinhaPaginaController {
     @GetMapping("/negocio/{slug}")
     public String paginaPublica(@PathVariable String slug, Model model) {
         PaginaNegocio pagina = paginaNegocioService.findBySlug(slug);
+        Horario horarioNegocio = horarioService.findAllByUsuario(pagina.getUsuario());
         model.addAttribute("pagina", pagina);
+        model.addAttribute("horarioNegocio", horarioNegocio);
         model.addAttribute("servicos", pagina.getServicos());
         return "pagina_negocio";
     }

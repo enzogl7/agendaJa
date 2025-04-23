@@ -57,7 +57,21 @@
 
     <div id="horarios" class="tabcontent bg-white mt-4 p-6 rounded-xl shadow" style="display:none;">
         <h2 class="text-xl font-semibold mb-4">Horários Disponíveis</h2>
-        <p>Em breve você poderá ver os horários disponíveis aqui!</p>
+        <p>Horário de atendimento: <span th:text="${horarioNegocio.inicio_expediente} + ' - ' + ${horarioNegocio.fim_expediente}"></span></p>
+        <p>Horário de intervalo: <span th:text="${horarioNegocio.inicio_pausa} + ' - ' + ${horarioNegocio.fim_pausa}"></span></p>
+        <hr>
+        <h2 class="text-xl font-semibold mb-4">Dias ausentes</h2>
+        <p>Próximos dias ausentes:</p>
+        <ul>
+            <li th:if="${horarioNegocio != null and horarioNegocio.datasFolgas != null}"
+                th:each="folga : ${horarioNegocio.datasFolgas}"
+                th:text="${#temporals.format(folga, 'dd/MM/yyyy')}">
+            </li>
+
+            <li th:if="${horarioNegocio == null or horarioNegocio.datasFolgas == null or #lists.isEmpty(horarioNegocio.datasFolgas)}">
+                Nenhum dia ausente configurado.
+            </li>
+        </ul>
     </div>
 
     <div id="localizacao" class="tabcontent bg-white mt-4 p-6 rounded-xl shadow" style="display:none;">

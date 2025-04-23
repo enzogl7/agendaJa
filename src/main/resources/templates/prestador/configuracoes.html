@@ -113,11 +113,11 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-[#2C3E50]">Início</label>
-                                    <input type="time" class="form-control" id="inicioExpediente">
+                                    <input type="time" class="form-control" id="inicioExpediente" th:value="${horarios != null} ? ${horarios.inicio_expediente} : ''">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-[#2C3E50]">Fim</label>
-                                    <input type="time" class="form-control" id="fimExpediente">
+                                    <input type="time" class="form-control" id="fimExpediente" th:value="${horarios != null} ? ${horarios.fim_expediente} : ''">
                                 </div>
                             </div>
                         </div>
@@ -127,11 +127,11 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-[#2C3E50]">Início da pausa</label>
-                                    <input type="time" class="form-control" id="inicioPausa">
+                                    <input type="time" class="form-control" id="inicioPausa" th:value="${horarios != null} ? ${horarios.inicio_pausa} : ''">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label text-[#2C3E50]">Fim da pausa</label>
-                                    <input type="time" class="form-control" id="fimPausa">
+                                    <input type="time" class="form-control" id="fimPausa" th:value="${horarios != null} ? ${horarios.fim_pausa} : ''">
                                 </div>
                             </div>
                         </div>
@@ -139,13 +139,21 @@
                         <div class="mb-4">
                             <h5 class="text-[#2C3E50] mb-2">Datas de folga</h5>
                             <div class="d-flex gap-2">
-                                <input type="date" class="form-control" id="dataFolga" style="max-width: 250px;">
-                                <button class="btn btn-outline-success" onclick="adicionarFolga()">
+                                <input type="date" class="form-control" id="dataFolga" style="max-width: 250px;" oninput="verificarInputData()">
+                                <button class="btn btn-outline-success" id="btnAdicionarFolga" onclick="adicionarFolga()" disabled>
                                     Adicionar data
                                 </button>
                             </div>
 
-                            <ul id="listaFolgas" class="mt-3 list-group" style="max-width: 300px;"></ul>
+                            <ul id="listaFolgas" class="mt-3 list-group" style="max-width: 300px;">
+                                <th:block th:if="${horarios.datasFolgas != null}">
+                                    <li th:each="folga : ${horarios.datasFolgas}"
+                                        th:if="${folga.isAfter(T(java.time.LocalDate).now())}"
+                                        th:text="${#temporals.format(folga, 'dd/MM/yyyy')}"
+                                        class="d-none folga-salva">
+                                    </li>
+                                </th:block>
+                            </ul>
                         </div>
 
                         <div>
