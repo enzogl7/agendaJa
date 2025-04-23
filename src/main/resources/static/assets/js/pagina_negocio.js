@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementsByClassName("tabcontent")[0].style.display = "block";
 document.querySelector("button").classList.add("py-2", "transition-all", "duration-300", "ease-in-out", "border-b-2", "border-[#27AE60]", "text-[#27AE60]", "hover:border-[#27AE60]", "hover:text-[#27AE60]", "focus:outline-none", "focus:border-[#27AE60]");
 
-
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -69,7 +68,7 @@ function gerarCalendario(data) {
 
         const mm = String(mes + 1).padStart(2, '0');
         const dd = String(dia).padStart(2, '0');
-        const dataCompleta = `${ano}-${mm}-${dd}`;
+        const dataCompleta = `${dd}/${mm}/${ano}`;
 
         if (feriadosFixos.includes(`${mm}-${dd}`)) {
             div.classList.add("bg-[#E74C3C]", "text-white", "rounded-lg", "py-2");

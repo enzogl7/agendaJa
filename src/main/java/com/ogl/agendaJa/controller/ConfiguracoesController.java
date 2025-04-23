@@ -2,6 +2,7 @@ package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.model.Horario;
 import com.ogl.agendaJa.model.HorarioDTO;
+import com.ogl.agendaJa.model.Usuario;
 import com.ogl.agendaJa.services.HorarioService;
 import com.ogl.agendaJa.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ConfiguracoesController {
@@ -55,4 +57,17 @@ public class ConfiguracoesController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/prestador/salvarpix")
+    public ResponseEntity salvarPix(@RequestParam("chavePix") String chavePix) {
+        try {
+            Usuario usuario = usuarioService.getUsuarioLogado();
+            usuario.setChavePix(chavePix);
+            usuarioService.salvar(usuario);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

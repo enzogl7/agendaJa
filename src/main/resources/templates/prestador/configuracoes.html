@@ -106,66 +106,83 @@
 
                 <div class="tab-content" id="configTabsContent">
                     <div class="tab-pane fade show active" id="horarios" role="tabpanel" aria-labelledby="horarios-tab">
-                        <p class="text-[#7F8C8D] mb-4 mt-4">Configure seus horários de atendimento, pausas e datas de indisponibilidade.</p>
+                        <div class="card mt-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="text-[#7F8C8D] mb-4">Configure seus horários de atendimento, pausas e datas de indisponibilidade.</p>
 
-                        <div class="mb-4">
-                            <h5 class="text-[#2C3E50] mb-2">Horário de expediente</h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label text-[#2C3E50]">Início</label>
-                                    <input type="time" class="form-control" id="inicioExpediente" th:value="${horarios != null} ? ${horarios.inicio_expediente} : ''">
+                                <div class="mb-4">
+                                    <h5 class="text-[#2C3E50] mb-2">Horário de expediente</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-[#2C3E50]">Início</label>
+                                            <input type="time" class="form-control" id="inicioExpediente" th:value="${horarios != null} ? ${horarios.inicio_expediente} : ''">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-[#2C3E50]">Fim</label>
+                                            <input type="time" class="form-control" id="fimExpediente" th:value="${horarios != null} ? ${horarios.fim_expediente} : ''">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label text-[#2C3E50]">Fim</label>
-                                    <input type="time" class="form-control" id="fimExpediente" th:value="${horarios != null} ? ${horarios.fim_expediente} : ''">
+
+                                <div class="mb-4">
+                                    <h5 class="text-[#2C3E50] mb-2">Horário de pausa</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-[#2C3E50]">Início da pausa</label>
+                                            <input type="time" class="form-control" id="inicioPausa" th:value="${horarios != null} ? ${horarios.inicio_pausa} : ''">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label text-[#2C3E50]">Fim da pausa</label>
+                                            <input type="time" class="form-control" id="fimPausa" th:value="${horarios != null} ? ${horarios.fim_pausa} : ''">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h5 class="text-[#2C3E50] mb-2">Datas de folga</h5>
+                                    <div class="d-flex gap-2">
+                                        <input type="date" class="form-control" id="dataFolga" style="max-width: 250px;" oninput="verificarInputData()">
+                                        <button class="btn btn-outline-success" id="btnAdicionarFolga" onclick="adicionarFolga()" disabled>
+                                            Adicionar data
+                                        </button>
+                                    </div>
+
+                                    <ul id="listaFolgas" class="mt-3 list-group" style="max-width: 300px;">
+                                        <th:block th:if="${horarios != null}">
+                                            <li th:each="folga : ${horarios.datasFolgas}"
+                                                th:if="${folga.isAfter(T(java.time.LocalDate).now())}"
+                                                th:text="folga != null ? ${#temporals.format(folga, 'dd/MM/yyyy')} : ''"
+                                                class="d-none folga-salva">
+                                            </li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <button onclick="salvarHorarios()" class="btn" style="background-color: #27AE60; color: white">
+                                        <i class="bi bi-check-circle me-1"></i> Salvar horários
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <h5 class="text-[#2C3E50] mb-2">Horário de pausa</h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label text-[#2C3E50]">Início da pausa</label>
-                                    <input type="time" class="form-control" id="inicioPausa" th:value="${horarios != null} ? ${horarios.inicio_pausa} : ''">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label text-[#2C3E50]">Fim da pausa</label>
-                                    <input type="time" class="form-control" id="fimPausa" th:value="${horarios != null} ? ${horarios.fim_pausa} : ''">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <h5 class="text-[#2C3E50] mb-2">Datas de folga</h5>
-                            <div class="d-flex gap-2">
-                                <input type="date" class="form-control" id="dataFolga" style="max-width: 250px;" oninput="verificarInputData()">
-                                <button class="btn btn-outline-success" id="btnAdicionarFolga" onclick="adicionarFolga()" disabled>
-                                    Adicionar data
-                                </button>
-                            </div>
-
-                            <ul id="listaFolgas" class="mt-3 list-group" style="max-width: 300px;">
-                                <th:block th:if="${horarios != null}">
-                                    <li th:each="folga : ${horarios.datasFolgas}"
-                                        th:if="${folga.isAfter(T(java.time.LocalDate).now())}"
-                                        th:text="folga != null ? ${#temporals.format(folga, 'dd/MM/yyyy')} : ''"
-                                        class="d-none folga-salva">
-                                    </li>
-                                </th:block>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <button onclick="salvarHorarios()" class="btn" style="background-color: #27AE60; color: white">
-                                Salvar horários
-                            </button>
-                        </div>
                     </div>
 
                     <div class="tab-pane fade" id="pagamentos" role="tabpanel" aria-labelledby="pagamentos-tab">
-                        <p class="text-[#7F8C8D] mt-4">Gerencie suas formas de pagamento.</p>
+                        <div class="card mt-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text text-muted">Cadastre sua chave PIX para receber pagamentos diretamente por agendamentos na sua página pública.</p>
+
+                                <label for="chavePix" class="form-label">Sua chave PIX</label>
+                                <input type="text" class="form-control mb-3" id="chavePix" name="chavePix" th:value="${usuario.chavePix ?: ''}" required>
+
+                                <button onclick="salvarChavePix()" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i> Salvar
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="tab-pane fade" id="plano" role="tabpanel" aria-labelledby="plano-tab">
                         <p class="text-[#7F8C8D] mt-4">Detalhes sobre seu plano atual.</p>
                     </div>

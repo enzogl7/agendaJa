@@ -108,3 +108,37 @@ function verificarInputData() {
     const botao = document.getElementById('btnAdicionarFolga');
     botao.disabled = !input.value;
 }
+
+function salvarChavePix() {
+    const chavePix = document.getElementById('chavePix').value;
+
+    $.ajax({
+        url: '/prestador/salvarpix',
+        type: 'POST',
+        data: {
+            chavePix: chavePix
+        },
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    Swal.fire({
+                        title: "Pronto!",
+                        text: "PIX registrado com sucesso!",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                    break;
+                default:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Ocorreu um erro ao registrar a chave PIX.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    return;
+            }
+        }
+    });
+}

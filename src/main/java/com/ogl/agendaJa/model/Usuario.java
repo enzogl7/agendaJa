@@ -37,6 +37,7 @@ public class Usuario implements UserDetails {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private String chavePix;
 
     public Usuario(String nome, String email, String senha, String cpf, LocalDate dataNascimento, String planoSelecionado,
                    boolean pagamentoConfirmado, UserRole role) {
