@@ -1,7 +1,7 @@
 package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.model.Horario;
-import com.ogl.agendaJa.model.HorarioDTO;
+import com.ogl.agendaJa.model.dto.HorarioDTO;
 import com.ogl.agendaJa.model.Usuario;
 import com.ogl.agendaJa.services.HorarioService;
 import com.ogl.agendaJa.services.UsuarioService;

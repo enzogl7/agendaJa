@@ -28,5 +28,7 @@ public class Agendamento {
     private String status;
     @ManyToOne
     private Usuario cliente;
+    @ManyToOne
+    private Cliente clienteCadastrado;
     private String formaPagamento;
 }

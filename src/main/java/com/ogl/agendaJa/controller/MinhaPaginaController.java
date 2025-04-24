@@ -1,8 +1,8 @@
 package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.model.*;
+import com.ogl.agendaJa.model.dto.MinhaPaginaDTO;
 import com.ogl.agendaJa.services.*;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

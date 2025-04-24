@@ -95,6 +95,7 @@ function salvarAgendamento() {
     var servico = document.getElementById('servicoAgendamento').value;
     var data = document.getElementById('dataAgendamento').value;
     var horario = document.getElementById('horarioAgendamento').value;
+    var cliente = document.getElementById('clienteAgendamento').value;
     var status = document.getElementById('statusAgendamento').value;
 
     if (!servico || !data || !horario) {
@@ -127,7 +128,7 @@ function salvarAgendamento() {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            servico: servico, data: data, horario: horario, status: status
+            servico: servico, data: data, horario: horario, cliente: cliente, status: status
         }),
         complete: function(xhr, status) {
             switch (xhr.status) {
@@ -220,6 +221,7 @@ function salvarEdicaoAgendamento() {
     var servico = document.getElementById('servicoAgendamentoEdicao').value;
     var data = document.getElementById('dataAgendamentoEdicao').value;
     var horario = document.getElementById('horarioAgendamentoEdicao').value;
+    var cliente = document.getElementById('clienteAgendamentoEdicao').value;
     var status = document.getElementById('statusAgendamentoEdicao').value;
 
     if (!servico || !data || !horario) {
@@ -237,7 +239,7 @@ function salvarEdicaoAgendamento() {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            id:id, servico: servico, data: data, horario: horario, status: status
+            id:id, servico: servico, data: data, horario: horario, cliente: cliente, status: status
         }),
         complete: function(xhr, status) {
             switch (xhr.status) {

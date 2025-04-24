@@ -54,3 +54,18 @@ function paginacaoTabela(tabela) {
 }
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+function formatarTelefone(input) {
+    let telefone = input.value.replace(/\D/g, '');
+    telefone = telefone.substring(0, 11);
+
+    if (telefone.length >= 2 && telefone.length <= 6) {
+        input.value = `(${telefone.substring(0, 2)}) ${telefone.substring(2)}`;
+    } else if (telefone.length > 6 && telefone.length <= 10) {
+        input.value = `(${telefone.substring(0, 2)}) ${telefone.substring(2, 3)} ${telefone.substring(3, 7)}-${telefone.substring(7)}`;
+    } else if (telefone.length === 11) {
+        input.value = `(${telefone.substring(0, 2)}) ${telefone.substring(2, 3)} ${telefone.substring(3, 7)}-${telefone.substring(7)}`;
+    } else {
+        input.value = telefone;
+    }
+}

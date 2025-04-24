@@ -20,6 +20,11 @@
                         <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
                     </select>
 
+                    <label for="clienteAgendamento">Cliente*</label>
+                    <select class="form-control mb-3 form-select" id="clienteAgendamento" title="Selecione um cliente">
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+
                     <label for="statusAgendamento">Status*</label>
                     <select class="form-control mb-3 form-select" id="statusAgendamento" title="Selecione um status">
                         <option value="CONFIRMADO">Confirmado</option>

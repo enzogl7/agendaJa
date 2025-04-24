@@ -1,10 +1,10 @@
 package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.model.*;
-import com.ogl.agendaJa.services.AgendamentoService;
-import com.ogl.agendaJa.services.HorarioService;
-import com.ogl.agendaJa.services.ServicoService;
-import com.ogl.agendaJa.services.UsuarioService;
+import com.ogl.agendaJa.model.dto.AgendamentoClienteDTO;
+import com.ogl.agendaJa.model.dto.AgendamentoDTO;
+import com.ogl.agendaJa.model.dto.EdicaoAgendamentoDTO;
+import com.ogl.agendaJa.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +31,8 @@ public class AgendamentoController {
     private AgendamentoService agendamentoService;
     @Autowired
     private HorarioService horarioService;
+    @Autowired
+    private ClienteService clienteService;
 
     @RequestMapping("/prestador/agendamentos")
     public String agendamentosPrestador(Model model) {
@@ -49,6 +51,7 @@ public class AgendamentoController {
         model.addAttribute("hoje", LocalDate.now());
         model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioLogado));
         model.addAttribute("horariosDisponiveis", horariosDisponiveis);
+        model.addAttribute("clientes", clienteService.findAllByPrestador(usuarioLogado));
         return "prestador/agendamentos";
     }
 
@@ -82,6 +85,7 @@ public class AgendamentoController {
             agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
             agendamento.setData(LocalDate.parse(agendamentoDTO.data()));
             agendamento.setHorario(agendamentoDTO.horario());
+            agendamento.setClienteCadastrado(clienteService.findById(Long.valueOf(agendamentoDTO.cliente())));
             agendamento.setPrestador(usuarioService.getUsuarioLogado());
             agendamento.setStatus(agendamentoDTO.status());
             agendamentoService.salvar(agendamento);
@@ -111,6 +115,7 @@ public class AgendamentoController {
             agendamento.setServico(servicoService.findById(Long.valueOf(edicaoAgendamento.servico())));
             agendamento.setData(LocalDate.parse(edicaoAgendamento.data()));
             agendamento.setHorario(edicaoAgendamento.horario());
+            agendamento.setClienteCadastrado(clienteService.findById(Long.valueOf(edicaoAgendamento.cliente())));
             agendamento.setPrestador(usuarioService.getUsuarioLogado());
             agendamento.setStatus(edicaoAgendamento.status());
             agendamentoService.salvar(agendamento);

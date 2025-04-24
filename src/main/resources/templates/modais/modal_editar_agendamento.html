@@ -19,15 +19,21 @@
 
                     <label for="horarioAgendamentoEdicao">Horário*</label>
                     <select class="form-control mb-3 form-select" id="horarioAgendamentoEdicao" title="Selecione um horário">
-                        <option value="08:00">08:00</option>
-                        <option value="08:00">Popular de acordo com os horários configurados pelo prestador</option>
+                        <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
                     </select>
+
+                    <label for="clienteAgendamentoEdicao">Cliente*</label>
+                    <select class="form-control mb-3 form-select" id="clienteAgendamentoEdicao" title="Selecione um cliente">
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                    </select>
+
 
                     <label for="statusAgendamentoEdicao">Status*</label>
                     <select class="form-control mb-3 form-select" id="statusAgendamentoEdicao" title="Selecione um status">
                         <option value="CONFIRMADO">Confirmado</option>
                         <option value="PENDENTE">Pendente</option>
                         <option value="CONCLUIDO">Concluído</option>
+                        <option value="CANCELADO">Cancelado</option>
                     </select>
 
                 </div>

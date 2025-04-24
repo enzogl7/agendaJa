@@ -1,4 +1,6 @@
-package com.ogl.agendaJa.model;
+package com.ogl.agendaJa.model.dto;
+
+import com.ogl.agendaJa.model.UserRole;
 
 import java.time.LocalDate;
 

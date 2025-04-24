@@ -1,8 +1,8 @@
 package com.ogl.agendaJa.controller;
 
-import com.ogl.agendaJa.model.EdicaoServicoDTO;
+import com.ogl.agendaJa.model.dto.EdicaoServicoDTO;
 import com.ogl.agendaJa.model.Servico;
-import com.ogl.agendaJa.model.ServicoDTO;
+import com.ogl.agendaJa.model.dto.ServicoDTO;
 import com.ogl.agendaJa.services.ServicoService;
 import com.ogl.agendaJa.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;

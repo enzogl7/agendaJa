@@ -1,8 +1,8 @@
 package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.infra.security.TokenService;
-import com.ogl.agendaJa.model.AuthenticationDTO;
-import com.ogl.agendaJa.model.RegisterDTO;
+import com.ogl.agendaJa.model.dto.AuthenticationDTO;
+import com.ogl.agendaJa.model.dto.RegisterDTO;
 import com.ogl.agendaJa.model.Usuario;
 import com.ogl.agendaJa.repository.UsuarioRepository;
 import jakarta.servlet.http.Cookie;
