@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -52,6 +50,22 @@ public class AgendamentoController {
         model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioLogado));
         model.addAttribute("horariosDisponiveis", horariosDisponiveis);
         return "prestador/agendamentos";
+    }
+
+    @RequestMapping("/cliente/agendamentos")
+    public String agendamentosCliente(Model model) {
+        List<Agendamento> agendamentos = agendamentoService.findAllByCliente(usuarioService.getUsuarioLogado());
+        agendamentos.sort(
+                Comparator.comparing((Agendamento a) -> {
+                    String status = a.getStatus();
+                    if (status.equals("CONFIRMADO")) return 0;
+                    if (status.equals("PENDENTE")) return 1;
+                    if (status.equals("CONCLUIDO")) return 2;
+                    return 3;
+                }).thenComparing(Agendamento::getData));
+        model.addAttribute("agendamentos", agendamentos);
+        model.addAttribute("hoje", LocalDate.now());
+        return "cliente/agendamentos_cliente";
     }
 
     @PostMapping("/prestador/salvaragendamento")

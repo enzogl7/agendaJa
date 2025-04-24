@@ -11,23 +11,24 @@
     <button id="toggleSidebar" class="md:hidden fixed top-2 left-2 z-50 bg-[#27AE60] text-white p-1 rounded">
         <i class="bi bi-arrow-bar-right text-base"></i>
     </button>
-
     <div id="sidebar" class="fixed md:static top-0 left-0 h-screen md:h-screen w-64 bg-white shadow-xl flex flex-col justify-between py-6 px-4 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-40">
         <div>
             <div class="flex items-center gap-2 mb-10">
                 <span class="text-xl font-bold">📅 AgendaJá</span>
             </div>
             <nav class="space-y-2">
-                <a href="/cliente/home" style="text-decoration: none; color: #7F8C8D" class="flex items-center gap-2 px-3 py-2 bg-[#27AE60] text-white hover:bg-[#1b7a46] rounded-md transition">
-                    <i class="bi bi-house"></i>
-                    <span>Home</span>
+                <a href="/cliente/home" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+                    <div class="flex items-center gap-3">
+                        <i class="bi bi-house"></i>
+                        <span>Home</span>
+                    </div>
+                    <i class="bi bi-chevron-right text-sm"></i>
                 </a>
-                <a href="/cliente/agendamentos" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
+                <a href="/cliente/agendamentos" style="text-decoration: none; color: #7F8C8D" class="flex items-center gap-2 px-3 py-2 bg-[#27AE60] text-white hover:bg-[#1b7a46] rounded-md transition">
                     <div class="flex items-center gap-3">
                         <i class="bi bi-calendar3"></i>
                         <span>Agendamentos</span>
                     </div>
-                    <i class="bi bi-chevron-right text-sm"></i>
                 </a>
                 <a href="#" style="text-decoration: none; color: #7F8C8D" class="text-[#7F8C8D] hover:text-white hover:bg-[#1b7a46] flex items-center justify-between px-3 py-2 rounded-md transition">
                     <div class="flex items-center gap-3">
@@ -58,8 +59,6 @@
     </div>
 
     <main class="container mx-auto p-6 flex-1">
-
-
         <div class="container mt-4">
             <section class="mb-4">
                 <h2 class="text-xl font-semibold text-shadow">
@@ -69,19 +68,18 @@
             <div class="p-6 bg-white rounded-2xl shadow transition duration-300 hover:shadow-lg hover:scale-[1.02]">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <h2 class="text-xl font-bold">Próximos agendamentos <a href="/cliente/agendamentos" style="text-decoration: none; color: #7F8C8D"><i class="bi bi-box-arrow-up-right text-sm align-middle" data-bs-toggle="tooltip" data-bs-placement="right" title="Ir para agendamentos"></i></a>
-                        </h2>
-                        <p class="text-sm text-emerald-500 font-semibold">Agendamentos confirmados previstos para os próximos 5 dias</p>
+                        <h2 class="text-xl font-bold">Seus agendamentos</h2>
                     </div>
                 </div>
 
-                <table class="w-full text-left text-sm" id="tableAgendamentosClienteHome">
+                <table class="w-full text-left text-sm" id="tableAgendamentosCliente">
                     <thead>
                     <tr class="text-gray-500 font-semibold border-b">
                         <th class="pb-3">Data</th>
                         <th class="pb-3">Prestador</th>
                         <th class="pb-3">Serviço</th>
                         <th class="pb-3">Valor</th>
+                        <th class="pb-3">Status</th>
                     </tr>
                     </thead>
                     <tbody class="text-gray-700">
@@ -97,6 +95,20 @@
                         <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.prestador.nome}"></td>
                         <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.nome}"></td>
                         <td class="text-center group-hover:bg-gray-50" th:text="${agendamento.servico.preco}"></td>
+                        <td class="text-center group-hover:bg-gray-50">
+                            <span th:if="${agendamento.status == 'PENDENTE'}">
+                                <span th:text="${agendamento.status}" class="badge bg-warning text-black text-base"></span>
+                            </span>
+                            <span th:if="${agendamento.status == 'CONCLUIDO'}">
+                                <span th:text="${agendamento.status}" class="badge bg-info text-white text-base"></span>
+                            </span>
+                            <span th:if="${agendamento.status == 'CONFIRMADO'}">
+                                <span th:text="${agendamento.status}" class="badge bg-success text-white text-base"></span>
+                            </span>
+                            <span th:if="${agendamento.status == 'CANCELADO'}">
+                                <span th:text="${agendamento.status}" class="badge bg-danger text-white text-base"></span>
+                            </span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -104,6 +116,7 @@
         </div>
     </main>
 </div>
-<footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/cliente/home_cliente.js')}"></footer>
+
+<footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/cliente/agendamentos_cliente.js')}"></footer>
 </body>
 </html>

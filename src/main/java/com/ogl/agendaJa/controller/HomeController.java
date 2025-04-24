@@ -18,25 +18,26 @@ public class HomeController {
     private UsuarioService usuarioService;
     @Autowired
     private AgendamentoService agendamentoService;
+    LocalDate hoje = LocalDate.now();
+    LocalDate limite = hoje.plusDays(4);
 
     @GetMapping("/prestador/home")
     public String prestadorHome(Model model) {
         List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuarioService.getUsuarioLogado());
-        LocalDate hoje = LocalDate.now();
-        LocalDate limite = hoje.plusDays(4);
-        agendamentos = agendamentos.stream()
-                .filter(a -> !a.getData().isBefore(hoje) && !a.getData().isAfter(limite))
-                .filter(a -> a.getStatus().equals("CONFIRMADO"))
-                .collect(Collectors.toList());
+        agendamentos = agendamentos.stream().filter(a -> !a.getData().isBefore(hoje) && !a.getData().isAfter(limite)).filter(a -> a.getStatus().equals("CONFIRMADO")).collect(Collectors.toList());
 
         model.addAttribute("agendamentos", agendamentos);
         model.addAttribute("qtdeAgendamentosProximos", agendamentos.size());
+        model.addAttribute("receitaMes", agendamentoService.getReceitaMensal());
         model.addAttribute("agendamentosPendentes", agendamentoService.countAgendamentosPendentesPorUsuario(usuarioService.getUsuarioLogado()));
         return "/prestador/home";
     }
 
     @GetMapping("/cliente/home")
-    public String clienteHome() {
+    public String clienteHome(Model model) {
+        List<Agendamento> agendamentos = agendamentoService.findAllByCliente(usuarioService.getUsuarioLogado());
+        agendamentos = agendamentos.stream().filter(a -> !a.getData().isBefore(hoje) && !a.getData().isAfter(limite)).filter(a -> a.getStatus().equals("CONFIRMADO")).collect(Collectors.toList());
+        model.addAttribute("agendamentos", agendamentos);
         return "/cliente/home_cliente";
     }
 }

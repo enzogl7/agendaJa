@@ -7,9 +7,12 @@ import com.ogl.agendaJa.repository.AgendamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AgendamentoService {
@@ -55,4 +58,23 @@ public class AgendamentoService {
         }
         return horariosDisponiveis;
     }
+
+    public List<Agendamento> findAllByCliente(Usuario usuario) {
+        return agendamentoRepository.findAllByCliente(usuario);
+    }
+
+    public String getReceitaMensal() {
+        LocalDate inicio = LocalDate.now().withDayOfMonth(1);
+        LocalDate fim = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth());
+
+        List<Agendamento> agendamentosMes = agendamentoRepository.findAgendamentosDoMes(inicio, fim);
+
+        BigDecimal total = agendamentosMes.stream()
+                .map(agendamento -> agendamento.getServico().getPreco())
+                .map(valor -> valor.replace("R$", "").replace(",", ".").replaceAll("\\s+", "").replaceAll("[^\\d.]", ""))
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return "R$ " + String.format(Locale.forLanguageTag("pt-BR"), "%,.2f", total);
+    }
+
 }
