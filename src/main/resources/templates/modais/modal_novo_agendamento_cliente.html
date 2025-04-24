@@ -13,7 +13,7 @@
 
             <label for="servicoAgendamentoCliente">Serviço*</label>
             <select class="form-control mb-3 form-select" id="servicoAgendamentoCliente" data-live-search="true" title="Selecione um serviço" onchange="atualizarHorariosDisponiveis()">
-              <option th:each="servico : ${pagina.servicos}" th:text="${servico.nome} + ' - ' + ${servico.preco}" th:value="${servico.id}"></option>
+              <option th:each="servico : ${pagina.servicos}" th:text="${servico.nome} + ' - ' + ${servico.preco}" th:value="${servico.id}" th:data-preco="${servico.preco}"></option>
             </select>
 
             <label for="dataAgendamentoCliente">Data*</label>
@@ -34,17 +34,20 @@
 
       <div id="step2" style="display: none;">
         <div class="form-group text-center">
-          <h3 style="color: #27AE60; font-weight: bold;">Está quase lá! 🎉</h3>
-          <p class="mb-2" style="font-size: 16px; color: #7F8C8D;">Para finalizar o seu agendamento, por favor, realize o pagamento com a chave PIX abaixo.</p>
+          <h3 style="color: #27AE60; font-weight: bold;" class="mt-1">Está quase lá! 🎉</h3>
+          <p class="mb-2" style="font-size: 16px; color: #7F8C8D;">Para finalizar o seu agendamento, por favor, realize o pagamento com o PIX QR Code abaixo.</p>
 
           <div id="pixDetails" class="mb-2" style="display: block;">
-            <p>Valor:<strong> R$ teste</strong></p>
-            <hr>
-            <img id="qrCodePix"
-                 th:src="@{/negocio/qrcode-pix(chave=${pagina.usuario.chavePix}, nome=${pagina.usuario.nome}, cidade=${pagina.cidade}, valor=29.90)}" alt="QR Code PIX"
-                 style="max-width: 100%; margin: 0 auto; display: block;" />
-            <p>Ou use a chave pix: <strong><span th:text="${pagina.usuario.chavePix}"></span></strong></p>
-            <button class="btn btn-outline-success">Copiar</button>
+            <p>Valor: <strong id="valorAgendamento"></strong></p>
+            <hr class="my-2">
+            <img id="qrCodePix" th:data-chave="${pagina.usuario.chavePix}" th:data-nome="${pagina.usuario.nome}" th:data-cidade="${pagina.cidade}" alt="QR Code PIX" class="my-2" style="max-width: 100%; margin: 0 auto; display: block;" />
+            <p class="mt-0 mb-1" style="font-size: 16px; color: #7F8C8D;">Ou use a chave pix:</p>
+            <div class="flex justify-center items-center">
+              <input type="text" id="pixPayloadInput" value="" disabled class="w-70 px-3 py-2 mt-1 text-sm border border-gray-300 rounded text-center cursor-pointer">
+              <i class="bi bi-copy text-sm cursor-pointer ml-2" onclick="copiarCodigoPix()"></i>
+            </div>
+            <span id="copiadoMsg" class="text-xs text-green-500 ml-2 hidden">Código Pix copiado para a área de transferência!</span>
+            <p class="text-muted mt-2" style="font-size: 12px; color: #7F8C8D;">*Não feche/recarregue esta página antes de finalizar o agendamento</p>
           </div>
         </div>
       </div>

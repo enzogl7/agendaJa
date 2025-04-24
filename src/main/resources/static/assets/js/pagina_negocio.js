@@ -166,8 +166,12 @@ function salvarAgendamentoCliente() {
                 case 200:
                     Swal.fire({
                         title: "Pronto!",
-                        text: "Seu agendamento foi solicitado com sucesso e está com status pendente." +
-                            "\nVocê será notificado por e-mail caso seja confirmado pelo estabelecimento.",
+                        html: `Seu agendamento foi solicitado com sucesso e está com status pendente.<br>
+                            O estabelecimento irá verificar o pagamento e então confirmará seu agendamento.<br>
+                            Você será notificado via email.<br><br>
+                            <a href="/cliente/agendamentos" style="text-decoration: underline; color: #27AE60;">
+                                Ver meus agendamentos
+                            </a> `,
                         icon: "success",
                         confirmButtonText: 'OK'
                     }).then((result) => {
@@ -227,6 +231,8 @@ function passarParaStep2() {
     const servico = document.getElementById('servicoAgendamentoCliente').value;
     const data = document.getElementById('dataAgendamentoCliente').value;
     const horario = document.getElementById('horarioAgendamentoCliente').value;
+    const campoValor = document.getElementById('valorAgendamento');
+    const valorAgendamento = document.getElementById('servicoAgendamentoCliente').options[document.getElementById('servicoAgendamentoCliente').selectedIndex].getAttribute('data-preco');
 
     if (!servico || !data || !horario) {
         Swal.fire({
@@ -242,5 +248,58 @@ function passarParaStep2() {
     document.getElementById('step2').style.display = 'block';
     document.getElementById('btnProximaEtapa').style.display = 'none';
     document.getElementById('btnFinalizarAgendamento').style.display = 'inline-block';
+    document.getElementById('btnFinalizarAgendamento').disabled = true;
     document.getElementById('pixDetails').style.display = 'block';
+    campoValor.textContent = valorAgendamento
+    gerarQrCodePix();
+    setTimeout(() => {
+        document.getElementById('btnFinalizarAgendamento').disabled = false;
+    }, 15000);
+}
+
+function gerarQrCodePix() {
+    const chave = document.getElementById('qrCodePix').getAttribute('data-chave');
+    const nome = document.getElementById('qrCodePix').getAttribute('data-nome');
+    const cidade = document.getElementById('qrCodePix').getAttribute('data-cidade');
+    const valor = document.getElementById('servicoAgendamentoCliente').options[document.getElementById('servicoAgendamentoCliente').selectedIndex].getAttribute('data-preco');
+    let valorSemSimbolo = valor.replace("R$", "").trim();
+    let valorFormatado = valorSemSimbolo.replace(",", ".").replace(/\s+/g, "");
+
+    $.ajax({
+        url: '/negocio/qrcode-pix',
+        type: 'GET',
+        data: {
+            chave: chave,
+            nome: nome,
+            cidade: cidade,
+            valor: valorFormatado
+        },
+        success: function (response) {
+            const qrCodeBase64 = response.qrCodeBase64;
+            document.getElementById('qrCodePix').src = "data:image/png;base64," + qrCodeBase64;
+            document.getElementById('pixPayloadInput').value = response.pixPayload;
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Ops!",
+                text: "Ocorreu um erro ao gerar o pix.",
+                icon: "error",
+                confirmButtonText: "Ok"
+            });
+        }
+    });
+}
+
+function copiarCodigoPix() {
+    console.log("rodou")
+    navigator.clipboard.writeText(document.getElementById('pixPayloadInput').value).then(() => {
+        document.getElementById('copiadoMsg').classList.remove('hidden');
+
+        setTimeout(() => {
+            document.getElementById('copiadoMsg').classList.add('hidden');
+        }, 2000);
+
+    }).catch(() => {
+        alert("Erro ao copiar o link.");
+    });
 }

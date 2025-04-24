@@ -72,9 +72,12 @@ public class GerarPixController {
     }
 
     @GetMapping("/negocio/qrcode-pix")
-    public ResponseEntity<byte[]> gerarQrCodePix(@RequestParam String chave, @RequestParam String nome, @RequestParam String cidade, @RequestParam String valor) throws Exception {
+    public ResponseEntity<Map<String, Object>> gerarQrCodePix(@RequestParam String chave, @RequestParam String nome, @RequestParam String cidade, @RequestParam String valor) throws Exception {
         String cidadeFormatada = Normalizer.normalize(cidade.split("[,-]")[0], Normalizer.Form.NFD).replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        String valorFormatado = valor.replace(",", ".");
+        String valorSemSimbolo = valor.replace("R$", "");
+        String valorFormatado = valorSemSimbolo.replace(",", ".").replaceAll("\\s+", "");
+
+        // tipo de chave pix
         String tipoChave;
         if (chave.contains("@")) {
             tipoChave = "email";
@@ -83,14 +86,19 @@ public class GerarPixController {
         } else {
             chave = chave.replaceAll("[.-]", "");
         }
+
         String payload = gerarPixPayload(chave, nome, cidadeFormatada, valorFormatado);
 
         BitMatrix matrix = new MultiFormatWriter().encode(payload, BarcodeFormat.QR_CODE, 300, 300);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         MatrixToImageWriter.writeToStream(matrix, "PNG", outputStream);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
+
+        String base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("qrCodeBase64", base64Image);
+        response.put("pixPayload", payload);
+        return ResponseEntity.ok(response);
     }
 
 }
