@@ -1,4 +1,6 @@
 let datasFolga = [];
+const tipoChaveSelect = document.getElementById('tipoChavePix');
+const chavePixInput = document.getElementById('chavePix');
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.folga-salva').forEach(item => {
@@ -8,6 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     atualizarListaFolgas();
+});
+
+window.onload = function() {
+    const tipoChaveSalvo = localStorage.getItem('tipoChavePix');
+    if (tipoChaveSalvo) {
+        tipoChaveSelect.value = tipoChaveSalvo;
+        atualizarCampoChave(tipoChaveSalvo);
+    }
+};
+
+tipoChaveSelect.addEventListener('change', function() {
+    chavePixInput.value = ""
+    localStorage.setItem('tipoChavePix', tipoChaveSelect.value);
+    atualizarCampoChave(tipoChaveSelect.value);
 });
 
 function adicionarFolga() {
@@ -142,3 +158,46 @@ function salvarChavePix() {
         }
     });
 }
+
+function formatarTelefone(telefone) {
+    telefone = telefone.replace(/\D/g, '');
+
+    if (telefone.length <= 11) {
+        return '+55 ' + telefone.replace(/(\d{2})(\d{5})(\d{4})/, '$1 $2-$3');
+    } else {
+        return telefone;
+    }
+}
+
+function cpfInputListener(e) {
+    let value = e.target.value.replace(/\D/g, '');
+
+    value = value.replace(/^(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
+
+    e.target.value = value;
+}
+
+function atualizarCampoChave(tipoChave) {
+    chavePixInput.removeEventListener('input', cpfInputListener);
+    chavePixInput.maxLength = 40;
+
+    if (tipoChave === 'telefone') {
+        chavePixInput.type = 'tel';
+        chavePixInput.value = formatarTelefone(chavePixInput.value);
+        chavePixInput.placeholder = 'Exemplo: +55 11 91234-5678';
+    } else if (tipoChave === 'email') {
+        chavePixInput.type = 'email';
+        chavePixInput.placeholder = 'Exemplo: email@dominio.com';
+    } else if (tipoChave === 'cpf') {
+        chavePixInput.type = 'text';
+        chavePixInput.placeholder = '123.456.789-10';
+        chavePixInput.maxLength = 14;
+        chavePixInput.addEventListener('input', cpfInputListener);
+    } else {
+        chavePixInput.type = 'text';
+        chavePixInput.placeholder = 'Digite sua chave';
+    }
+}
+

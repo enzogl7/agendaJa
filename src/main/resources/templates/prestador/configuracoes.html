@@ -173,8 +173,18 @@
                             <div class="card-body">
                                 <p class="card-text text-muted">Cadastre sua chave PIX para receber pagamentos diretamente por agendamentos na sua página pública.</p>
 
-                                <label for="chavePix" class="form-label">Sua chave PIX</label>
-                                <input type="text" class="form-control mb-3" id="chavePix" name="chavePix" th:value="${usuario.chavePix ?: ''}" required>
+                                <div class="mb-3">
+                                    <label for="chavePix" class="form-label">Sua chave PIX</label>
+                                    <div class="input-group">
+                                        <select class="form-select form-select-sm" id="tipoChavePix" name="tipoChavePix">
+                                            <option value="email">Email</option>
+                                            <option value="cpf">CPF</option>
+                                            <option value="telefone">Telefone</option>
+                                        </select>
+                                        <input type="text" class="form-control" id="chavePix" name="chavePix" th:value="${usuario.chavePix ?: ''}" required>
+                                    </div>
+                                </div>
+
 
                                 <button onclick="salvarChavePix()" class="btn btn-success">
                                     <i class="bi bi-check-circle me-1"></i> Salvar

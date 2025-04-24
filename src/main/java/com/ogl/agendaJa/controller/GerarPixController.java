@@ -34,15 +34,15 @@ public class GerarPixController {
         String merchantAccountInfo = "26" + String.format("%02d", 4 + gui.length() + infoChave.length()) + "00" + String.format("%02d", gui.length()) + gui + infoChave;
 
         String payload =
-                "000201" +                           // Payload Format Indicator
-                        merchantAccountInfo +               // Merchant Account Info
-                        "52040000" +                         // Merchant Category Code
-                        "5303986" +                          // Transaction Currency (BRL)
-                        "54" + String.format("%02d", valor.length()) + valor + // Transaction Amount
-                        "5802BR" +                           // Country Code
-                        "59" + String.format("%02d", nomeRecebedor.length()) + nomeRecebedor + // Merchant Name
-                        "60" + String.format("%02d", cidade.length()) + cidade +               // Merchant City
-                        "62" + "07" + "05" + "03" + "***";  // Additional Data Field (txid = ***)
+                "000201" +                           // formato payload
+                        merchantAccountInfo +               // info conta recebedor
+                        "52040000" +                         // categoria
+                        "5303986" +                          // moeda transacao
+                        "54" + String.format("%02d", valor.length()) + valor + // valor trasacao
+                        "5802BR" +                           // cod. pais
+                        "59" + String.format("%02d", nomeRecebedor.length()) + nomeRecebedor + // nome de quem recebe
+                        "60" + String.format("%02d", cidade.length()) + cidade +               // cidade de quem recebe
+                        "62" + "07" + "05" + "03" + "***";  // txid
 
         String crc = calcularCRC16(payload + "6304");
         return payload + "6304" + crc;
@@ -72,21 +72,25 @@ public class GerarPixController {
     }
 
     @GetMapping("/negocio/qrcode-pix")
-    public ResponseEntity<Map<String, Object>> gerarQrCodePix(@RequestParam String chave, @RequestParam String nome, @RequestParam String cidade, @RequestParam String valor) throws Exception {
+    public ResponseEntity<byte[]> gerarQrCodePix(@RequestParam String chave, @RequestParam String nome, @RequestParam String cidade, @RequestParam String valor) throws Exception {
         String cidadeFormatada = Normalizer.normalize(cidade.split("[,-]")[0], Normalizer.Form.NFD).replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         String valorFormatado = valor.replace(",", ".");
+        String tipoChave;
+        if (chave.contains("@")) {
+            tipoChave = "email";
+        } else if (chave.startsWith("+55")) {
+            chave = chave.replaceAll("\\s+", "");
+        } else {
+            chave = chave.replaceAll("[.-]", "");
+        }
         String payload = gerarPixPayload(chave, nome, cidadeFormatada, valorFormatado);
 
         BitMatrix matrix = new MultiFormatWriter().encode(payload, BarcodeFormat.QR_CODE, 300, 300);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         MatrixToImageWriter.writeToStream(matrix, "PNG", outputStream);
-        String base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray());
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("qrCodeBase64", base64Image);
-        response.put("pixPayload", payload);
-
-        return ResponseEntity.ok(response);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return new ResponseEntity<>(outputStream.toByteArray(), headers, HttpStatus.OK);
     }
 
 }

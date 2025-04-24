@@ -40,8 +40,9 @@
           <div id="pixDetails" class="mb-2" style="display: block;">
             <p>Valor:<strong> R$ teste</strong></p>
             <hr>
-            <img id="qrCodePix" th:src="@{'/negocio/qrcode-pix?chave=' + ${pagina.usuario.chavePix} + '&nome=' + ${pagina.usuario.nome} + '&cidade=' + ${pagina.cidade} + '&valor=' + 29.90}"
-                 alt="QR Code PIX" style="max-width: 100%; margin: 0 auto; display: block;" />
+            <img id="qrCodePix"
+                 th:src="@{/negocio/qrcode-pix(chave=${pagina.usuario.chavePix}, nome=${pagina.usuario.nome}, cidade=${pagina.cidade}, valor=29.90)}" alt="QR Code PIX"
+                 style="max-width: 100%; margin: 0 auto; display: block;" />
             <p>Ou use a chave pix: <strong><span th:text="${pagina.usuario.chavePix}"></span></strong></p>
             <button class="btn btn-outline-success">Copiar</button>
           </div>
