@@ -134,11 +134,6 @@ public class AgendamentoController {
     @PostMapping("/negocio/salvaragendamentocliente")
     public ResponseEntity salvarAgendamentoCliente(@RequestBody AgendamentoClienteDTO agendamentoDTO) {
         try {
-            // verifica se o cliente está logado
-            Usuario usuarioLogado = usuarioService.getUsuarioLogado();
-            if (usuarioLogado == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
 
             // verifica se o dono do negocio possui plano
             Usuario prestador = usuarioService.findById(Long.valueOf(agendamentoDTO.prestador()));
@@ -154,7 +149,7 @@ public class AgendamentoController {
             agendamento.setHorario(agendamentoDTO.horario());
             agendamento.setPrestador(prestador);
             agendamento.setFormaPagamento(agendamentoDTO.pagamento());
-            agendamento.setCliente(usuarioLogado);
+            agendamento.setCliente(usuarioService.getUsuarioLogado());
             agendamento.setStatus("PENDENTE");
             agendamentoService.salvar(agendamento);
 

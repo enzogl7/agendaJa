@@ -2,14 +2,13 @@ package com.ogl.agendaJa.controller;
 
 import com.ogl.agendaJa.model.*;
 import com.ogl.agendaJa.services.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.Normalizer;
 import java.time.format.DateTimeFormatter;
@@ -137,6 +136,16 @@ public class MinhaPaginaController {
         model.addAttribute("horariosDisponiveis", horariosDisponiveis);
         model.addAttribute("horariosPorData", horariosPorData);
         return "pagina_negocio";
+    }
+
+    @GetMapping("/negocio/verificarlogin")
+    @ResponseBody
+    public ResponseEntity<Void> verificarLogin() {
+        if (usuarioService.getUsuarioLogado() != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
 }

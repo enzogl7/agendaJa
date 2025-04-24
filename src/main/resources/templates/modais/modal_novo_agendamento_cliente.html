@@ -1,3 +1,4 @@
+<!-- Step 1: Dados do Agendamento -->
 <div class="modal fade" id="modalNovoAgendamentoCliente" tabindex="-1" role="dialog" aria-labelledby="modalNovoAgendamentoClienteTitulo" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -6,31 +7,54 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <input type="hidden" id="prestador">
+        <div id="step1">
+          <div class="form-group">
+            <input type="hidden" id="prestador">
 
-          <label for="servicoAgendamentoCliente">Serviço*</label>
-          <select class="form-control mb-3 form-select" id="servicoAgendamentoCliente" data-live-search="true" title="Selecione um serviço">
-            <option th:each="servico : ${pagina.servicos}" th:text="${servico.nome}" th:value="${servico.id}"></option>
-          </select>
+            <label for="servicoAgendamentoCliente">Serviço*</label>
+            <select class="form-control mb-3 form-select" id="servicoAgendamentoCliente" data-live-search="true" title="Selecione um serviço" onchange="atualizarHorariosDisponiveis()">
+              <option th:each="servico : ${pagina.servicos}" th:text="${servico.nome} + ' - ' + ${servico.preco}" th:value="${servico.id}"></option>
+            </select>
 
-          <label for="dataAgendamentoCliente">Data*</label>
-          <input class="form-control mb-3" type="text" id="dataAgendamentoCliente" onchange="atualizarHorariosDisponiveis()">
+            <label for="dataAgendamentoCliente">Data*</label>
+            <input class="form-control mb-3" type="text" id="dataAgendamentoCliente" onchange="atualizarHorariosDisponiveis()">
 
-          <label for="horarioAgendamentoCliente">Horário*</label>
-          <select class="form-control mb-3 form-select" id="horarioAgendamentoCliente" title="Selecione um horário">
-            <option disabled selected>Selecione uma data</option>
-          </select>
+            <label for="horarioAgendamentoCliente">Horário*</label>
+            <select class="form-control mb-3 form-select" id="horarioAgendamentoCliente" title="Selecione um horário">
+              <option disabled selected>Selecione uma data</option>
+            </select>
 
-          <label for="formaPagamentoCliente">Forma de pagamento*</label>
-          <select class="form-control mb-3 form-select" id="formaPagamentoCliente" title="Selecione uma forma de pagamento">
-            <option value="PIX">PIX via AgendaJá</option>
-          </select>
-
+            <label for="formaPagamentoCliente">Forma de pagamento*</label>
+            <select class="form-control mb-3 form-select" id="formaPagamentoCliente" title="Selecione uma forma de pagamento">
+              <option value="PIX">PIX via AgendaJá</option>
+            </select>
+          </div>
         </div>
       </div>
+
+      <div id="step2" style="display: none;">
+        <div class="form-group text-center">
+          <h3 style="color: #27AE60; font-weight: bold;">Está quase lá! 🎉</h3>
+          <p class="mb-2" style="font-size: 16px; color: #7F8C8D;">Para finalizar o seu agendamento, por favor, realize o pagamento com a chave PIX abaixo.</p>
+
+          <div id="pixDetails" class="mb-2" style="display: block;">
+            <p>Valor:<strong> R$ teste</strong></p>
+            <hr>
+            <img id="qrCodePix" th:src="@{'/negocio/qrcode-pix?chave=' + ${pagina.usuario.chavePix} + '&nome=' + ${pagina.usuario.nome} + '&cidade=' + ${pagina.cidade} + '&valor=' + 29.90}"
+                 alt="QR Code PIX" style="max-width: 100%; margin: 0 auto; display: block;" />
+            <p>Ou use a chave pix: <strong><span th:text="${pagina.usuario.chavePix}"></span></strong></p>
+            <button class="btn btn-outline-success">Copiar</button>
+          </div>
+        </div>
+      </div>
+
       <div class="modal-footer">
-        <button type="submit" class="btn" style="background-color: #27AE60; color: white" onclick="salvarAgendamentoCliente()"><i class="bi bi-check-circle me-1"></i> Agendar</button>
+        <button type="button" class="btn" style="background-color: #27AE60; color: white" id="btnProximaEtapa" onclick="passarParaStep2()">
+          <i class="bi bi-arrow-right me-1"></i> Próxima Etapa
+        </button>
+        <button type="submit" class="btn" style="background-color: #27AE60; color: white; display: none;" id="btnFinalizarAgendamento" onclick="salvarAgendamentoCliente()">
+          <i class="bi bi-check-circle me-1"></i> Finalizar Agendamento
+        </button>
       </div>
     </div>
   </div>

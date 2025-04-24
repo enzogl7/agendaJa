@@ -106,32 +106,40 @@ function mudarMes(offset) {
 }
 
 function modalNovoAgendamentoCliente(data, button) {
-    $('#modalNovoAgendamentoCliente').modal('show');
-    if (data != null) {
-        $('#dataAgendamento').val(data);
-    }
-    $('#prestador').val(button.getAttribute('data-prestador'));
+    fetch("/negocio/verificarlogin")
+        .then(response => {
+            if (response.status === 200) {
+                $('#modalNovoAgendamentoCliente').modal('show');
+                if (data != null) {
+                    $('#dataAgendamento').val(data);
+                }
+                $('#prestador').val(button.getAttribute('data-prestador'));
+            } else {
+                Swal.fire({
+                    title: "Faça login para continuar",
+                    text: "Você precisa estar logado para agendar um serviço. Clique em OK para acessar ou criar sua conta.",
+                    icon: "info",
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/login";
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao verificar login:", error);
+        });
 }
 
 function salvarAgendamentoCliente() {
     var servico = document.getElementById('servicoAgendamentoCliente').value;
     var data = document.getElementById('dataAgendamentoCliente').value;
-    console.log("DAT: " + data)
     var horario = document.getElementById('horarioAgendamentoCliente').value;
     var pagamento = document.getElementById('formaPagamentoCliente').value;
     var prestador = document.getElementById('prestador').value;
-
-    if (!servico || !data || !horario) {
-        Swal.fire({
-            title: "Ops!",
-            text: "Preencha todos os campos obrigatórios!",
-            icon: "warning",
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
-
     var hoje = new Date();
+
     hoje.setHours(0, 0, 0, 0);
     var partesData = data.split("-");
     var dataSelecionada = new Date(partesData[0], partesData[1] - 1, partesData[2]);
@@ -168,18 +176,6 @@ function salvarAgendamentoCliente() {
                         }
                     });
                     break;
-                case 401:
-                    Swal.fire({
-                        title: "Faça login para continuar",
-                        text: "Você precisa estar logado para agendar um serviço. Clique em OK para acessar ou criar sua conta.",
-                        icon: "info",
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "/login";
-                        }
-                    });
-                    return;
                 case 409:
                     Swal.fire({
                         title: "Ops!",
@@ -225,4 +221,26 @@ function atualizarHorariosDisponiveis() {
             horarioSelect.appendChild(option);
         });
     }
+}
+
+function passarParaStep2() {
+    const servico = document.getElementById('servicoAgendamentoCliente').value;
+    const data = document.getElementById('dataAgendamentoCliente').value;
+    const horario = document.getElementById('horarioAgendamentoCliente').value;
+
+    if (!servico || !data || !horario) {
+        Swal.fire({
+            title: "Preencha todos os campos",
+            text: "Por favor, preencha todos os campos obrigatórios antes de continuar.",
+            icon: "warning",
+            confirmButtonText: "OK"
+        });
+        return;
+    }
+
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'block';
+    document.getElementById('btnProximaEtapa').style.display = 'none';
+    document.getElementById('btnFinalizarAgendamento').style.display = 'inline-block';
+    document.getElementById('pixDetails').style.display = 'block';
 }

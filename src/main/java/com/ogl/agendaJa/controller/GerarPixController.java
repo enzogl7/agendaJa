@@ -1,0 +1,92 @@
+package com.ogl.agendaJa.controller;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+@Controller
+public class GerarPixController {
+
+    private String gerarPixPayload(String chavePix, String nomeRecebedor, String cidade, String valor) {
+        nomeRecebedor = removerAcentos(nomeRecebedor);
+        if (nomeRecebedor.length() > 25) {
+            nomeRecebedor = nomeRecebedor.substring(0, 25);
+        }
+        cidade = removerAcentos(cidade);
+
+        String gui = "BR.GOV.BCB.PIX";
+        String infoChave = "01" + String.format("%02d", chavePix.length()) + chavePix;
+        String merchantAccountInfo = "26" + String.format("%02d", 4 + gui.length() + infoChave.length()) + "00" + String.format("%02d", gui.length()) + gui + infoChave;
+
+        String payload =
+                "000201" +                           // Payload Format Indicator
+                        merchantAccountInfo +               // Merchant Account Info
+                        "52040000" +                         // Merchant Category Code
+                        "5303986" +                          // Transaction Currency (BRL)
+                        "54" + String.format("%02d", valor.length()) + valor + // Transaction Amount
+                        "5802BR" +                           // Country Code
+                        "59" + String.format("%02d", nomeRecebedor.length()) + nomeRecebedor + // Merchant Name
+                        "60" + String.format("%02d", cidade.length()) + cidade +               // Merchant City
+                        "62" + "07" + "05" + "03" + "***";  // Additional Data Field (txid = ***)
+
+        String crc = calcularCRC16(payload + "6304");
+        return payload + "6304" + crc;
+    }
+
+    private String calcularCRC16(String input) {
+        int polinomio = 0x1021;
+        int resultado = 0xFFFF;
+
+        byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
+        for (byte b : bytes) {
+            resultado ^= (b << 8);
+            for (int i = 0; i < 8; i++) {
+                if ((resultado & 0x8000) != 0) {
+                    resultado = (resultado << 1) ^ polinomio;
+                } else {
+                    resultado <<= 1;
+                }
+            }
+        }
+
+        return String.format("%04X", resultado & 0xFFFF);
+    }
+
+    private String removerAcentos(String texto) {
+        return Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    @GetMapping("/negocio/qrcode-pix")
+    public ResponseEntity<Map<String, Object>> gerarQrCodePix(@RequestParam String chave, @RequestParam String nome, @RequestParam String cidade, @RequestParam String valor) throws Exception {
+        String cidadeFormatada = Normalizer.normalize(cidade.split("[,-]")[0], Normalizer.Form.NFD).replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        String valorFormatado = valor.replace(",", ".");
+        String payload = gerarPixPayload(chave, nome, cidadeFormatada, valorFormatado);
+
+        BitMatrix matrix = new MultiFormatWriter().encode(payload, BarcodeFormat.QR_CODE, 300, 300);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(matrix, "PNG", outputStream);
+        String base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("qrCodeBase64", base64Image);
+        response.put("pixPayload", payload);
+
+        return ResponseEntity.ok(response);
+    }
+
+}
