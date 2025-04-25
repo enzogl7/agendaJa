@@ -263,3 +263,25 @@ function modalTermos() {
 function modalPrivacidade() {
     $('#modalPrivacidade').modal('show');
 }
+
+function validarSenha() {
+    const senha = document.getElementById("senha").value;
+    const temMaiuscula = /[A-Z]/.test(senha);
+    const temNumero = /\d/.test(senha);
+    const temEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(senha);
+    const temMinimo = senha.length >= 8;
+
+    atualizarRequisito("req-maiuscula", temMaiuscula, "Ao menos 1 letra maiúscula");
+    atualizarRequisito("req-numero", temNumero, "Ao menos 1 número");
+    atualizarRequisito("req-especial", temEspecial, "Ao menos 1 caractere especial");
+    atualizarRequisito("req-minimo", temMinimo, "Pelo menos 8 caracteres");
+    document.getElementById("btn-avancar").disabled = !(temMaiuscula && temNumero && temEspecial && temMinimo);
+}
+
+function atualizarRequisito(id, valido, texto) {
+    const el = document.getElementById(id);
+    const icone = valido ? '<i class="bi bi-check"></i>' : '<i class="bi bi-x"></i>';
+    el.innerHTML = `${icone} ${texto}`;
+    el.classList.remove("text-success", "text-danger", "text-muted");
+    el.classList.add(valido ? "text-success" : "text-danger");
+}

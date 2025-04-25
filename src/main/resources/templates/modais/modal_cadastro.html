@@ -25,8 +25,16 @@
             </div>
             <div class="mb-3">
               <label for="senha" class="form-label">Senha</label>
-              <input type="password" class="form-control" id="senha" required>
+              <input type="password" class="form-control" id="senha" required oninput="validarSenha()">
             </div>
+
+            <ul id="requisitosSenha" class="list-unstyled mb-3">
+              <li id="req-maiuscula" class="text-muted text-sm"><i class="bi bi-x"></i> Ao menos 1 letra maiúscula</li>
+              <li id="req-numero" class="text-muted text-sm"><i class="bi bi-x"></i> Ao menos 1 número</li>
+              <li id="req-especial" class="text-muted text-sm"><i class="bi bi-x"></i> Ao menos 1 caractere especial</li>
+              <li id="req-minimo" class="text-muted text-sm"><i class="bi bi-x"></i> Pelo menos 8 caracteres</li>
+            </ul>
+
             <div class="mb-3">
               <label class="form-label">Tipo de usuário</label>
               <div>

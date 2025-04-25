@@ -22,6 +22,7 @@ body, html {
     position: relative;
     padding: 0 20px;
     text-align: center;
+    padding-bottom: 40px;
 }
 
 @keyframes fadeInUp {
@@ -310,4 +311,22 @@ body, html {
     border-radius: 50px;
     display: inline-block;
     margin-bottom: 10px;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(8px);
+    }
+}
+
+.seta-container {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.8;
+    animation: bounce 2s infinite;
 }
