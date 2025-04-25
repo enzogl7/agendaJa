@@ -1,11 +1,14 @@
 package com.ogl.agendaJa.controller;
 
+import com.ogl.agendaJa.model.Agendamento;
 import com.ogl.agendaJa.model.dto.EdicaoServicoDTO;
 import com.ogl.agendaJa.model.Servico;
 import com.ogl.agendaJa.model.dto.ServicoDTO;
+import com.ogl.agendaJa.services.AgendamentoService;
 import com.ogl.agendaJa.services.ServicoService;
 import com.ogl.agendaJa.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class ServicosController {
 
@@ -21,6 +26,8 @@ public class ServicosController {
     private ServicoService servicoService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private AgendamentoService agendamentoService;
 
     @RequestMapping("/prestador/servicos")
     public String servicosPrestador(Model model) {
@@ -50,7 +57,24 @@ public class ServicosController {
     public ResponseEntity excluirServico(@RequestParam("idServico") String idServico) {
         try {
             Servico servico = servicoService.findById(Long.valueOf(idServico));
+            List<Agendamento> agendamentosServico = agendamentoService.findAllByServico(servico);
+            if (!agendamentosServico.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+
+            }
             servicoService.excluir(servico);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/prestador/inativarservico")
+    public ResponseEntity inativarServico(@RequestParam("idServico") String idServico) {
+        try {
+            Servico servico = servicoService.findById(Long.valueOf(idServico));
+            servico.setAtivo(false);
+            servicoService.salvar(servico);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

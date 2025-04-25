@@ -10,4 +10,6 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     List<Servico> findAllByUsuario(Usuario usuario);
 
     Long countServicosByUsuario(Usuario usuario);
+
+    List<Servico> findAllByUsuarioAndAtivo(Usuario usuario, Boolean ativo);
 }

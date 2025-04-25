@@ -21,8 +21,8 @@ public class ServicoService {
         servicoRepository.delete(servico);
     }
 
-    public List<Servico> findAllByUsuario(Usuario usuarioLogado) {
-        return servicoRepository.findAllByUsuario(usuarioLogado);
+    public List<Servico> findAllAtivoByUsuario(Usuario usuarioLogado) {
+        return servicoRepository.findAllByUsuarioAndAtivo(usuarioLogado, true);
     }
 
     public Long qtdeServicosPorUsuario(Usuario usuarioLogado) {
@@ -35,6 +35,10 @@ public class ServicoService {
 
     public List<Servico> findAllById(List<Long> ids) {
         return servicoRepository.findAllById(ids);
+    }
+
+    public List<Servico> findAllByUsuario(Usuario usuario) {
+        return servicoRepository.findAllByUsuario(usuario);
     }
 
 }

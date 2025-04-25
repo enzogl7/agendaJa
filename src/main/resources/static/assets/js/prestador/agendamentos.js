@@ -97,6 +97,8 @@ function salvarAgendamento() {
     var horario = document.getElementById('horarioAgendamento').value;
     var cliente = document.getElementById('clienteAgendamento').value;
     var status = document.getElementById('statusAgendamento').value;
+    var nome = document.getElementById('nomeClienteNovo').value;
+    var telefone = document.getElementById('telefoneClienteNovo').value;
 
     if (!servico || !data || !horario) {
         Swal.fire({
@@ -128,7 +130,7 @@ function salvarAgendamento() {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-            servico: servico, data: data, horario: horario, cliente: cliente, status: status
+            servico: servico, data: data, horario: horario, cliente: cliente, status: status, nome: nome, telefone: telefone
         }),
         complete: function(xhr, status) {
             switch (xhr.status) {
@@ -350,4 +352,18 @@ function cancelarAgendamento(button) {
             });
         }
     })
+}
+
+function toggleCamposCliente() {
+    const checkbox = document.getElementById('clienteCadastradoCheckbox');
+    const selectWrapper = document.getElementById('selectClienteWrapper');
+    const inputsWrapper = document.getElementById('inputsClienteWrapper');
+
+    if (checkbox.checked) {
+        selectWrapper.style.display = 'block';
+        inputsWrapper.style.display = 'none';
+    } else {
+        selectWrapper.style.display = 'none';
+        inputsWrapper.style.display = 'block';
+    }
 }

@@ -1,6 +1,7 @@
 package com.ogl.agendaJa.repository;
 
 import com.ogl.agendaJa.model.Agendamento;
+import com.ogl.agendaJa.model.Servico;
 import com.ogl.agendaJa.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     @Query("SELECT a FROM agendamentos a WHERE a.data BETWEEN :inicio AND :fim AND a.status IN ('CONFIRMADO', 'CONCLUIDO')")
     List<Agendamento> findAgendamentosDoMes(@Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
+    List<Agendamento> findAllByClienteCadastrado_Id(Long clienteCadastradoId);
+
+    List<Agendamento> findAllByServico(Servico servico);
 }

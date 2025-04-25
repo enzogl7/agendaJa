@@ -20,10 +20,29 @@
                         <option th:each="horario : ${horariosDisponiveis}" th:value="${horario}" th:text="${horario}"></option>
                     </select>
 
-                    <label for="clienteAgendamento">Cliente*</label>
-                    <select class="form-control mb-3 form-select" id="clienteAgendamento" title="Selecione um cliente">
-                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
-                    </select>
+                    <div class="form-group mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="clienteCadastradoCheckbox" onchange="toggleCamposCliente()">
+                            <label class="form-check-label" for="clienteCadastradoCheckbox">
+                                Cliente cadastrado?
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="selectClienteWrapper" style="display: none">
+                        <label for="clienteAgendamento">Cliente*</label>
+                        <select class="form-control mb-3 form-select" id="clienteAgendamento" title="Selecione um cliente">
+                            <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                        </select>
+                    </div>
+
+                    <div id="inputsClienteWrapper">
+                        <label for="nomeClienteNovo">Nome do cliente*</label>
+                        <input class="form-control mb-3" type="text" id="nomeClienteNovo">
+
+                        <label for="telefoneClienteNovo">Telefone do cliente*</label>
+                        <input class="form-control mb-3" type="text" id="telefoneClienteNovo" oninput="formatarTelefone(this)">
+                    </div>
 
                     <label for="statusAgendamento">Status*</label>
                     <select class="form-control mb-3 form-select" id="statusAgendamento" title="Selecione um status">

@@ -1,0 +1,27 @@
+<div class="modal fade" id="modalClienteEdicao" tabindex="-1" role="dialog" aria-labelledby="modalClienteEdicaoTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align: center; width: 100%;">
+                <h5 class="modal-title" id="modalClienteEdicaoTitulo">Editar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="idClienteEdicao">
+                <div class="form-group">
+                    <label for="nomeClienteEdicao">Nome*</label>
+                    <input class="form-control mb-3" type="text" id="nomeClienteEdicao">
+
+                    <label for="emailClienteEdicao">Email</label>
+                    <input class="form-control mb-3" type="text" id="emailClienteEdicao">
+
+                    <label for="telefoneClienteEdicao">Telefone*</label>
+                    <input class="form-control mb-3" type="text" id="telefoneClienteEdicao" oninput="formatarTelefone(this)">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn" style="background-color: #27AE60; color: white" onclick="salvarEdicaoCliente()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

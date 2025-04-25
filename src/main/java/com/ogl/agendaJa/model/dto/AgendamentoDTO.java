@@ -1,4 +1,4 @@
 package com.ogl.agendaJa.model.dto;
 
-public record AgendamentoDTO(String servico, String data, String horario, String status, String cliente) {
+public record AgendamentoDTO(String servico, String data, String horario, String status, String cliente, String nome, String telefone) {
 }

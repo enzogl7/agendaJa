@@ -73,6 +73,7 @@ function salvarServico() {
 }
 
 function excluirServico(button) {
+    const idServico = button.getAttribute('data-id')
     Swal.fire({
         icon: 'info',
         title: 'Deseja excluir este serviço?',
@@ -85,7 +86,7 @@ function excluirServico(button) {
                 url: '/prestador/excluirservico',
                 type: 'POST',
                 data: {
-                    idServico: button.getAttribute('data-id')
+                    idServico: idServico
                 },
                 complete: function(xhr, status) {
                     switch (xhr.status) {
@@ -102,10 +103,16 @@ function excluirServico(button) {
                         case 304:
                             Swal.fire({
                                 title: "Ops!",
-                                text: "Não foi possível excluir este serviço pois o mesmo possui agendamentos atribuídos à ele.",
+                                text: "Não foi possível excluir este serviço pois o mesmo possui agendamentos atribuídos à ele. Deseja inativá-lo?",
                                 icon: "warning",
-                                confirmButtonText: 'OK'
-                            })
+                                showDenyButton: true,
+                                confirmButtonText: 'Sim',
+                                denyButtonText: 'Não',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    inativarServico(idServico);
+                                }
+                            });
                             break;
                         default:
                             Swal.fire({
@@ -118,6 +125,38 @@ function excluirServico(button) {
                     }
                 }
             });
+        }
+    })
+}
+
+function inativarServico(idServico) {
+    $.ajax({
+        url: '/prestador/inativarservico',
+        type: 'POST',
+        data: {
+            idServico: idServico
+        },
+        complete: function(xhr, status) {
+            switch (xhr.status) {
+                case 200:
+                    Swal.fire({
+                        title: "Pronto!",
+                        text: "Serviço inativado com sucesso!",
+                        icon: "success",
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                    break;
+                default:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Ocorreu um erro ao inativar o serviço.",
+                        icon: "error",
+                        confirmButtonText: "Ok"
+                    });
+                    return;
+            }
         }
     })
 }

@@ -28,4 +28,8 @@ public class ClienteService {
     public Cliente findById(Long id) {
         return clienteRepository.findById(id).get();
     }
+
+    public void deleteById(Long id) {
+        clienteRepository.deleteById(id);
+    }
 }

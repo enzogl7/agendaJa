@@ -44,7 +44,7 @@ public class AgendamentoController {
         Horario horarios = horarioService.findAllByUsuario(usuarioLogado);
         List<String> horariosDisponiveis = horarios != null ? agendamentoService.gerarHorariosDisponiveis(horarios) : Collections.emptyList();
 
-        model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioLogado));
+        model.addAttribute("servicos", servicoService.findAllAtivoByUsuario(usuarioLogado));
         model.addAttribute("agendamentos", agendamentos);
         model.addAttribute("datasAgendadas", datasAgendadas);
         model.addAttribute("agendamentosHoje", agendamentosHoje);
@@ -74,6 +74,7 @@ public class AgendamentoController {
     @PostMapping("/prestador/salvaragendamento")
     public ResponseEntity salvarAgendamento(@RequestBody AgendamentoDTO agendamentoDTO) {
         try {
+            Agendamento agendamento = new Agendamento();
             Usuario usuario = usuarioService.getUsuarioLogado();
             if (usuario.getPlanoSelecionado().equals("BASICO")) {
                 List<Agendamento> agendamentos = agendamentoService.findAllByUsuario(usuario);
@@ -81,11 +82,21 @@ public class AgendamentoController {
                     return ResponseEntity.status(HttpStatus.CONFLICT).build();
                 }
             }
-            Agendamento agendamento = new Agendamento();
+
+            if (!agendamentoDTO.nome().isEmpty() && !agendamentoDTO.telefone().isEmpty()) {
+                Cliente clienteNovo = new Cliente();
+                clienteNovo.setNome(agendamentoDTO.nome());
+                clienteNovo.setTelefone(agendamentoDTO.telefone());
+                clienteNovo.setPrestador(usuarioService.getUsuarioLogado());
+                clienteService.salvar(clienteNovo);
+                agendamento.setClienteCadastrado(clienteNovo);
+            } else {
+                agendamento.setClienteCadastrado(clienteService.findById(Long.valueOf(agendamentoDTO.cliente())));
+            }
+
             agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
             agendamento.setData(LocalDate.parse(agendamentoDTO.data()));
             agendamento.setHorario(agendamentoDTO.horario());
-            agendamento.setClienteCadastrado(clienteService.findById(Long.valueOf(agendamentoDTO.cliente())));
             agendamento.setPrestador(usuarioService.getUsuarioLogado());
             agendamento.setStatus(agendamentoDTO.status());
             agendamentoService.salvar(agendamento);
@@ -153,7 +164,6 @@ public class AgendamentoController {
     @PostMapping("/negocio/salvaragendamentocliente")
     public ResponseEntity salvarAgendamentoCliente(@RequestBody AgendamentoClienteDTO agendamentoDTO) {
         try {
-
             // verifica se o dono do negocio possui plano
             Usuario prestador = usuarioService.findById(Long.valueOf(agendamentoDTO.prestador()));
             List<Agendamento> agendamentosPrestador = agendamentoService.findAllByUsuario(prestador);

@@ -51,7 +51,7 @@ public class MinhaPaginaController {
         }
 
         model.addAttribute("minhaPagina", pagina);
-        model.addAttribute("servicos", servicoService.findAllByUsuario(usuarioService.getUsuarioLogado()));
+        model.addAttribute("servicos", servicoService.findAllAtivoByUsuario(usuarioService.getUsuarioLogado()));
         return "/prestador/minha_pagina";
     }
 
@@ -128,6 +128,7 @@ public class MinhaPaginaController {
         Map<String, List<String>> horariosPorData = agendamentos.stream().collect(Collectors.groupingBy(a -> a.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 Collectors.mapping(Agendamento::getHorario, Collectors.toList())));
         List<String> horariosDisponiveis = agendamentoService.gerarHorariosDisponiveis(horarioNegocio);
+        List<Servico> servicosAtivos = servicoService.findAllAtivoByUsuario(pagina.getUsuario());
 
         model.addAttribute("datasAgendadas", datasAgendadas);
         model.addAttribute("pagina", pagina);

@@ -2,6 +2,7 @@ package com.ogl.agendaJa.services;
 
 import com.ogl.agendaJa.model.Agendamento;
 import com.ogl.agendaJa.model.Horario;
+import com.ogl.agendaJa.model.Servico;
 import com.ogl.agendaJa.model.Usuario;
 import com.ogl.agendaJa.repository.AgendamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,14 @@ public class AgendamentoService {
                 .map(BigDecimal::new)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return "R$ " + String.format(Locale.forLanguageTag("pt-BR"), "%,.2f", total);
+    }
+
+    public List<Agendamento> findAllByClienteCadastrado(Long idCliente) {
+        return agendamentoRepository.findAllByClienteCadastrado_Id(idCliente);
+    }
+
+    public List<Agendamento> findAllByServico(Servico servico) {
+        return agendamentoRepository.findAllByServico(servico);
     }
 
 }
