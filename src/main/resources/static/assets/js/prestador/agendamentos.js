@@ -367,3 +367,45 @@ function toggleCamposCliente() {
         inputsWrapper.style.display = 'block';
     }
 }
+
+function concluirAgendamento(button) {
+    Swal.fire({
+        icon: 'info',
+        title: 'Deseja concluir este agendamento?',
+        showDenyButton: true,
+        confirmButtonText: 'Sim',
+        denyButtonText: 'Não',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/prestador/concluiragendamento',
+                type: 'POST',
+                data: {
+                    idAgendamento: button.getAttribute('data-id')
+                },
+                complete: function(xhr, status) {
+                    switch (xhr.status) {
+                        case 200:
+                            Swal.fire({
+                                title: "Pronto!",
+                                text: "Concluído com sucesso!",
+                                icon: "success",
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao concluir o agendamento.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            return;
+                    }
+                }
+            });
+        }
+    })
+}

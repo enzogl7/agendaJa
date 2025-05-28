@@ -165,6 +165,9 @@
               <a th:if="${agendamento.status == 'PENDENTE'}" onclick="cancelarAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Cancelar">
                 <i class="bi bi-x text-xl" style="color: #7f8c8d;"></i>
               </a>
+              <a th:if="${agendamento.status == 'CONFIRMADO'}" onclick="concluirAgendamento(this)" style="text-decoration: none" th:data-id="${agendamento.id}" class="cursor-pointer"  data-bs-toggle="tooltip" data-bs-placement="top" title="Concluir">
+                <i class="bi bi-check text-xl" style="color: #7f8c8d;"></i>
+              </a>
               <a onclick="modalEditarAgendamento(this)" th:data-id="${agendamento.id}" th:data-data="${agendamento.data}" th:data-servico="${agendamento.servico.id}" th:data-status="${agendamento.status}"
                  th:data-horario="${agendamento.horario}" style="text-decoration: none" class="me-2 cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                 <i class="bi bi-pencil" style="color: #7f8c8d;"></i>

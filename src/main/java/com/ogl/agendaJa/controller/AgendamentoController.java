@@ -187,4 +187,16 @@ public class AgendamentoController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/prestador/concluiragendamento")
+    public ResponseEntity concluirAgendamento(@RequestParam("idAgendamento")String idAgendamento) {
+        try {
+            Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
+            agendamento.setStatus("CONCLUIDO");
+            agendamentoService.salvar(agendamento);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
