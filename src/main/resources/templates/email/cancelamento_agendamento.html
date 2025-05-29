@@ -25,19 +25,18 @@
 <div class="container" style="width: 100%; max-width: 600px; margin: 20px auto; background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
     <div class="header" style="background-color: #2C3E50; color: #FFFFFF; padding: 20px; text-align: center;">
         <h1 style="margin: 0; font-size: 24px; color: #27AE60;">AgendaJá</h1>
-        <p style="color: #F8F9FA; margin-top: 5px; font-size: 16px;">Confirmação de Agendamento - AgendaJá</p>
+        <p style="color: #F8F9FA; margin-top: 5px; font-size: 16px;">Agendamento cancelado - AgendaJá</p>
     </div>
     <div class="content" style="padding: 25px;">
-        <h3 style="font-weight: bold; text-align: center; align-items: center">✅ Confirmado</h3>
+        <h3 style="font-weight: bold; text-align: center; align-items: center">❌ Cancelado</h3>
         <p style="margin-bottom: 15px; color: #2C3E50;">
             Olá, <strong class="highlight" style="color: #27AE60; font-weight: bold;" th:text="${nomeCliente}">Nome do Cliente</strong>,
         </p>
-        <p style="margin-bottom: 15px; color: #2C3E50;">Seu agendamento foi confirmado com sucesso!</p>
-        <p style="margin-bottom: 15px; color: #2C3E50;">Estamos ansiosos para atender você.</p>
+        <p style="margin-bottom: 15px; color: #2C3E50;">Seu agendamento foi cancelado :(</p>
 
         <div class="appointment-details" style="background-color: #F8F9FA; padding: 15px; margin-top: 20px; margin-bottom: 20px; border-left: 4px solid #27AE60;">
             <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
-                <strong style="color: #2C3E50;">Confirmado por:</strong>
+                <strong style="color: #E74C3C;">Cancelado por:</strong>
                 <span th:text="${nomeNegocioPrestador}">Nome do Negócio XYZ</span>
             </p>
             <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
@@ -54,8 +53,6 @@
             </p>
         </div>
 
-        <p style="margin-bottom: 15px; color: #2C3E50;">Se precisar reagendar ou cancelar, por favor, entre em contato com o prestador com antecedência ou acesse sua conta em nosso sistema.</p>
-
         <div class="button-container" style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
             <a href="" class="button" style="background-color: #27AE60; color: #FFFFFF !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Ver Meus Agendamentos</a>
         </div>
@@ -70,11 +67,11 @@
             &copy; <span th:text="${anoAtual}">2025</span> <span>AgendaJá. Todos os direitos reservados.</span>
         </p>
         <p style="margin: 8px 0; font-size: 12px;">
-            <span>Se você não realizou este agendamento, por favor</span>
+            <span>Se você não reconhece esse email, por favor</span>
             <a href="mailto:agendajacontato@gmail.com" style="color: #27AE60; text-decoration: none;">entre em contato</a>.
         </p>
         <p style="margin: 8px 0; font-size: 12px;">
-            <span>(*) Este e-mail foi enviado de forma automática pela plataforma AgendaJá ao confirmar o seu agendamento. Não responda.</span>
+            <span>(*) Este e-mail foi enviado de forma automática pela plataforma AgendaJá. Não responda.</span>
         </p>
     </div>
 </div>

@@ -56,7 +56,39 @@ public class MailService {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erro geral ao enviar email: " + e.getMessage());
-            return "Erro ao tentar enviar email de confirmação do agendamento";
+            return "Erro ao tentar enviar email";
+        }
+    }
+
+    public String envioEmailCancelamentoAgendamento(Agendamento agendamento) {
+        try {
+            PaginaNegocio negocioPrestador = paginaNegocioService.findByUsuario(agendamento.getPrestador());
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setFrom(remetente);
+            helper.setTo(agendamento.getCliente().getEmail());
+            helper.setSubject("❌ Agendamento Cancelado em " + negocioPrestador.getNome());
+
+            Context context = new Context();
+            context.setVariable("nomeCliente", agendamento.getCliente().getNome());
+            context.setVariable("nomeNegocioPrestador", negocioPrestador.getNome());
+            context.setVariable("nomeServico", agendamento.getServico().getNome());
+            context.setVariable("dataAgendamento", agendamento.getData());
+            context.setVariable("horaAgendamento", agendamento.getHorario());
+            context.setVariable("anoAtual", String.valueOf(Year.now().getValue()));
+
+            String htmlContent = templateEngine.process("email/cancelamento_agendamento", context);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(mimeMessage);
+            System.out.println("Email de cancelamento de agendamento enviado para: " + agendamento.getCliente().getEmail());
+            return "Email de cancelamento de agendamento enviado";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Erro geral ao enviar email: " + e.getMessage());
+            return "Erro ao tentar enviar email";
         }
     }
 }

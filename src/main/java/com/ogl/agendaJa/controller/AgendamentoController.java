@@ -158,6 +158,7 @@ public class AgendamentoController {
             Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
             agendamento.setStatus("CANCELADO"); // todo: criar um schedule para deletar esses agendamentos depois de algum tempo "CANCELADO"
             agendamentoService.salvar(agendamento);
+            mailService.envioEmailCancelamentoAgendamento(agendamento);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
