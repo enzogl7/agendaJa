@@ -33,6 +33,8 @@ public class AgendamentoController {
     private HorarioService horarioService;
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private MailService mailService;
 
     @RequestMapping("/prestador/agendamentos")
     public String agendamentosPrestador(Model model) {
@@ -143,6 +145,7 @@ public class AgendamentoController {
             Agendamento agendamento = agendamentoService.findById(Long.valueOf(idAgendamento));
             agendamento.setStatus("CONFIRMADO");
             agendamentoService.salvar(agendamento);
+            mailService.enviarEmailConfirmacaoAgendamento(agendamento);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -166,6 +169,7 @@ public class AgendamentoController {
         try {
             // verifica se o dono do negocio possui plano
             Usuario prestador = usuarioService.findById(Long.valueOf(agendamentoDTO.prestador()));
+            Usuario cliente = usuarioService.getUsuarioLogado();
             List<Agendamento> agendamentosPrestador = agendamentoService.findAllByUsuario(prestador);
             if (agendamentosPrestador.size() >= 10 && prestador.getPlanoSelecionado().equals("BASICO")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -178,9 +182,10 @@ public class AgendamentoController {
             agendamento.setHorario(agendamentoDTO.horario());
             agendamento.setPrestador(prestador);
             agendamento.setFormaPagamento(agendamentoDTO.pagamento());
-            agendamento.setCliente(usuarioService.getUsuarioLogado());
+            agendamento.setCliente(cliente);
             agendamento.setStatus("PENDENTE");
             agendamentoService.salvar(agendamento);
+            // mailService.enviarEmailConfirmacaoAgendamento(cliente.getEmail(), cliente.getNome(), prestador);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
