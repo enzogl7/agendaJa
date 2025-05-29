@@ -274,11 +274,23 @@ function confirmarAgendamento(button) {
     Swal.fire({
         icon: 'info',
         title: 'Deseja confirmar este agendamento?',
+        text: 'Esta ação não poderá ser desfeita.',
         showDenyButton: true,
-        confirmButtonText: 'Sim',
+        confirmButtonText: 'Sim, confirmar',
         denyButtonText: 'Não',
+        confirmButtonColor: '#3085d6',
+        denyButtonColor: '#d33'
     }).then((result) => {
         if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Confirmando...',
+                text: 'Por favor, aguarde enquanto o agendamento é confirmado.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             $.ajax({
                 url: '/prestador/confirmaragendamento',
                 type: 'POST',
@@ -290,37 +302,85 @@ function confirmarAgendamento(button) {
                         case 200:
                             Swal.fire({
                                 title: "Pronto!",
-                                text: "Confirmado com sucesso!",
+                                text: "Agendamento confirmado com sucesso!",
                                 icon: "success",
                                 confirmButtonText: 'OK'
                             }).then(() => {
                                 location.reload();
                             });
                             break;
-                        default:
+                        case 400:
+                            var response = xhr.responseJSON || { message: "Dados inválidos." };
                             Swal.fire({
-                                title: "Ops!",
-                                text: "Ocorreu um erro ao confirmar o agendamento.",
+                                title: "Erro de Validação!",
+                                text: "Verifique os dados enviados.",
                                 icon: "error",
                                 confirmButtonText: "Ok"
                             });
-                            return;
+                            break;
+                        case 403:
+                            Swal.fire({
+                                title: "Acesso Negado!",
+                                text: "Você não tem permissão para realizar esta ação. Verifique se está logado.",
+                                icon: "warning",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
+                        case 500:
+                            Swal.fire({
+                                title: "Erro no Servidor!",
+                                text: "Ocorreu um erro inesperado no servidor. Tente novamente mais tarde.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao confirmar o agendamento. Código: " + xhr.status,
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
                     }
+                },
+                error: function(xhr, status, error) {
+                    if (!xhr.status) {
+                        Swal.fire({
+                            title: "Erro de Conexão",
+                            text: "Não foi possível conectar ao servidor. Verifique sua internet.",
+                            icon: "error",
+                            confirmButtonText: "Ok"
+                        });
+                    }
+                    console.error("AJAX Error:", status, error, xhr);
                 }
             });
         }
-    })
+    });
 }
 
 function cancelarAgendamento(button) {
     Swal.fire({
-        icon: 'info',
-        title: 'Deseja cancelar este agendamento?',
+        icon: 'warning',
+        title: 'Deseja realmente cancelar este agendamento?',
+        text: 'Esta ação não poderá ser desfeita e o horário ficará disponível para outros clientes.',
         showDenyButton: true,
-        confirmButtonText: 'Sim',
+        confirmButtonText: 'Sim, cancelar',
         denyButtonText: 'Não',
+        confirmButtonColor: '#d33',
+        denyButtonColor: '#3085d6'
     }).then((result) => {
         if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Cancelando...',
+                text: 'Por favor, aguarde enquanto o agendamento é cancelado.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
             $.ajax({
                 url: '/prestador/cancelaragendamento',
                 type: 'POST',
@@ -331,27 +391,71 @@ function cancelarAgendamento(button) {
                     switch (xhr.status) {
                         case 200:
                             Swal.fire({
-                                title: "Pronto!",
-                                text: "Cancelado com sucesso!",
+                                title: "Cancelado!",
+                                text: "Agendamento cancelado com sucesso.",
                                 icon: "success",
                                 confirmButtonText: 'OK'
                             }).then(() => {
                                 location.reload();
                             });
                             break;
-                        default:
+                        case 400:
+                            var response = xhr.responseJSON || { message: "Não foi possível processar o cancelamento." };
                             Swal.fire({
-                                title: "Ops!",
-                                text: "Ocorreu um erro ao cancelar o agendamento.",
+                                title: "Não é possível cancelar!",
+                                text: "Verifique as regras de cancelamento.",
                                 icon: "error",
                                 confirmButtonText: "Ok"
                             });
-                            return;
+                            break;
+                        case 403:
+                            Swal.fire({
+                                title: "Acesso Negado!",
+                                text: "Você não tem permissão para realizar esta ação. Verifique se está logado.",
+                                icon: "warning",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
+                        case 404:
+                            Swal.fire({
+                                title: "Não encontrado!",
+                                text: "O agendamento que você está tentando cancelar não foi encontrado.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
+                        case 500:
+                            Swal.fire({
+                                title: "Erro no Servidor!",
+                                text: "Ocorreu um erro inesperado no servidor. Tente novamente mais tarde.",
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
+                        default:
+                            Swal.fire({
+                                title: "Ops!",
+                                text: "Ocorreu um erro ao cancelar o agendamento. Código: " + xhr.status,
+                                icon: "error",
+                                confirmButtonText: "Ok"
+                            });
+                            break;
                     }
+                },
+                error: function(xhr, status, error) {
+                    if (!xhr.status) {
+                        Swal.fire({
+                            title: "Erro de Conexão",
+                            text: "Não foi possível conectar ao servidor. Verifique sua internet.",
+                            icon: "error",
+                            confirmButtonText: "Ok"
+                        });
+                    }
+                    console.error("AJAX Error ao cancelar:", status, error, xhr);
                 }
             });
         }
-    })
+    });
 }
 
 function toggleCamposCliente() {
