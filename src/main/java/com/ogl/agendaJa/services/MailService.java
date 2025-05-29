@@ -29,11 +29,13 @@ public class MailService {
     private PaginaNegocioService paginaNegocioService;
     @Value("${spring.mail.username}")
     private String remetente;
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public String enviarEmailConfirmacaoAgendamento(Agendamento agendamento) {
         try {
             PaginaNegocio negocioPrestador = paginaNegocioService.findByUsuario(agendamento.getPrestador());
-
+            String urlAgendamentos = baseUrl + "/cliente/agendamentos";
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
@@ -48,6 +50,7 @@ public class MailService {
             context.setVariable("dataAgendamento", agendamento.getData());
             context.setVariable("horaAgendamento", agendamento.getHorario());
             context.setVariable("anoAtual", String.valueOf(Year.now().getValue()));
+            context.setVariable("urlAgendamentos", urlAgendamentos);
 
             String htmlContent = templateEngine.process("email/confirmacao_agendamento", context);
             helper.setText(htmlContent, true);
@@ -66,6 +69,7 @@ public class MailService {
     public String envioEmailCancelamentoAgendamento(Agendamento agendamento) {
         try {
             PaginaNegocio negocioPrestador = paginaNegocioService.findByUsuario(agendamento.getPrestador());
+            String urlAgendamentos = baseUrl + "/cliente/agendamentos";
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
@@ -80,6 +84,7 @@ public class MailService {
             context.setVariable("dataAgendamento", agendamento.getData());
             context.setVariable("horaAgendamento", agendamento.getHorario());
             context.setVariable("anoAtual", String.valueOf(Year.now().getValue()));
+            context.setVariable("urlAgendamentos", urlAgendamentos);
 
             String htmlContent = templateEngine.process("email/cancelamento_agendamento", context);
             helper.setText(htmlContent, true);
@@ -98,6 +103,7 @@ public class MailService {
     public String enviarEmailNovoAgendamento(Usuario prestador, Usuario cliente, Servico servico, AgendamentoClienteDTO agendamento) {
         try {
             PaginaNegocio negocioPrestador = paginaNegocioService.findByUsuario(prestador);
+            String urlAgendamentos = baseUrl + "/prestador/agendamentos";
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
@@ -112,6 +118,7 @@ public class MailService {
             context.setVariable("dataAgendamento", agendamento.data());
             context.setVariable("horaAgendamento", agendamento.horario());
             context.setVariable("anoAtual", String.valueOf(Year.now().getValue()));
+            context.setVariable("urlAgendamentos", urlAgendamentos);
 
             String htmlContent = templateEngine.process("email/novo_agendamento", context);
             helper.setText(htmlContent, true);

@@ -154,6 +154,15 @@ function salvarAgendamentoCliente() {
         return;
     }
 
+    Swal.fire({
+        title: 'Finalizando...',
+        text: 'Por favor, aguarde enquanto finalizamos seu agendamento.',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
     $.ajax({
         url: '/negocio/salvaragendamentocliente',
         type: 'POST',
