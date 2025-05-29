@@ -171,6 +171,7 @@ public class AgendamentoController {
             // verifica se o dono do negocio possui plano
             Usuario prestador = usuarioService.findById(Long.valueOf(agendamentoDTO.prestador()));
             Usuario cliente = usuarioService.getUsuarioLogado();
+            Servico servico = servicoService.findById(Long.valueOf(agendamentoDTO.servico()));
             List<Agendamento> agendamentosPrestador = agendamentoService.findAllByUsuario(prestador);
             if (agendamentosPrestador.size() >= 10 && prestador.getPlanoSelecionado().equals("BASICO")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -178,7 +179,7 @@ public class AgendamentoController {
 
             // caso ok, salva o agendamento
             Agendamento agendamento = new Agendamento();
-            agendamento.setServico(servicoService.findById(Long.valueOf(agendamentoDTO.servico())));
+            agendamento.setServico(servico);
             agendamento.setData(LocalDate.parse(agendamentoDTO.data(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             agendamento.setHorario(agendamentoDTO.horario());
             agendamento.setPrestador(prestador);
@@ -186,7 +187,8 @@ public class AgendamentoController {
             agendamento.setCliente(cliente);
             agendamento.setStatus("PENDENTE");
             agendamentoService.salvar(agendamento);
-            // mailService.enviarEmailConfirmacaoAgendamento(cliente.getEmail(), cliente.getNome(), prestador);
+
+            mailService.enviarEmailNovoAgendamento(prestador, cliente, servico, agendamentoDTO); // envio de email prestador
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

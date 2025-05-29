@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Agendamento - AgendaJá</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #F8F9FA; font-family: Arial, sans-serif; line-height: 1.6; color: #2C3E50; }
+        .container { width: 100%; max-width: 600px; margin: 20px auto; background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; }
+        .header { background-color: #2C3E50; color: #FFFFFF; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; color: #27AE60 ; }
+        .content { padding: 25px; }
+        .content p { margin-bottom: 15px; color: #2C3E50; }
+        .content strong { color: #27AE60; }
+        .appointment-details { background-color: #F8F9FA; padding: 15px; margin-top: 20px; margin-bottom: 20px; border-left: 4px solid #27AE60; }
+        .appointment-details p { margin: 8px 0; font-size: 15px; }
+        .button-container { text-align: center; margin-top: 25px; margin-bottom: 15px; }
+        .button { background-color: #27AE60; color: #FFFFFF !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; }
+        .footer { background-color: #F8F9FA; color: #7F8C8D; text-align: center; padding: 15px; font-size: 12px; border-top: 1px solid #E0E0E0; }
+        .footer a { color: #27AE60; text-decoration: none; }
+        .highlight { color: #27AE60; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container" style="width: 100%; max-width: 600px; margin: 20px auto; background-color: #FFFFFF; border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden;">
+    <div class="header" style="background-color: #2C3E50; color: #FFFFFF; padding: 20px; text-align: center;">
+        <h1 style="margin: 0; font-size: 24px; color: #27AE60;">AgendaJá</h1>
+        <p style="color: #F8F9FA; margin-top: 5px; font-size: 16px;">Novo agendamento - AgendaJá</p>
+    </div>
+    <div class="content" style="padding: 25px;">
+        <h3 style="font-weight: bold; text-align: center; align-items: center">Novo agendamento</h3>
+        <p style="margin-bottom: 15px; color: #2C3E50;">
+            Olá, <strong class="highlight" style="color: #27AE60; font-weight: bold;" th:text="${nomePrestador}">Nome do prestador</strong>,
+        </p>
+        <p style="margin-bottom: 15px; color: #2C3E50;">Um cliente solicitou um agendamento! Verifique se o pagamento foi efetuado e confirme-o em sua página o quanto antes.</p>
+
+        <div class="appointment-details" style="background-color: #F8F9FA; padding: 15px; margin-top: 20px; margin-bottom: 20px; border-left: 4px solid #27AE60;">
+            <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
+                <strong style="color: #2C3E50;">Agendamento solicitado por por:</strong>
+                <span th:text="${nomeCliente}">Nome do Cliente</span>
+            </p>
+            <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
+                <strong style="color: #2C3E50;">Serviço:</strong>
+                <span th:text="${nomeServico}">Nome do Serviço Agendado</span>
+            </p>
+            <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
+                <strong style="color: #2C3E50;">Data:</strong>
+                <span th:text="${dataAgendamento}">DD/MM/AAAA</span>
+            </p>
+            <p style="margin: 8px 0; font-size: 15px; color: #2C3E50;">
+                <strong style="color: #2C3E50;">Horário:</strong>
+                <span th:text="${horaAgendamento}">HH:MM</span>
+            </p>
+        </div>
+
+        <div class="button-container" style="text-align: center; margin-top: 25px; margin-bottom: 15px;">
+            <a href="" class="button" style="background-color: #27AE60; color: #FFFFFF !important; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Ver Meus Agendamentos</a>
+        </div>
+
+        <p style="margin-bottom: 15px; color: #2C3E50;">
+            <span>Atenciosamente</span>,<br/>
+            <span>Equipe AgendaJá</span>
+        </p>
+    </div>
+    <div class="footer" style="background-color: #F8F9FA; color: #7F8C8D; text-align: center; padding: 15px; font-size: 12px; border-top: 1px solid #E0E0E0;">
+        <p style="margin: 8px 0; font-size: 12px;">
+            &copy; <span th:text="${anoAtual}">2025</span> <span>AgendaJá. Todos os direitos reservados.</span>
+        </p>
+        <p style="margin: 8px 0; font-size: 12px;">
+            <span>Se você não reconhece esse email, por favor</span>
+            <a href="mailto:agendajacontato@gmail.com" style="color: #27AE60; text-decoration: none;">entre em contato</a>.
+        </p>
+        <p style="margin: 8px 0; font-size: 12px;">
+            <span>(*) Este e-mail foi enviado de forma automática pela plataforma AgendaJá. Não responda.</span>
+        </p>
+    </div>
+</div>
+</body>
+</html>
