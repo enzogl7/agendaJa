@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ProductRequestStripe {
     private String priceId;
     private Long quantity;
+    private String email;
 }

@@ -14,6 +14,8 @@ public class StripeService {
 
     @Value("${stripe.secretKey}")
     private String secretKey;
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public StripeResponse checkoutProduct(ProductRequestStripe request) {
         Stripe.apiKey = secretKey;
@@ -23,8 +25,9 @@ public class StripeService {
                 .setPrice(request.getPriceId()).build();
 
         SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                .setSuccessUrl("https://stripe.com/")
-                .setCancelUrl("http://localhost:8080/logout")
+                .setSuccessUrl(baseUrl + "/login")
+                .setCancelUrl(baseUrl + "/login")
+                .setCustomerEmail(request.getEmail())
                 .addLineItem(lineItem).build();
 
         Session session = null;

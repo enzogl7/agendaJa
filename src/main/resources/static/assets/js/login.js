@@ -1,13 +1,3 @@
-document.getElementById('cpfPagante').addEventListener('input', function (e) {
-    let value = e.target.value.replace(/\D/g, '');
-
-    value = value.replace(/^(\d{3})(\d)/, '$1.$2');
-    value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
-    value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
-
-    e.target.value = value;
-});
-
 document.getElementById('cpf').addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
 
@@ -59,9 +49,11 @@ function mostrarEtapa(n) {
     document.getElementById("btn-voltar").disabled = n === 1;
 
     const btnAvancar = document.getElementById("btn-avancar");
+    const btnVoltar = document.getElementById("btn-voltar");
 
     if (n === 4) {
         btnAvancar.classList.add("d-none");
+        btnVoltar.classList.add("d-none");
         setTimeout(() => {
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroEtapas'));
         }, 3000);
@@ -136,6 +128,29 @@ function avancarEtapa() {
         return;
     }
 
+    const planoSelecionado = document.querySelector('input[name="plano"]:checked');
+    if (etapa === 2) {
+        if (!planoSelecionado) {
+            Swal.fire({
+                title: "Ops!",
+                text: "Por favor, escolha um plano antes de continuar.",
+                icon: "warning",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+
+        if (planoSelecionado.value === "BASICO") {
+            etapa = 4;
+            cadastrar();
+            return;
+        }
+    }
+
+    if (etapa === 2 && planoSelecionado.value !== "BASICO") {
+        cadastrar(true);
+    }
+
     if (etapa === 3 && tipoUsuario === "PRESTADOR") {
         etapa = 4;
         cadastrar();
@@ -162,7 +177,7 @@ function modalCadastro() {
     modal.show();
 }
 
-function cadastrar() {
+function cadastrar(preRegistro = false) {
     var nome = document.getElementById('nome').value;
     var cpf = document.getElementById('cpf').value;
     var email = document.getElementById('email').value;
@@ -170,8 +185,6 @@ function cadastrar() {
     var dataNascimento = document.getElementById('dataNascimento').value;
     var tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked').value;
     var planoSelecionadoInput = document.querySelector('input[name="plano"]:checked');
-    // var nomePagante = document.getElementById('nomePagante').value;
-    // var cpfPagante = document.getElementById('cpfPagante').value;
     var planoSelecionado = planoSelecionadoInput ? planoSelecionadoInput.value : null;
 
     $.ajax({
@@ -186,10 +199,14 @@ function cadastrar() {
             dataNascimento: dataNascimento,
             planoSelecionado: planoSelecionado,
             userRole: tipoUsuario,
+            preRegistro: preRegistro
         }),
         complete: function(xhr, status) {
             switch (xhr.status) {
                 case 200:
+                    if (preRegistro) {
+                        break;
+                    }
                     mostrarEtapa(4);
                     setTimeout(() => {
                         $('#modalCadastroEtapas').modal('hide');
@@ -284,4 +301,42 @@ function atualizarRequisito(id, valido, texto) {
     el.innerHTML = `${icone} ${texto}`;
     el.classList.remove("text-success", "text-danger", "text-muted");
     el.classList.add(valido ? "text-success" : "text-danger");
+}
+
+function pagarStripe() {
+    const button = document.getElementById("btnStripeCheckout");
+    const text = document.getElementById("btnStripeText");
+    const spinner = document.getElementById("btnStripeSpinner");
+    const email = document.getElementById('email').value;
+
+    button.disabled = true;
+    text.textContent = "Redirecionando...";
+    spinner.classList.remove("hidden");
+
+    $.ajax({
+        url: '/product/v1/checkout',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            priceId: "price_1RZAHcKFFRANfNose1KR7sHr",
+            quantity: "1",
+            email: email
+        }),
+        success: function(response) {
+            if (response && response.sessionUrl) {
+                window.open(response.sessionUrl, '_blank');
+            } else {
+                Swal.fire("Erro", "URL de pagamento não encontrada.", "error");
+            }
+        },
+        error: function(xhr) {
+            console.error("Erro ao redirecionar:", xhr);
+            Swal.fire("Erro", "Falha ao iniciar o pagamento.", "error");
+        },
+        complete: function() {
+            button.disabled = false;
+            text.textContent = "Ir para Stripe";
+            spinner.classList.add("hidden");
+        }
+    });
 }

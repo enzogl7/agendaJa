@@ -8,6 +8,19 @@
       <div class="modal-body">
           <div class="etapa" id="etapa-1">
             <div class="mb-3">
+              <label class="form-label">Tipo de usuário</label>
+              <div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="tipoUsuario" id="cliente" value="CLIENTE" checked>
+                  <label class="form-check-label" for="cliente">Cliente</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="tipoUsuario" id="prestador" value="PRESTADOR">
+                  <label class="form-check-label" for="prestador">Prestador de Serviço</label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
               <label for="nome" class="form-label">Nome completo</label>
               <input type="text" class="form-control" id="nome" required>
             </div>
@@ -36,17 +49,6 @@
             </ul>
 
             <div class="mb-3">
-              <label class="form-label">Tipo de usuário</label>
-              <div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="tipoUsuario" id="cliente" value="CLIENTE" checked>
-                  <label class="form-check-label" for="cliente">Cliente</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="tipoUsuario" id="prestador" value="PRESTADOR">
-                  <label class="form-check-label" for="prestador">Prestador de Serviço</label>
-                </div>
-              </div>
               <div class="mb-3 mt-3">
                 <label class="form-label">Termos e condições gerais e políticas de privacidade</label>
                 <div>
@@ -72,23 +74,27 @@
           </div>
 
           <div class="etapa d-none" id="etapa-3">
-            <h6>Informações de pagamento:</h6>
-            <div class="mb-3">
-              <label for="nomePagante" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="nomePagante" placeholder="Insira o nome de quem enviará o pagamento" required>
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 200px;">
+              <h5 class="text-center mb-4">Clique abaixo para finalizar o pagamento da sua assinatura</h5>
+              <button id="btnStripeCheckout"
+                      onclick="pagarStripe()"
+                      class="bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-lg btn-lg px-5 py-3 rounded-pill hover:from-green-600 hover:to-green-800 active:translate-y-0.5 active:shadow-md transition transform duration-300 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center justify-center gap-2">
+                <span id="btnStripeText">Ir para Stripe</span>
+                <svg id="btnStripeSpinner" class="animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+              </button>
+              <p class="text-gray-600 mt-4 text-sm italic text-center">
+                *Você será redirecionado para a Stripe, onde seu pagamento será processado de forma totalmente segura e gerenciada pela Stripe. O AgendaJá não terá acesso às suas informações.
+              </p>
             </div>
-            <div class="mb-3">
-              <label for="cpfPagante" class="form-label">CPF</label>
-              <input type="text" class="form-control" id="cpfPagante" placeholder="123.456.789-10" maxlength="14" required>
-            </div>
-            <!-- IMPLEMENTAR ABACATE PAY QUANDO SUBIR O PROJETO !-->
           </div>
 
           <div class="etapa d-none text-center" id="etapa-4">
             <h5>Cadastro concluído com sucesso! 🎉</h5>
             <p>Bem-vindo(a) ao AgendaJá. Você será redirecionado em instantes...</p>
           </div>
-
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" id="btn-voltar" onclick="voltarEtapa()" disabled>Voltar</button>

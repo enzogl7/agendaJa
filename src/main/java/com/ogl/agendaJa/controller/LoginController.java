@@ -46,7 +46,7 @@ public class LoginController {
         String encryptedPassword = new BCryptPasswordEncoder().encode(dataRegister.senha());
         Usuario newUsuario = new Usuario(dataRegister.nome(), dataRegister.email(), encryptedPassword,
                 dataRegister.cpf(), dataRegister.dataNascimento(),
-                dataRegister.planoSelecionado(), true, dataRegister.userRole());
+                dataRegister.planoSelecionado(), !dataRegister.preRegistro(), dataRegister.userRole());
 
         usuarioRepository.save(newUsuario);
         return ResponseEntity.ok().build();

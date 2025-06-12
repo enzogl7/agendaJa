@@ -27,5 +27,19 @@ public class UsuarioService {
     public void salvar(Usuario usuario) {
         usuarioRepository.save(usuario);
     }
+
+    public void ativarPlano(String email, String costumerId) {
+        Usuario usuario = (Usuario) usuarioRepository.findByEmail(email);
+        usuario.setPagamentoConfirmado(true);
+        usuario.setCostumerIdStripe(costumerId);
+        usuarioRepository.save(usuario);
+        System.out.println("Pagamento confirmado TRUE para: " + email);
+    }
+    public void desativarPlano(String costumerId) {
+        Usuario usuario = (Usuario) usuarioRepository.findByCostumerIdStripe(costumerId);
+        usuario.setPagamentoConfirmado(false);
+        usuarioRepository.save(usuario);
+        System.out.println("Pagamento confirmado FALSE para: " + usuario.getEmail());
+    }
 }
 
