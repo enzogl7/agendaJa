@@ -1,6 +1,6 @@
 # AgendaJá
 
-<h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção PAUSADA, estou deixando o repositório público apenas por PORTFÓLIO.</h3>
+<h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção PAUSADA porém está muito completo. Estou deixando o repositório público apenas por PORTFÓLIO.</h3>
 
 ---
 
@@ -8,13 +8,40 @@
    <img src="https://i.imgur.com/yF08KvS.gif">
 </p>
 
-**Simplifique a gestão do seu negócio e potencialize seus agendamentos.**
+## Tecnologias Utilizadas
 
-AgendaJá é uma plataforma completa e intuitiva, desenhada para prestadores de serviço que buscam otimizar sua rotina de agendamentos, pagamentos e presença online. Com uma assinatura mensal, você transforma a maneira como gerencia seu trabalho e interage com seus clientes.
+### Frontend
+* HTML5
+* CSS3
+* JavaScript (ES6+)
+* Tailwind CSS
+* Bootstrap 5
+* Thymeleaf
+
+### Backend
+* Java 17+
+* Spring Boot 3.x
+    * Spring MVC
+    * Spring Data JPA
+    * Spring Security
+
+### Banco de Dados
+* PostgreSQL
+
+### Outras Ferramentas e Bibliotecas
+* **Stripe:** Integrei a Stripe para o cliente poder realizar pagamento da assinatura recorrente. A aplicação também possui um webhook do Stripe para poder monitorar se a assinatura foi paga ou não mensalmente, cortando ou reativando o plano do usuário.
+* **Thymeleaf:** Engine de templates para renderização de páginas no servidor.
+* **Spring Mail:** Para envio de e-mails transacionais (confirmações, notificações) via SMTP.
+* **Lombok:** Para redução de código boilerplate em classes Java.
+* **SweetAlert2 (Swal):** Para exibição de alertas e modais customizados no frontend.
+* **jQuery:** Utilizado para manipulação do DOM e requisições AJAX.
+* **JSON Web Tokens (JWT):** Para autenticação e autorização segura baseada em tokens.
+
+---
 
 ## Visão Geral
 
-Cansado de planilhas complicadas e trocas intermináveis de mensagens para marcar um horário? O AgendaJá centraliza tudo o que você precisa: desde a organização da sua carteira de clientes e catálogo de serviços até a criação de uma página profissional para o seu negócio. Essa página exclusiva, com URL própria, permite que seus clientes consultem sua disponibilidade, realizem agendamentos e efetuem pagamentos via PIX de forma rápida e segura.
+O AgendaJá centraliza tudo o que você precisa: desde a organização da sua carteira de clientes e catálogo de serviços até a criação de uma página profissional para o seu negócio. Essa página exclusiva, com URL própria, permite que seus clientes consultem sua disponibilidade, realizem agendamentos e efetuem pagamentos via PIX de forma rápida e segura.
 
 ## Para Quem é o AgendaJá?
 
@@ -25,7 +52,7 @@ Cansado de planilhas complicadas e trocas intermináveis de mensagens para marca
 
 ### Para Prestadores de Serviço:
 
-* **Página de Negócios Personalizada:** Crie uma vitrine online para seu negócio com uma URL exclusiva (ex: `agendaja.com/negocio/seu-negocio`) para divulgar seus serviços.
+* **Página de Negócios Personalizada:** Crie uma vitrine online para seu negócio com uma URL exclusiva (ex: `agendaja.com/negocio/seu-negocio`) para divulgar seus serviços. (Plano Premium)
 * **Gestão de Agendamentos Simplificada:** Visualize, confirme ou cancele agendamentos com facilidade.
 * **Gestão de Clientes:** Mantenha um cadastro organizado dos seus clientes.
 * **Catálogo de Serviços:** Adicione, edite e remova os serviços que você oferece, definindo preços e durações.
@@ -47,7 +74,6 @@ Cansado de planilhas complicadas e trocas intermináveis de mensagens para marca
 ### Geral:
 
 * **Dois Perfis de Acesso:** Sistema de cadastro e login diferenciado para "Prestador" e "Usuário (Cliente)".
-* **Landing Page:** Uma página de apresentação completa, explicando todos os benefícios e funcionalidades da plataforma AgendaJá.
 
 ## Como Funciona (Fluxo Básico)
 
@@ -56,32 +82,5 @@ Cansado de planilhas complicadas e trocas intermináveis de mensagens para marca
 3.  **Cliente:** Acessa a página do prestador, escolhe o serviço, seleciona um horário disponível e realiza o agendamento, efetuando o pagamento via PIX (QR Code ou Copia e Cola).
 4.  **Notificações:** O prestador é notificado do novo agendamento. O cliente recebe a confirmação por e-mail.
 5.  **Gestão:** O prestador gerencia o agendamento (confirmando ou, se necessário, cancelando e notificando o cliente). O cliente pode consultar seus agendamentos em seu próprio dashboard.
-
-## Tecnologias Utilizadas
-
-### Frontend
-* HTML5
-* CSS3
-* JavaScript (ES6+)
-* Tailwind CSS
-* Bootstrap 5
-
-### Backend
-* Java 17+
-* Spring Boot 3.x
-    * Spring MVC
-    * Spring Data JPA
-    * Spring Security
-
-### Banco de Dados
-* PostgreSQL
-
-### Outras Ferramentas e Bibliotecas
-* **Thymeleaf:** Engine de templates para renderização de páginas no servidor.
-* **Spring Mail:** Para envio de e-mails transacionais (confirmações, notificações) via SMTP.
-* **Lombok:** Para redução de código boilerplate em classes Java.
-* **SweetAlert2 (Swal):** Para exibição de alertas e modais customizados no frontend.
-* **jQuery:** Utilizado para manipulação do DOM e requisições AJAX.
-* **JSON Web Tokens (JWT):** Para autenticação e autorização segura baseada em tokens.
 
 ---
