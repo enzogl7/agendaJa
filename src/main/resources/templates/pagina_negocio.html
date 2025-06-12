@@ -155,8 +155,9 @@
 
         if (firstTabButton && servicosTabContent) {
             const activeTab = document.querySelector("#tabNav .tab-link.current-tab");
+            console.log("teste: " + activeTab)
             if (!activeTab) {
-                openTab(null, 'servicos', firstTabButton);
+                openTab(event, 'servicos', firstTabButton);
             } else {
                 let tabContents = document.getElementsByClassName("tabcontent");
                 for (let i = 0; i < tabContents.length; i++) {

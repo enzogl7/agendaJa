@@ -204,8 +204,52 @@
                     </div>
 
                     <div class="tab-pane fade" id="plano" role="tabpanel" aria-labelledby="plano-tab">
-                        <p class="text-[#7F8C8D] mt-4">Detalhes sobre seu plano atual.</p>
+                        <div class="card mt-3 shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text text-muted">Gerencie seu plano atual e pagamentos</p>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 text-sm">
+                                        <span th:if="${usuario.planoSelecionado == 'BASICO'}" class="inline-block px-3 py-1 bg-gray-200 text-gray-700 rounded-full font-medium">
+                                          Plano Básico
+                                        </span>
+                                        <span th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                                            <i class="bi bi-gem mr-1"></i>
+                                            Plano Profissional
+                                        </span>
+                                        <span th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}">
+                                            <span th:if="${usuario.pagamentoConfirmado == true}" class="flex items-center text-green-700 bg-green-100 px-3 py-1 rounded-full font-medium">
+                                              <i class="bi bi-check-circle-fill mr-1"></i>Pagamento Confirmado
+                                            </span>
+                                            <span th:if="${usuario.pagamentoConfirmado != true}" class="flex items-center text-yellow-700 bg-yellow-100 px-3 py-1 rounded-full font-medium">
+                                              <i class="bi bi-clock-history mr-1"></i>Pagamento Pendente
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-6">
+                                    <p class="font-semibold text-gray-700 mb-2">Seus benefícios:</p>
+                                    <ul class="text-gray-600 text-sm space-y-1 list-disc pl-5">
+                                        <li th:if="${usuario.planoSelecionado == 'BASICO'}">Até 10 agendamentos por mês</li>
+                                        <li th:if="${usuario.planoSelecionado == 'BASICO'}">Recursos limitados</li>
+                                        <li th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}">Agendamentos ilimitados</li>
+                                        <li th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}">Suporte prioritário</li>
+                                        <li th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}">Página exclusiva para seu negócio</li>
+                                    </ul>
+                                </div>
+
+                                <div th:if="${usuario.planoSelecionado == 'BASICO'}" class="text-center">
+                                    <hr>
+                                    <p class="text-gray-700 text-sm mb-2">Quer mais recursos?</p>
+                                    <button class="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white px-5 py-2 rounded-pill font-semibold shadow transition-transform hover:scale-105"
+                                            onclick="upgradePlanoModal()">
+                                        Fazer upgrade para o Profissional
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="tab-pane fade" id="conta" role="tabpanel" aria-labelledby="conta-tab">
                         <p class="text-[#7F8C8D] mt-4">Informações da conta e configurações pessoais.</p>
                     </div>
@@ -213,7 +257,7 @@
             </div>
         </div>
     </main>
-
+    <div th:replace="~{modais/modal_upgrade_plano}"></div>
 </div>
 <footer th:replace="~{fragments/scripts :: scriptsContent('/assets/js/prestador/configuracoes.js')}"></footer>
 </body>

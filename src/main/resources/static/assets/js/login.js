@@ -75,7 +75,11 @@ function mostrarEtapa(n) {
         setTimeout(() => {
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalCadastroEtapas'));
         }, 3000);
-    } else {
+    }
+    else if (n === 3) {
+        btnAvancar.classList.add("d-none");
+    }
+    else {
         btnAvancar.classList.remove("d-none");
         btnAvancar.innerText = n === 3 ? "Finalizar" : "Avançar";
     }
@@ -327,42 +331,4 @@ function atualizarRequisito(id, valido, texto) {
     el.innerHTML = `${icone} ${texto}`;
     el.classList.remove("text-success", "text-danger", "text-muted");
     el.classList.add(valido ? "text-success" : "text-danger");
-}
-
-function pagarStripe() {
-    const button = document.getElementById("btnStripeCheckout");
-    const text = document.getElementById("btnStripeText");
-    const spinner = document.getElementById("btnStripeSpinner");
-    const email = document.getElementById('email').value;
-
-    button.disabled = true;
-    text.textContent = "Redirecionando...";
-    spinner.classList.remove("hidden");
-
-    $.ajax({
-        url: '/product/v1/checkout',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            priceId: "price_1RZAHcKFFRANfNose1KR7sHr",
-            quantity: "1",
-            email: email
-        }),
-        success: function(response) {
-            if (response && response.sessionUrl) {
-                window.open(response.sessionUrl, '_blank');
-            } else {
-                Swal.fire("Erro", "URL de pagamento não encontrada.", "error");
-            }
-        },
-        error: function(xhr) {
-            console.error("Erro ao redirecionar:", xhr);
-            Swal.fire("Erro", "Falha ao iniciar o pagamento.", "error");
-        },
-        complete: function() {
-            button.disabled = false;
-            text.textContent = "Ir para Stripe";
-            spinner.classList.add("hidden");
-        }
-    });
 }

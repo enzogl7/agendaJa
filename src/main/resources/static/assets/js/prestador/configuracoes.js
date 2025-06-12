@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     atualizarListaFolgas();
+    if (window.location.hash === "#plano") {
+        const triggerEl = document.querySelector('#plano-tab');
+        if (triggerEl) {
+            new bootstrap.Tab(triggerEl).show();
+        }
+    }
 });
 
 window.onload = function() {
@@ -199,5 +205,10 @@ function atualizarCampoChave(tipoChave) {
         chavePixInput.type = 'text';
         chavePixInput.placeholder = 'Digite sua chave';
     }
+}
+
+function upgradePlanoModal() {
+    $('#modalUpgradePlano').modal('show');
+
 }
 

@@ -1,0 +1,26 @@
+<div class="modal fade" id="modalUpgradePlano" tabindex="-1" role="dialog" aria-labelledby="modalUpgradePlanoTituloCentro" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="text-align: center; width: 100%;">
+        <h5 class="modal-title" id="modalUpgradePlanoTitulo">Entrar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 200px;">
+          <input type="hidden" id="email" th:value="${usuario.email}">
+          <p class="text-center mb-4">Clique abaixo para finalizar o pagamento da sua assinatura Profissional</p>
+          <button id="btnStripeCheckout" onclick="pagarStripe()" class="bg-gradient-to-r from-green-500 to-green-700 text-white font-semibold text-lg btn-lg px-5 py-3 rounded-pill hover:from-green-600 hover:to-green-800 active:translate-y-0.5 active:shadow-md transition transform duration-300 focus:outline-none focus:ring-4 focus:ring-green-300 flex items-center justify-center gap-2">
+            <span id="btnStripeText">Ir para Stripe</span>
+            <svg id="btnStripeSpinner" class="animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+          </button>
+          <p class="text-gray-600 mt-4 text-sm italic text-center">
+            *Você será redirecionado para a Stripe, onde seu pagamento será processado de forma totalmente segura e gerenciada pela Stripe. O AgendaJá não terá acesso às suas informações.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
