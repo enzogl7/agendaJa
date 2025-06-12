@@ -1,5 +1,9 @@
 # AgendaJá
 
+<h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção PAUSADA, estou deixando o repositório público apenas por PORTFÓLIO.</h3>
+
+---
+
 <p align="center">
    <img src="https://i.imgur.com/yF08KvS.gif">
 </p>
