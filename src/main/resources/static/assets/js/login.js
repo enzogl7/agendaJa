@@ -31,11 +31,29 @@ document.addEventListener("DOMContentLoaded", function () {
     prestadorRadio.addEventListener("change", atualizarCamposVisiveis);
 
     atualizarCamposVisiveis();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const pagamentoStatus = urlParams.get("pagamento");
+    if (pagamentoStatus) {
+        modalLoginPagamento(pagamentoStatus)
+    }
 });
 
 
 function modalLogin() {
     $('#modalLogin').modal('show');
+}
+
+function modalLoginPagamento(status) {
+    $('#modalLogin').modal('show');
+    if (status === 'sucesso') {
+        const mensagem = document.getElementById("mensagemPagamentoSucesso");
+        mensagem.classList.remove("hidden");
+    }
+    else if (status === 'erro') {
+        const mensagem = document.getElementById("mensagemPagamentoErro");
+        mensagem.classList.remove("hidden");
+    }
 }
 
 let etapa = 1;
@@ -264,6 +282,14 @@ function logar() {
                     break;
                 case 202:
                     window.location.href = "/cliente/home";
+                    break;
+                case 401:
+                    Swal.fire({
+                        title: "Ops!",
+                        text: "Email ou senha incorretos!",
+                        icon: "warning",
+                        confirmButtonText: 'OK'
+                    })
                     break;
                 default:
                     alert("Erro desconhecido: " + status);

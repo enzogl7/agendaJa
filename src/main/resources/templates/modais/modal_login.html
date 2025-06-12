@@ -6,6 +6,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <div id="mensagemPagamentoSucesso" class="alert alert-success text-center hidden" role="alert">
+          <strong>Pagamento confirmado!</strong> Sua assinatura foi ativada. Faça login para acessar sua conta.
+        </div>
+        <div id="mensagemPagamentoErro" class="alert alert-danger text-center hidden" role="alert">
+          <strong>Ocorreu um erro ao processar seu pagamento</strong>. Verifique o método de pagamento, tente novamente ou entre em contato com <strong>agendajacontato@gmail.com</strong>.
+        </div>
+
         <div class="form-group">
           <label for="emailLogin">E-mail</label>
           <input class="form-control form-control-lg mb-3" type="email" id="emailLogin" placeholder="Insira seu e-mail">

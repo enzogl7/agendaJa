@@ -25,8 +25,8 @@ public class StripeService {
                 .setPrice(request.getPriceId()).build();
 
         SessionCreateParams params = SessionCreateParams.builder().setMode(SessionCreateParams.Mode.SUBSCRIPTION)
-                .setSuccessUrl(baseUrl + "/login")
-                .setCancelUrl(baseUrl + "/login")
+                .setSuccessUrl(baseUrl + "/login?pagamento=sucesso")
+                .setCancelUrl(baseUrl + "/login?pagamento=erro")
                 .setCustomerEmail(request.getEmail())
                 .addLineItem(lineItem).build();
 

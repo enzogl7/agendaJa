@@ -80,7 +80,7 @@
   </div>
 
   <div class="flex-1 flex items-center justify-center min-h-screen bg-gray-100">
-    <div th:if="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+    <div th:if="${usuario.planoSelecionado == 'PROFISSIONAL' and usuario.pagamentoConfirmado == true}" class="max-w-md w-full bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
       <div class="flex flex-col items-center">
         <input type="text" id="nomeNegocio" class="mt-4 text-xl font-semibold text-center text-gray-800 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-[#27AE60] focus:ring-2 focus:ring-[#27AE60] transition duration-300"
                placeholder="Nome do seu negócio" th:value="${minhaPagina != null ? minhaPagina.nome : ''}"/>
@@ -144,7 +144,7 @@
 
     </div>
 
-    <div th:unless="${usuario.planoSelecionado == 'PROFISSIONAL'}" class="max-w-md w-full text-center bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
+    <div th:if="${usuario.planoSelecionado != 'PROFISSIONAL' or usuario.pagamentoConfirmado != true}" class="max-w-md w-full text-center bg-white shadow-xl rounded-2xl p-6 border border-gray-200">
       <h2 class="text-xl font-semibold mb-2">Indisponível</h2>
       <p>Este recurso está disponível apenas para o plano <strong>profissional</strong>.</p>
       <a href="/prestador/planos" class="mt-2 inline-block bg-[#27AE60] text-white px-4 py-2 rounded hover:bg-[#1b7a46] transition" style="text-decoration: none">Ver Planos</a>
