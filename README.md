@@ -1,5 +1,9 @@
 # AgendaJá
 
+<p align="center">
+   <img src="https://i.imgur.com/yF08KvS.gif">
+</p>
+
 **Simplifique a gestão do seu negócio e potencialize seus agendamentos.**
 
 AgendaJá é uma plataforma completa e intuitiva, desenhada para prestadores de serviço que buscam otimizar sua rotina de agendamentos, pagamentos e presença online. Com uma assinatura mensal, você transforma a maneira como gerencia seu trabalho e interage com seus clientes.
