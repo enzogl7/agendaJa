@@ -7,6 +7,10 @@
 <p align="center">
    <img src="https://i.imgur.com/yF08KvS.gif">
 </p>
+<p align="center">
+   <img src="https://imgur.com/a/AgKwKau">
+</p>
+
 
 ## Tecnologias Utilizadas
 
@@ -38,10 +42,6 @@
 * **JSON Web Tokens (JWT):** Para autenticação e autorização segura baseada em tokens.
 
 ---
-
-## Visão Geral
-
-O AgendaJá centraliza tudo o que você precisa: desde a organização da sua carteira de clientes e catálogo de serviços até a criação de uma página profissional para o seu negócio. Essa página exclusiva, com URL própria, permite que seus clientes consultem sua disponibilidade, realizem agendamentos e efetuem pagamentos via PIX de forma rápida e segura.
 
 ## Para Quem é o AgendaJá?
 
