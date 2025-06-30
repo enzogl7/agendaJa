@@ -3,14 +3,16 @@
 <h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção PAUSADA porém está muito completo. Estou deixando o repositório público apenas por PORTFÓLIO.</h3>
 
 ---
+<h3 align="center">Visão geral</h3>
 
 <p align="center">
-   <img src="https://i.imgur.com/yF08KvS.gif">
+   <img src="src/main/resources/static/assets/gifs/agendaja-gif.gif">
 </p>
-<p align="center">
-   <img src="https://imgur.com/a/AgKwKau">
-</p>
+<h3 align="center">Stripe - como funciona no projeto</h3>
 
+<p align="center">
+   <img src="src/main/resources/static/assets/gifs/stripe-payment.gif">
+</p>
 
 ## Tecnologias Utilizadas
 
