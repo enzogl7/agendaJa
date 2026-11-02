@@ -1,6 +1,6 @@
 # AgendaJá
 
-<h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção PAUSADA porém está muito completo. Estou deixando o repositório público apenas por PORTFÓLIO.</h3>
+<h3>*O AgendaJá surgiu como uma ideia de SaaS e está com sua produção ENCERRADA porém está muito completo. Estou deixando o repositório público apenas por PORTFÓLIO.</h3>
 
 ---
 <h3 align="center">Visão geral</h3>
